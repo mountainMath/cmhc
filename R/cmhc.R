@@ -21,14 +21,17 @@ get_cmhc <- function(query_params) {
                   body=query_params,
                   encode = "form",
                   httr::set_cookies(cookie),
-                  httr::write_disk(data_file, overwrite = TRUE),
-                  httr::progress())
-  dat=readLines(data_file)
+                  #httr::progress(), # too noisy
+                  httr::write_disk(data_file, overwrite = TRUE)
+                  )
+  dat=readLines(data_file, encoding="latin1") # yes, CMHC does not use UTF-8...
   last_row=match("",dat)
-  result=read.table(text=dat[4:last_row-1], sep = ",", header=TRUE)
-  attr(result,"title")=dat[1]
+  result=read.table(text=dat[4:last_row-1], sep = ",", header=TRUE, na.strings = c("**"))
+  region_title=lapply(strsplit(dat[1],"\u0097"),trimws)[[1]]
+  attr(result,"region")=region_title[1]
+  attr(result,"title")=region_title[2]
   attr(result,"subtitle")=dat[2]
-  file.remove(data_file)
+  #file.remove(data_file) #keep file for now for debugging purposes
   return(result)
 }
 
@@ -114,13 +117,12 @@ cmhc_vacancy_params=  function(){
 
 #' Parameters for primary market vacancy data timeline
 #' @export
-cmhc_vacancy_history_params=  function(){
+cmhc_vacancy_history_params=  function(geography_id=2410){
   year=2017
   month=""
   table_id="2.2.1"
   cmhc_filter="Row / Apartment"
   cmhc_key="dwelling_type_desc_en"
-  geography_id=2410
   geography_type=3
   breakdown_geography_type=0
   default_data_field="vacancy_rate_pct"
@@ -157,13 +159,12 @@ cmhc_vacancy_history_params=  function(){
 
 #' Parameters for primary market rent change fixed sample data timeline
 #' @export
-cmhc_rent_change_history_params=  function(){
+cmhc_rent_change_history_params=  function(geography_id=2410){
   year=2017
   month=""
   table_id="2.2.12"
   cmhc_filter="Row / Apartment"
   cmhc_key="dwelling_type_desc_en"
-  geography_id=2410
   geography_type=3
   breakdown_geography_type=0
   default_data_field="fixed_sample_rent_change_pct"
@@ -197,3 +198,7 @@ cmhc_rent_change_history_params=  function(){
   return(query_params)
 }
 
+
+#' geography lookup
+#' @export
+cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140")

@@ -1,0 +1,76 @@
+---
+title: "Vacancy Rates and Rent Changes"
+author: "Jens von Bergmann"
+date: "2017-08-29"
+output:
+  html_document: default
+  html_notebook: default
+vignette: >
+  %\VignetteIndexEntry{Vacancy Rates and Rent Changes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette uses the `cmhc` package to download vacancy and rent change data for several areas and visualize them on the same graph to highlight the relationship between the two.
+
+## Getting the Data
+First we read in the data using the `cmhc` package and join the tables we want and tidy up.
+
+```{r, message=FALSE, warning=FALSE}
+library(cmhc)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+# read in the data and tidy up
+vacancy_rent_table_for <- function(geography_id){
+  dat_vacancy=get_cmhc(cmhc_vacancy_history_params(geography_id))
+  region=attr(dat_vacancy,"region")
+  title_x=attr(dat_vacancy,"title")
+  dat_vacancy <- dat_vacancy %>% 
+    select("X","Total") %>%
+    mutate(Total=as.numeric(as.character(Total))/100) %>%
+    rename(vacancy_rate=Total)
+  dat_rent_change=get_cmhc(cmhc_rent_change_history_params(geography_id)) 
+  title_y=attr(dat_rent_change,"title")
+  dat_rent_change <- dat_rent_change %>%
+    select("X","Total") %>%
+    mutate(Total=as.numeric(as.character(Total))/100) %>%
+    rename(rent_change=Total)
+  dat=inner_join(dat_vacancy,dat_rent_change,by="X") %>% rename(Year=X)
+  attr(dat,"region")=region
+  attr(dat,"labels")=c(title_x,title_y)
+  return(dat)
+}
+```
+
+## Plot the data
+With an easy way to get the data, we now define the plot
+
+```{r, message=FALSE, warning=FALSE}
+plot_geography <- function(data) {
+  plot_data <- data %>% 
+    gather(key="series",value="Rate", "vacancy_rate", "rent_change") %>% 
+    mutate(Rate=as.numeric(as.character(Rate))) 
+
+  ggplot(data=plot_data, aes(x = Year, y = Rate, group=series, color=series)) +
+  geom_line() +
+  geom_point() + 
+  labs(title=paste0(attr(data,"region")," CMA"), caption="Source: CMHC Rms, code: https://github.com/mountainMath/cmhc") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_color_manual(labels = c("% Rent Change\n(fixed sample)","Vacancy Rate"), values = c("darkgreen", "steelblue")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+}
+
+```
+
+Equipped with these two functions we can now plot the data for various census metropolitan areas.
+
+```{r, message=FALSE, warning=FALSE, fig.height=3, fig.width=5}
+plot_geography(vacancy_rent_table_for(cmhc_geography_list$Vancouver))
+plot_geography(vacancy_rent_table_for(cmhc_geography_list$Calgary))
+plot_geography(vacancy_rent_table_for(cmhc_geography_list$Toronto))
+
+```
+
