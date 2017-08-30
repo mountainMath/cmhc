@@ -2,10 +2,22 @@
 % Please edit documentation in R/cmhc.R
 \name{cmhc_completion_params}
 \alias{cmhc_completion_params}
+\alias{cmhc_completion_params}
 \title{Parameters for completion data}
 \usage{
-cmhc_completion_params()
+cmhc_completion_params(geography_id = 2410, year = 2017, month = 7)
+
+cmhc_completion_params(geography_id = 2410, year = 2017, month = 7)
+}
+\arguments{
+\item{geography_id}{Geography for which to get the data}
+
+\item{year}{Year for which to get the data}
+
+\item{month}{Month for which to get the data}
 }
 \description{
 Parameters for completion data
+
+Parameters for under construction data
 }

@@ -2,6 +2,7 @@
 #
 # An R package to access CMHC data.
 
+#' Hack into CMHC data portal to pull out csv tables
 #' @param query_params Query parameters to be sent to CMHC.
 #'
 #' returns dataframe with CMHC data, tile and subtitle are set as attributes
@@ -26,11 +27,17 @@ get_cmhc <- function(query_params) {
                   )
   dat=readLines(data_file, encoding="latin1") # yes, CMHC does not use UTF-8...
   last_row=match("",dat)
-  result=read.table(text=dat[4:last_row-1], sep = ",", header=TRUE, na.strings = c("**"))
+  result=read.table(text=dat[4:last_row-1],
+                    sep = ",",
+                    header=TRUE,
+                    na.strings = c("**"),
+                    stringsAsFactors = FALSE,
+                    check.names = FALSE)
   region_title=lapply(strsplit(dat[1],"\u0097"),trimws)[[1]]
   attr(result,"region")=region_title[1]
   attr(result,"title")=region_title[2]
   attr(result,"subtitle")=dat[2]
+  names(result)[names(result)==""]
   #file.remove(data_file) #keep file for now for debugging purposes
   return(result)
 }
@@ -74,15 +81,58 @@ cmhc_completion_params=  function(){
   return(query_params)
 }
 
-#' Parameters for primary market vacancy data buy survey zones
+#' Parameters for under construction data
+#' @param geography_id Geography for which to get the data
+#' @param year Year for which to get the data
+#' @param month Month for which to get the data
 #' @export
-cmhc_vacancy_params=  function(){
+cmhc_completion_params=  function(geography_id=2410, year=2017, month=7){
+  table_id="1.1.3.11"
+  cmhc_filter="All"
+  cmhc_dimension="dimension-18"
+  geography_type=3
+  breakdown_geography_type=7 # CT level
+
+  query_params=list(
+    TableId=table_id,
+    GeographyId=geography_id,
+    GeographyTypeId=geography_type,
+    BreakdownGeographyTypeId=breakdown_geography_type,
+    GeographyBreakdownFieldKey="dimension-code-29",
+    DisplayAs="Table",
+    GeograghyName=names(cmhc_geography_list[cmhc_geography_list==geography_id]),
+    Ytd="false",
+    Frequency="",
+    RowSortKey="",
+    DefaultDataField="measure-11",
+    Survey="Scss",
+    DataSource="1",
+    exportType="csv",
+    ForTimePeriod.Year=year,
+    ForTimePeriod.Quarter="",
+    ForTimePeriod.Month=month,
+    ForTimePeriod.Season="",
+    ToTimePeriod.Year="",
+    ToTimePeriod.Quarter="",
+    ToTimePeriod.Month="",
+    ToTimePeriod.Season="",
+    "AppliedFilters%5B0%5D.Key"=cmhc_dimension,
+    "AppliedFilters%5B0%5D.Value"=cmhc_filter
+  )
+  return(query_params)
+}
+
+
+
+#' Parameters for primary market vacancy data buy survey zones
+#' @param geography_id Geography for which to get the data
+#' @export
+cmhc_vacancy_params=  function(geography_id=2410){
   year=2017
   month=10
   table_id="2.1.12.3"
   cmhc_filter="Row / Apartment"
   cmhc_key="dwelling_type_desc_en"
-  geography_id=2410
   geography_type=3
   breakdown_geography_type=5
 
@@ -93,7 +143,7 @@ cmhc_vacancy_params=  function(){
     GeographyTypeId=geography_type,
     BreakdownGeographyTypeId=breakdown_geography_type,
     DisplayAs="Table",
-    GeograghyName="Vancouver",
+    GeograghyName=names(cmhc_geography_list[cmhc_geography_list==geography_id]),
     Ytd="false",
     Frequency="",
     RowSortKey="",
@@ -116,6 +166,7 @@ cmhc_vacancy_params=  function(){
 }
 
 #' Parameters for primary market vacancy data timeline
+#' @param geography_id Geography for which to get the data
 #' @export
 cmhc_vacancy_history_params=  function(geography_id=2410){
   year=2017
@@ -134,7 +185,7 @@ cmhc_vacancy_history_params=  function(geography_id=2410){
     GeographyTypeId=geography_type,
     BreakdownGeographyTypeId=breakdown_geography_type,
     DisplayAs="Table",
-    GeograghyName="Vancouver",
+    GeograghyName=names(cmhc_geography_list[cmhc_geography_list==geography_id]),
     Ytd="false",
     Frequency="",
     RowSortKey="",
@@ -158,6 +209,7 @@ cmhc_vacancy_history_params=  function(geography_id=2410){
 
 
 #' Parameters for primary market rent change fixed sample data timeline
+#' @param geography_id Geography for which to get the data
 #' @export
 cmhc_rent_change_history_params=  function(geography_id=2410){
   year=2017
@@ -176,7 +228,7 @@ cmhc_rent_change_history_params=  function(geography_id=2410){
     GeographyTypeId=geography_type,
     BreakdownGeographyTypeId=breakdown_geography_type,
     DisplayAs="Table",
-    GeograghyName="Vancouver",
+    GeograghyName=names(cmhc_geography_list[cmhc_geography_list==geography_id]),
     Ytd="false",
     Frequency="",
     RowSortKey="",
@@ -199,6 +251,10 @@ cmhc_rent_change_history_params=  function(geography_id=2410){
 }
 
 
-#' geography lookup
+#' cmhc geography lookup
 #' @export
 cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140")
+
+#' census geography lookup
+#' @export
+census_geography_list=list(Vancouver="59933", Toronto="35535", Calgary="48825")

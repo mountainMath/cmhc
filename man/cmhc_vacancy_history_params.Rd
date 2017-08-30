@@ -6,6 +6,9 @@
 \usage{
 cmhc_vacancy_history_params(geography_id = 2410)
 }
+\arguments{
+\item{geography_id}{Geography for which to get the data}
+}
 \description{
 Parameters for primary market vacancy data timeline
 }

@@ -4,7 +4,10 @@
 \alias{cmhc_vacancy_params}
 \title{Parameters for primary market vacancy data buy survey zones}
 \usage{
-cmhc_vacancy_params()
+cmhc_vacancy_params(geography_id = 2410)
+}
+\arguments{
+\item{geography_id}{Geography for which to get the data}
 }
 \description{
 Parameters for primary market vacancy data buy survey zones

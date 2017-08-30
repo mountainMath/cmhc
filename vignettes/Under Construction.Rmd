@@ -1,0 +1,90 @@
+---
+title: "Under Construction"
+author: "Jens von Bergmann"
+date: '2017-08-29'
+output:
+  html_document: default
+  html_notebook: default
+vignette: >
+  %\VignetteIndexEntry{Under Construction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette demonstrates how to pull in under constructino data from CMHC using the `cmhc` package,
+link it with geographic data from [CensusMapper](https://censusmapper.ca) using the `cancensus`
+package and map the under construction data.
+## CMHC data
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(cmhc)
+
+cma="Toronto"
+year=2017
+month=7
+
+# properly parse integer with thousands separator. Yes CMHC sends down formatted number strings.
+parse_integer <- function(x){
+  return(as.integer(sub(",", "", x, fixed = TRUE)))
+}
+
+census_cma=census_geography_list[[cma]]
+cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
+
+#get all under construction data for Vancouver and pad CT GeoUIDs.
+under_construction <- get_cmhc(cmhc_completion_params(
+  geography_id = cmhc_geography_list[[cma]],
+  year = year,
+  month = month))
+names(under_construction)[[1]]="X"
+names(under_construction)[[7]]="remove"
+as_integer=c("Single","Semi-Detached","Row","Apartment","All")
+under_construction <- under_construction %>%
+  mutate(GeoUID = paste0(cma_header,X)) %>%
+  mutate_at(intersect(names(under_construction), as_integer), funs(parse_integer))
+
+```
+
+## Geographic data
+```{r, message=FALSE, warning=FALSE}
+library(cancensus)
+#options(cancensus.api_key='your API key')
+geos <- get_census(dataset = 'CA16', regions=list(CMA=census_cma),level='CT',geo_format='sf')
+```
+
+## Joining the data
+```{r}
+geos <- inner_join(geos,under_construction, by="GeoUID")
+```
+
+
+## Graph
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(sf)
+library(RColorBrewer)
+
+breaks=c(-Inf,1,25,50,100,250,500,750,1000,2000,Inf)
+labels <- c(paste0("0 - ",breaks[2]))
+for(i in 2:(length(breaks)-2)){
+  labels[i] = paste(breaks[i],breaks[i+1], sep=" - ")
+}
+labels[length(breaks)-1]=paste0("Over ",breaks[length(breaks)-1])
+colors=c("darkred",(RColorBrewer::brewer.pal(length(labels)-1,"YlGnBu")))
+
+# categorize the numbers under contruction
+geos$categories <- geos$All %>% cut(breaks=breaks, labels=labels)
+total=sum(geos$All)
+
+ggplot(geos) +
+  geom_sf(aes(fill = categories)) +
+  scale_fill_manual(labels=labels, values=colors, name = "# Units") +
+  ggtitle(paste0(cma, " CMA Under Construction ",month,"-",year," (",prettyNum(total,big.mark = ",")," total)")) +
+  theme_bw()
+
+```
+

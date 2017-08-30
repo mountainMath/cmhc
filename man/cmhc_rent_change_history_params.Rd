@@ -6,6 +6,9 @@
 \usage{
 cmhc_rent_change_history_params(geography_id = 2410)
 }
+\arguments{
+\item{geography_id}{Geography for which to get the data}
+}
 \description{
 Parameters for primary market rent change fixed sample data timeline
 }
