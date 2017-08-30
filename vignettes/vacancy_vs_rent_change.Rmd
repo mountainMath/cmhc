@@ -1,28 +1,37 @@
 ---
 title: "Vacancy Rates and Rent Changes"
 author: "Jens von Bergmann"
-date: "2017-08-29"
+date: '2017-08-29'
 output:
   html_document: default
   html_notebook: default
-vignette: >
-  %\VignetteIndexEntry{Vacancy Rates and Rent Changes}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+vignette: |
+  %\VignetteIndexEntry{Vacancy Rates and Rent Changes} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
 
 This vignette uses the `cmhc` package to download vacancy and rent change data for several areas and visualize them on the same graph to highlight the relationship between the two.
 
+To install and use `cmhc` simply download the repository from Github. 
+```{r, message=FALSE, warning=FALSE}
+devtools::install_github("mountainmath/cmhc")
+library(cmhc)
+```
+
+
 ## Getting the Data
-First we read in the data using the `cmhc` package and join the tables we want and tidy up.
+
+First we read in the data using the `cmhc` package and join the tables we want and tidy up.`cmhc` is preloaded with a list of pre-loaded parameters, `cmhc_geography_list` to access CMHC data for the following cities:
+```{r, message=FALSE, warning=FALSE}
+cmhc_geography_list
+```
+
+The CMHC API is a bit of a mess. `cmhc` uses several internal functions to access data via the CMHC API. The function below makes calls to the CMHC API and returns vacancy and rent price data for a given CMHC city id in a tidy way that we can then use for analysis or graphing. 
 
 ```{r, message=FALSE, warning=FALSE}
-library(cmhc)
 library(dplyr)
-library(ggplot2)
 library(tidyr)
 
-# read in the data and tidy up
+# A function to read and tidy CMHC data
 vacancy_rent_table_for <- function(geography_id){
   dat_vacancy=get_cmhc(cmhc_vacancy_history_params(geography_id))
   region=attr(dat_vacancy,"region")
@@ -44,33 +53,56 @@ vacancy_rent_table_for <- function(geography_id){
 }
 ```
 
-## Plot the data
-With an easy way to get the data, we now define the plot
+Let's take a look at this data now.
 
 ```{r, message=FALSE, warning=FALSE}
-plot_geography <- function(data) {
-  plot_data <- data %>% 
-    gather(key="series",value="Rate", "vacancy_rate", "rent_change") %>% 
-    mutate(Rate=as.numeric(as.character(Rate))) 
+# cmhc_geography_list
+cgy <- vacancy_rent_table_for("0140")
+head(cgy)
+tor <- vacancy_rent_table_for("2270")
+head(tor)
+van <- vacancy_rent_table_for("2410")
+head(van)
+```
 
-  ggplot(data=plot_data, aes(x = Year, y = Rate, group=series, color=series)) +
-  geom_line() +
-  geom_point() + 
-  labs(title=paste0(attr(data,"region")," CMA"), caption="Source: CMHC Rms, code: https://github.com/mountainMath/cmhc") +
+And combine it into a single data frame for comparing directly:
+
+```{r, message=FALSE, warning=FALSE}
+cmhc <- bind_rows(cgy, tor, van, .id = "city")
+
+# Rename id var
+cmhc <- cmhc %>% 
+  # Gather into tidy long format
+  gather(key = "Series", value = "Rate",vacancy_rate:rent_change) %>%
+  # Tidy up the names and variables
+  mutate(city = case_when(
+    .$city == 1 ~ "Calgary",
+    .$city == 2 ~ "Toronto",
+    .$city == 3 ~ "Vancouver"),
+    Series = case_when(
+    .$Series == "vacancy_rate" ~ "Vacancy Rate",
+    .$Series == "rent_change" ~ "Rent Change"),
+    Year = as.numeric(substr(Year,1,4)))
+```
+
+## Plot the data
+
+With the data all tidy, we can now plot it easily. 
+
+```{r, message=FALSE, warning=FALSE}
+library(ggplot2)
+
+plot_comparison <- ggplot(cmhc, aes(x = Year, y = Rate, color = Series)) +
+  geom_line() + 
+  geom_point() +
+  facet_grid(city~.) + 
+  labs(title="Vacancy Rate vs Change in Rent", 
+       subtitle ="Select Cities",
+       caption="Source: CMHC Rms, code: https://github.com/mountainMath/cmhc") +
   scale_y_continuous(labels = scales::percent) +
-  scale_color_manual(labels = c("% Rent Change\n(fixed sample)","Vacancy Rate"), values = c("darkgreen", "steelblue")) +
-  theme_bw() +
+  xlab("") +
+  scale_color_manual(labels = c("% Rent Change\n(fixed sample)","Vacancy Rate"), values = c("darkgreen", "steelblue"), name = "") +
+  theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
-}
-
+plot_comparison
 ```
-
-Equipped with these two functions we can now plot the data for various census metropolitan areas.
-
-```{r, message=FALSE, warning=FALSE, fig.height=3, fig.width=5}
-plot_geography(vacancy_rent_table_for(cmhc_geography_list$Vancouver))
-plot_geography(vacancy_rent_table_for(cmhc_geography_list$Calgary))
-plot_geography(vacancy_rent_table_for(cmhc_geography_list$Toronto))
-
-```
-
