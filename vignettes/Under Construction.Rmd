@@ -151,11 +151,13 @@ site <- data.frame(long=-79.40125107,lat=43.674595)
 ggplot() +
   geom_sf(data=geos, aes(fill = categories), size = 0.05) +
   ggtitle(paste0(cma, " Under Construction ",month,"-",year)) +
-  scale_fill_manual(values=colors, name = "# Units") +
+  scale_fill_manual(values=colors,  breaks =labels, labels=labels, name = "# Units") +
   theme_opts +   
   geom_point(data=site,aes(long,lat),colour="blue",size=2,show_guide = FALSE) +
   geom_sf(data=annex, aes(fill=NA),color="blue",show_guide = FALSE) +
-  coord_sf(xlim=c(-79.3,-79.5), ylim=c(43.6,43.75)) 
+  scale_color_discrete(guide=FALSE) +
+  #guides(fill=FALSE) +
+  coord_sf(xlim=c(-79.3,-79.5), ylim=c(43.6,43.75))  
 
 ggsave('../images/under_construction_annex.png',width=10,height=10)
 
