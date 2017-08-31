@@ -37,7 +37,7 @@ get_cmhc <- function(query_params) {
   attr(result,"region")=region_title[1]
   attr(result,"title")=region_title[2]
   attr(result,"subtitle")=dat[2]
-  names(result)[names(result)==""]
+  names(result)[names(result)==""] <- paste0("X",sequence(length(names(result)[names(result)==""])))
   #file.remove(data_file) #keep file for now for debugging purposes
   return(result)
 }

@@ -37,11 +37,9 @@ under_construction <- get_cmhc(cmhc_completion_params(
   geography_id = cmhc_geography_list[[cma]],
   year = year,
   month = month))
-names(under_construction)[[1]]="X"
-names(under_construction)[[7]]="remove"
 as_integer=c("Single","Semi-Detached","Row","Apartment","All")
 under_construction <- under_construction %>%
-  mutate(GeoUID = paste0(cma_header,X)) %>%
+  mutate(GeoUID = paste0(cma_header,X1)) %>%
   mutate_at(intersect(names(under_construction), as_integer), funs(parse_integer))
 
 ```
@@ -60,10 +58,24 @@ geos <- inner_join(geos,under_construction, by="GeoUID")
 
 
 ## Graph
+```{r}
+bg_color="#c0c0c0"
+theme_opts<-list(theme(panel.grid.minor = element_blank(),
+                       #panel.grid.major = element_blank(), #bug, not working
+                       panel.grid.major = element_line(colour = bg_color),
+                       panel.background = element_rect(fill = bg_color, colour = NA),
+                       plot.background = element_rect(fill=bg_color, size=1,linetype="solid"),
+                       axis.line = element_blank(),
+                       axis.text.x = element_blank(),
+                       axis.text.y = element_blank(),
+                       axis.ticks = element_blank(),
+                       axis.title.x = element_blank(),
+                       axis.title.y = element_blank()))
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+```
 
-```{r, fig.height=7, fig.width=7, message=FALSE, warning=FALSE}
+After defining a basic theme we can go ahead and map the data.
+```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(sf)
 library(RColorBrewer)
@@ -74,17 +86,50 @@ for(i in 2:(length(breaks)-2)){
   labels[i] = paste(breaks[i],breaks[i+1], sep=" - ")
 }
 labels[length(breaks)-1]=paste0("Over ",breaks[length(breaks)-1])
-colors=c("darkred",(RColorBrewer::brewer.pal(length(labels)-1,"YlGnBu")))
+#colors=c("darkred",(RColorBrewer::brewer.pal(length(labels)-1,"YlGnBu")))
+colors=RColorBrewer::brewer.pal(length(relative_labels),"PiYG")
 
 # categorize the numbers under contruction
 geos$categories <- geos$All %>% cut(breaks=breaks, labels=labels)
 total=sum(geos$All)
 
 ggplot(geos) +
-  geom_sf(aes(fill = categories)) +
+  geom_sf(aes(fill = categories), size = 0.05) +
   scale_fill_manual(labels=labels, values=colors, name = "# Units") +
   ggtitle(paste0(cma, " CMA Under Construction ",month,"-",year," (",prettyNum(total,big.mark = ",")," total)")) +
-  theme_bw()
+  theme_opts
+
+ggsave('../images/under_construction.png',width=10,height=10)
 
 ```
+
+## Mixing with Census Data
+We can also mix in census data. For example we can show the construction activity relative to the 2016 dwelling stock. 
+
+```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
+
+geos$relative_activity <- geos$All / geos$Dwellings 
+total=sum(geos$All)/sum(geos$Dwellings)
+relative_breaks <- c(-Inf,0.001,0.0025,0.005,0.0075,0.01,0.015,0.025,0.05,0.1,0.5,Inf)
+geos$relative_categories <- geos$relative_activity %>% cut(breaks=relative_breaks)
+
+relative_labels <- c(paste0("0 - ",prettyNum(relative_breaks[2]*10000,big.mark = ",")))
+for(i in 2:(length(relative_breaks)-2)){
+  relative_labels[i] = paste0(prettyNum(relative_breaks[i]*10000,big.mark = ","), " - ",prettyNum(relative_breaks[i+1]*10000,big.mark = ","))
+}
+relative_labels[length(relative_breaks)-1]=paste0("Over ",prettyNum(relative_breaks[length(relative_breaks)-1]*10000,big.mark = ","))
+relative_colors=RColorBrewer::brewer.pal(length(relative_labels),"RdYlGn")
+title=paste0(cma, " CMA Under Construction ",month,"-",year,
+             " per 10,000 existing dwellings  (",
+             prettyNum(round(total*10000),big.mark = ","),
+             " on average)")
+
+ggplot(geos) +
+  geom_sf(aes(fill = relative_categories), size = 0.05) +
+  scale_fill_manual(labels=relative_labels, values=relative_colors, name = "# Units per 10k\nExisting 2016",na.value="#808080") +
+  ggtitle(title) +
+  theme_opts
+```
+
+We could also just as easily choose other census variables to try and understand why dwelling unit construction is higher in some areas than in others. For example.
 

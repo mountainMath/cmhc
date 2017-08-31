@@ -37,15 +37,15 @@ vacancy_rent_table_for <- function(geography_id){
   region=attr(dat_vacancy,"region")
   title_x=attr(dat_vacancy,"title")
   dat_vacancy <- dat_vacancy %>% 
-    select("X","Total") %>%
+    select("X1","Total") %>%
     mutate(Total=as.numeric(as.character(Total))/100) %>%
-    rename(vacancy_rate=Total)
+    rename(vacancy_rate=Total, X=X1)
   dat_rent_change=get_cmhc(cmhc_rent_change_history_params(geography_id)) 
   title_y=attr(dat_rent_change,"title")
   dat_rent_change <- dat_rent_change %>%
-    select("X","Total") %>%
+    select("X1","Total") %>%
     mutate(Total=as.numeric(as.character(Total))/100) %>%
-    rename(rent_change=Total)
+    rename(rent_change=Total, X=X1)
   dat=inner_join(dat_vacancy,dat_rent_change,by="X") %>% rename(Year=X)
   attr(dat,"region")=region
   attr(dat,"labels")=c(title_x,title_y)
@@ -105,4 +105,7 @@ plot_comparison <- ggplot(cmhc, aes(x = Year, y = Rate, color = Series)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 plot_comparison
+
+ggsave('../images/vacancy_rent_change.png')
+
 ```
