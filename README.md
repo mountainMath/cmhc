@@ -12,3 +12,7 @@ Check out the [vignette plotting vacancy rate against fixed sample rent increase
 Or we can fold in census geographies (and census data) to map the [current units under construction](https://github.com/mountainMath/cmhc/blob/master/vignettes/Under%20Construction.nb.html).
 
 ![Under Construction](images/under_construction.png)
+
+And since there is a lot of interest in development around the Annex neighbourhood, we can zoom in real quick and overlay the neighbourhood boundary.
+
+![Annex](images/under_construction_annex.png)
