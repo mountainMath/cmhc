@@ -9,6 +9,6 @@ Check out the [vignette plotting vacancy rate against fixed sample rent increase
 
 ![Vacancy rate](images/vacancy_rent_change.png)
 
-Or we can fold in census geographies (and census data) to map the [current units under construction](https://htmlpreview.github.io/?https://github.com/mountainMath/cmhc/blob/master/vignettes/Under%20Construction.nb.html).
+Or we can fold in census geographies (and census data) to map the [current units under construction](https://github.com/mountainMath/cmhc/blob/master/vignettes/Under%20Construction.nb.html).
 
 ![Under Construction](images/under_construction.png)
