@@ -109,7 +109,7 @@ We can also mix in census data. For example we can show the construction activit
 ```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
 
 geos$relative_activity <- geos$All / geos$Dwellings 
-total=sum(geos$All)/sum(geos$Dwellings)
+relative_total=sum(geos$All)/sum(geos$Dwellings)
 relative_breaks <- c(-Inf,0.001,0.0025,0.005,0.0075,0.01,0.015,0.025,0.05,0.1,0.5,Inf)
 geos$relative_categories <- geos$relative_activity %>% cut(breaks=relative_breaks)
 
@@ -121,7 +121,7 @@ relative_labels[length(relative_breaks)-1]=paste0("Over ",prettyNum(relative_bre
 relative_colors=RColorBrewer::brewer.pal(length(relative_labels),"RdYlGn")
 title=paste0(cma, " CMA Under Construction ",month,"-",year,
              " per 10,000 existing dwellings  (",
-             prettyNum(round(total*10000),big.mark = ","),
+             prettyNum(round(relative_total*10000),big.mark = ","),
              " on average)")
 
 ggplot(geos) +
@@ -132,4 +132,28 @@ ggplot(geos) +
 ```
 
 We could also just as easily choose other census variables to try and understand why dwelling unit construction is higher in some areas than in others. For example.
+
+## Annex
+Everyone seems to be talking about this area called the Annex these days. Let's check what's under development there right now,
+so let's zoom in a bit and overlay the neighbourhood boundary. While most of the Annex has essentially zero development happening right now, the north-eastern corner that also holds the subject site that irks everyone's interest these days does seems to see some moderate development activity. It is also evident that the development activity is spread very unevenly, and some areas
+are recieving an order of magnitude more active development.
+
+
+```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
+
+annex <- read_sf('../data/annex.geojson')
+site <- data.frame(long=-79.40125107,lat=43.674595)
+
+ggplot(geos) +
+  geom_sf(aes(fill = categories), size = 0.05) +
+  scale_fill_manual(labels=labels, values=colors, name = "# Units") +
+  ggtitle(paste0(cma, " Under Construction ",month,"-",year)) +
+  geom_point(data=site,aes(long,lat),colour="blue",size=2) +
+  geom_sf(data=annex, aes(fill=NA),color="blue") +
+  coord_sf(xlim=c(-79.3,-79.5), ylim=c(43.6,43.75)) +
+  theme_opts
+
+ggsave('../images/under_construction_annex.png',width=10,height=10)
+
+```
 
