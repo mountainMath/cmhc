@@ -179,12 +179,12 @@ $(document).ready(function () {
 <p>This vignette demonstrates how to pull in under constructino data from CMHC using the <code>cmhc</code> package, link it with geographic data from <a href="https://censusmapper.ca">CensusMapper</a> using the <code>cancensus</code> package and map the under construction data. ## CMHC data</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmxpYnJhcnkoY21oYylcbmNtYT1cIlRvcm9udG9cIlxueWVhcj0yMDE3XG5tb250aD03XG4jIHByb3Blcmx5IHBhcnNlIGludGVnZXIgd2l0aCB0aG91c2FuZHMgc2VwYXJhdG9yLiBZZXMgQ01IQyBzZW5kcyBkb3duIGZvcm1hdHRlZCBudW1iZXIgc3RyaW5ncy5cbnBhcnNlX2ludGVnZXIgPC0gZnVuY3Rpb24oeCl7XG4gIHJldHVybihhcy5pbnRlZ2VyKHN1YihcIixcIiwgXCJcIiwgeCwgZml4ZWQgPSBUUlVFKSkpXG59XG5jZW5zdXNfY21hPWNlbnN1c19nZW9ncmFwaHlfbGlzdFtbY21hXV1cbmNtYV9oZWFkZXI9c3Vic3RyKGNlbnN1c19jbWEsIG5jaGFyKGNlbnN1c19jbWEpLTIsbmNoYXIoY2Vuc3VzX2NtYSkpXG4jZ2V0IGFsbCB1bmRlciBjb25zdHJ1Y3Rpb24gZGF0YSBmb3IgVmFuY291dmVyIGFuZCBwYWQgQ1QgR2VvVUlEcy5cbnVuZGVyX2NvbnN0cnVjdGlvbiA8LSBnZXRfY21oYyhjbWhjX2NvbXBsZXRpb25fcGFyYW1zKFxuICBnZW9ncmFwaHlfaWQgPSBjbWhjX2dlb2dyYXBoeV9saXN0W1tjbWFdXSxcbiAgeWVhciA9IHllYXIsXG4gIG1vbnRoID0gbW9udGgpKVxuYXNfaW50ZWdlcj1jKFwiU2luZ2xlXCIsXCJTZW1pLURldGFjaGVkXCIsXCJSb3dcIixcIkFwYXJ0bWVudFwiLFwiQWxsXCIpXG51bmRlcl9jb25zdHJ1Y3Rpb24gPC0gdW5kZXJfY29uc3RydWN0aW9uICU+JVxuICBtdXRhdGUoR2VvVUlEID0gcGFzdGUwKGNtYV9oZWFkZXIsWDEpKSAlPiVcbiAgbXV0YXRlX2F0KGludGVyc2VjdChuYW1lcyh1bmRlcl9jb25zdHJ1Y3Rpb24pLCBhc19pbnRlZ2VyKSwgZnVucyhwYXJzZV9pbnRlZ2VyKSlcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmxpYnJhcnkoY21oYylcbmNtYT1cIlRvcm9udG9cIlxueWVhcj0yMDE3XG5tb250aD04XG4jIHByb3Blcmx5IHBhcnNlIGludGVnZXIgd2l0aCB0aG91c2FuZHMgc2VwYXJhdG9yLiBZZXMgQ01IQyBzZW5kcyBkb3duIGZvcm1hdHRlZCBudW1iZXIgc3RyaW5ncy5cbnBhcnNlX2ludGVnZXIgPC0gZnVuY3Rpb24oeCl7XG4gIHJldHVybihhcy5pbnRlZ2VyKHN1YihcIixcIiwgXCJcIiwgeCwgZml4ZWQgPSBUUlVFKSkpXG59XG5jZW5zdXNfY21hPWNlbnN1c19nZW9ncmFwaHlfbGlzdFtbY21hXV1cbmNtYV9oZWFkZXI9c3Vic3RyKGNlbnN1c19jbWEsIG5jaGFyKGNlbnN1c19jbWEpLTIsbmNoYXIoY2Vuc3VzX2NtYSkpXG4jZ2V0IGFsbCB1bmRlciBjb25zdHJ1Y3Rpb24gZGF0YSBmb3IgVmFuY291dmVyIGFuZCBwYWQgQ1QgR2VvVUlEcy5cbnVuZGVyX2NvbnN0cnVjdGlvbiA8LSBnZXRfY21oYyhjbWhjX2NvbXBsZXRpb25fcGFyYW1zKFxuICBnZW9ncmFwaHlfaWQgPSBjbWhjX2dlb2dyYXBoeV9saXN0W1tjbWFdXSxcbiAgeWVhciA9IHllYXIsXG4gIG1vbnRoID0gbW9udGgpKVxuYXNfaW50ZWdlcj1jKFwiU2luZ2xlXCIsXCJTZW1pLURldGFjaGVkXCIsXCJSb3dcIixcIkFwYXJ0bWVudFwiLFwiQWxsXCIpXG51bmRlcl9jb25zdHJ1Y3Rpb24gPC0gdW5kZXJfY29uc3RydWN0aW9uICU+JVxuICBtdXRhdGUoR2VvVUlEID0gcGFzdGUwKGNtYV9oZWFkZXIsWDEpKSAlPiVcbiAgbXV0YXRlX2F0KGludGVyc2VjdChuYW1lcyh1bmRlcl9jb25zdHJ1Y3Rpb24pLCBhc19pbnRlZ2VyKSwgZnVucyhwYXJzZV9pbnRlZ2VyKSlcbmBgYCJ9 -->
 <pre class="r"><code>library(dplyr)
 library(cmhc)
 cma=&quot;Toronto&quot;
 year=2017
-month=7
+month=8
 # properly parse integer with thousands separator. Yes CMHC sends down formatted number strings.
 parse_integer &lt;- function(x){
   return(as.integer(sub(&quot;,&quot;, &quot;&quot;, x, fixed = TRUE)))
@@ -201,6 +201,10 @@ under_construction &lt;- under_construction %&gt;%
   mutate(GeoUID = paste0(cma_header,X1)) %&gt;%
   mutate_at(intersect(names(under_construction), as_integer), funs(parse_integer))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gbXV0YXRlX2ltcGwoLmRhdGEsIGRvdHMpIDogXG4gIEV2YWx1YXRpb24gZXJyb3I6IG9iamVjdCAnWDEnIG5vdCBmb3VuZC5cbiJ9 -->
+<pre><code>Error in mutate_impl(.data, dots) : 
+  Evaluation error: object 'X1' not found.</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="geographic-data" class="section level2">

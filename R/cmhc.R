@@ -212,14 +212,22 @@ cmhc_vacancy_history_params=  function(geography_id=2410){
 #' @param geography_id Geography for which to get the data
 #' @export
 cmhc_rent_change_history_params=  function(geography_id=2410){
+  return(cmhc_primary_rental_params(geography_id, "fixed_sample_rent_change_pct"))
+}
+
+#' Parameters for primary market rent change fixed sample data timeline
+#' @param geography_id Geography for which to get the data
+#' @param default_data_field data field
+#' @param data_source not sure what this is
+#' @param table_id
+#' @export
+cmhc_primary_rental_params=  function(geography_id=2410, table_id = "2.2.12",default_data_field = default_data_field, data_source="1"){
   year=2017
   month=""
-  table_id="2.2.12"
   cmhc_filter="Row / Apartment"
   cmhc_key="dwelling_type_desc_en"
   geography_type=3
   breakdown_geography_type=0
-  default_data_field="fixed_sample_rent_change_pct"
 
   query_params=list(
     TableId=table_id,
@@ -234,7 +242,7 @@ cmhc_rent_change_history_params=  function(geography_id=2410){
     RowSortKey="",
     DefaultDataField=default_data_field,
     Survey="Rms",
-    DataSource="1",
+    DataSource=data_source,
     exportType="csv",
     ForTimePeriod.Year=1990,
     ForTimePeriod.Quarter="",
@@ -250,7 +258,6 @@ cmhc_rent_change_history_params=  function(geography_id=2410){
   return(query_params)
 }
 
-
 #' cmhc geography lookup
 #' @export
 cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140")
@@ -258,3 +265,8 @@ cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140")
 #' census geography lookup
 #' @export
 census_geography_list=list(Vancouver="59933", Toronto="35535", Calgary="48825")
+
+#' census geography lookup
+#' @export
+census_to_cmhc_translation=list("59933"="2410", "35535"="2270", "48825"="0140")
+
