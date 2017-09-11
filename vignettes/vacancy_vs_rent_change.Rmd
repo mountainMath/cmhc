@@ -13,7 +13,7 @@ This vignette uses the `cmhc` package to download vacancy and rent change data f
 
 To install and use `cmhc` simply download the repository from Github. 
 ```{r, message=FALSE, warning=FALSE}
-devtools::install_github("mountainmath/cmhc")
+#devtools::install_github("mountainmath/cmhc")
 library(cmhc)
 ```
 

@@ -212,7 +212,7 @@ cmhc_vacancy_history_params=  function(geography_id=2410){
 #' @param geography_id Geography for which to get the data
 #' @export
 cmhc_rent_change_history_params=  function(geography_id=2410){
-  return(cmhc_primary_rental_params(geography_id, "fixed_sample_rent_change_pct"))
+  return(cmhc_primary_rental_params(geography_id, default_data_field="fixed_sample_rent_change_pct"))
 }
 
 #' Parameters for primary market rent change fixed sample data timeline
