@@ -124,7 +124,7 @@ cmhc_completion_params=  function(geography_id=2410, year=2017, month=7){
 
 
 
-#' Parameters for primary market vacancy data buy survey zones
+#' Parameters for primary market vacancy data by survey zones
 #' @param geography_id Geography for which to get the data
 #' @export
 cmhc_vacancy_params=  function(geography_id=2410){
@@ -219,9 +219,9 @@ cmhc_rent_change_history_params=  function(geography_id=2410){
 #' @param geography_id Geography for which to get the data
 #' @param default_data_field data field
 #' @param data_source not sure what this is
-#' @param table_id
+#' @param table_id cmhc table id
 #' @export
-cmhc_primary_rental_params=  function(geography_id=2410, table_id = "2.2.12",default_data_field = default_data_field, data_source="1"){
+cmhc_primary_rental_params=  function(geography_id=2410, table_id = "2.2.12",default_data_field = "fixed_sample_rent_change_pct", data_source="1"){
   year=2017
   month=""
   cmhc_filter="Row / Apartment"
@@ -258,15 +258,75 @@ cmhc_primary_rental_params=  function(geography_id=2410, table_id = "2.2.12",def
   return(query_params)
 }
 
+
+
+#' Parameters for time series
+#' @param geography_id Geography for which to get the data
+#' @param geography_type type corrsponding to geography
+#' @param table_id CMHC table id
+#' @export
+cmhc_snapshot_params=  function(table_id = "2.2.12",
+                                geography_id=2410, geography_type=3, breakdown_geography_type="CSD",
+                                year=2017, month=7){
+
+  query_params=list(
+    TableId=table_id,
+    GeographyId=geography_id,
+    GeographyTypeId=geography_type,
+    BreakdownGeographyTypeId=as.integer(as.character(cmhc_geography_type_list[breakdown_geography_type])),
+    ForTimePeriod.Year=year,
+    ForTimePeriod.Month=month,
+    exportType="csv"
+  )
+  return(query_params)
+}
+
+
+#' Parameters for time series
+#' @param geography_id Geography for which to get the data
+#' @param geography_type type corrsponding to geography
+#' @param table_id CMHC table id
+#' @export
+cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geography_type=3){
+  breakdown_geography_type=0
+
+  query_params=list(
+    TableId=table_id,
+    GeographyId=geography_id,
+    GeographyTypeId=geography_type,
+    BreakdownGeographyTypeId=breakdown_geography_type,
+    exportType="csv"
+  )
+  return(query_params)
+}
+
+
+#' table lookup
+#' @export
+cmhc_table_list=list(
+  "Srms Average Rent" = "4.4.2",
+  "Rms Vacancy Rate Time Seris" = "2.2.1",
+  "Rms Rent Change Time Seris" = "2.2.12",
+  "Rms Average Rent" = "2.1.11.3",
+  "Rms Average Rent Time Series" = "2.2.11",
+  "Scss Completions" = "1.1.2.9",
+  "Scss Completions Time Seris" = "1.2.2",
+  "Scss Under Construction" = "1.1.3.11"
+)
+
 #' cmhc geography lookup
 #' @export
-cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140")
+cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140", Victoria="2440")
+
+#' cmhc geography type lookup
+cmhc_geography_type_list=list(CMA=3, CSD=4, CT=7)
 
 #' census geography lookup
 #' @export
-census_geography_list=list(Vancouver="59933", Toronto="35535", Calgary="48825")
+census_geography_list=list(Vancouver="59933", Toronto="35535", Calgary="48825", Victoria="59935")
 
 #' census geography lookup
 #' @export
-census_to_cmhc_translation=list("59933"="2410", "35535"="2270", "48825"="0140")
+census_to_cmhc_translation=list("59933"="2410", "35535"="2270", "48825"="0140", "59935"="2440")
 
+#' to filter for rental: {Key: "dimension-18", Value: "Rental"}

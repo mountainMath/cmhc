@@ -4,7 +4,7 @@
 \name{cmhc_geography_list}
 \alias{cmhc_geography_list}
 \title{cmhc geography lookup}
-\format{An object of class \code{list} of length 3.}
+\format{An object of class \code{list} of length 4.}
 \usage{
 cmhc_geography_list
 }

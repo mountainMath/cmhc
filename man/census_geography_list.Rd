@@ -4,7 +4,7 @@
 \name{census_geography_list}
 \alias{census_geography_list}
 \title{census geography lookup}
-\format{An object of class \code{list} of length 3.}
+\format{An object of class \code{list} of length 4.}
 \usage{
 census_geography_list
 }

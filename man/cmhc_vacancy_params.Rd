@@ -2,7 +2,7 @@
 % Please edit documentation in R/cmhc.R
 \name{cmhc_vacancy_params}
 \alias{cmhc_vacancy_params}
-\title{Parameters for primary market vacancy data buy survey zones}
+\title{Parameters for primary market vacancy data by survey zones}
 \usage{
 cmhc_vacancy_params(geography_id = 2410)
 }
@@ -10,5 +10,5 @@ cmhc_vacancy_params(geography_id = 2410)
 \item{geography_id}{Geography for which to get the data}
 }
 \description{
-Parameters for primary market vacancy data buy survey zones
+Parameters for primary market vacancy data by survey zones
 }
