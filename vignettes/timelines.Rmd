@@ -44,12 +44,12 @@ data <- get_cmhc(cmhc_timeseries_params(table_id = cmhc_table_list["Scss Complet
             All=sum(All)) %>%
   filter(as.integer(Date)<2017) # ditch partial data
 
-types <- c("Single","Semi-Detached","Row","Apartment","All")
+types <- c("Single","Semi-Detached","Row","Apartment")
 ggplot(data=data %>% gather(key="Type",value="Units",types), 
-       aes(x=Date, y=Units, group=Type, color=Type)) +
+       aes(x=Date, y=Units, group=Type, fill=Type)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   ggtitle(paste0(cma," CMA Completions")) + 
-  geom_line()
+  geom_bar(stat="identity")
 ggsave("../images/van_completions.png")
 ```
 
