@@ -27,7 +27,8 @@ get_cmhc <- function(query_params) {
                   )
   dat=readLines(data_file, encoding="latin1") # yes, CMHC does not use UTF-8...
   last_row=match("",dat)
-  result=read.table(text=dat[4:last_row-1],
+  range=grep("^,.+$",dat)
+  result=read.table(text=dat[range[1]:(range[2]-1)],
                     sep = ",",
                     header=TRUE,
                     na.strings = c("**"),
@@ -122,7 +123,13 @@ cmhc_completion_params=  function(geography_id=2410, year=2017, month=7){
   return(query_params)
 }
 
-
+#' Build ct_uid out of cmhc data
+#' @param cma_header Census CMA code without province part
+#' @param GeoUID ct geo_uid
+#' @export
+cmhc_geo_uid_for_ct <- function(cma_header,GeoUID) {
+  return(paste0(cma_header,sprintf("%07.2f", GeoUID)))
+}
 
 #' Parameters for primary market vacancy data by survey zones
 #' @param geography_id Geography for which to get the data
@@ -267,10 +274,11 @@ cmhc_primary_rental_params=  function(geography_id=2410, table_id = "2.2.12",def
 #' @export
 cmhc_snapshot_params=  function(table_id = "2.2.12",
                                 geography_id=2410, geography_type=3, breakdown_geography_type="CSD",
+                                filter=list(),
                                 year=2017, month=7){
 
   query_params=list(
-    TableId=table_id,
+    TableId=as.character(table_id),
     GeographyId=geography_id,
     GeographyTypeId=geography_type,
     BreakdownGeographyTypeId=as.integer(as.character(cmhc_geography_type_list[breakdown_geography_type])),
@@ -278,6 +286,13 @@ cmhc_snapshot_params=  function(table_id = "2.2.12",
     ForTimePeriod.Month=month,
     exportType="csv"
   )
+  for (i in 1:length(filter)) {
+    x=filter[i]
+    query_params[paste0("AppliedFilters[",i-1,"].Key")]=names(x)
+    query_params[paste0("AppliedFilters[",i-1,"].Value")]=as.character(x)
+  }
+
+
   return(query_params)
 }
 
@@ -311,7 +326,8 @@ cmhc_table_list=list(
   "Rms Average Rent Time Series" = "2.2.11",
   "Scss Completions" = "1.1.2.9",
   "Scss Completions Time Seris" = "1.2.2",
-  "Scss Under Construction" = "1.1.3.11"
+  "Scss Under Construction CT" = "1.1.3.11",
+  "Scss Under Construction CSD" = '1.1.3.9'
 )
 
 #' cmhc geography lookup

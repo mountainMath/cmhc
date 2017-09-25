@@ -3,6 +3,7 @@
 export(census_geography_list)
 export(census_to_cmhc_translation)
 export(cmhc_completion_params)
+export(cmhc_geo_uid_for_ct)
 export(cmhc_geography_list)
 export(cmhc_primary_rental_params)
 export(cmhc_rent_change_history_params)
