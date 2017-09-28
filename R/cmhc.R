@@ -28,6 +28,9 @@ get_cmhc <- function(query_params) {
   dat=readLines(data_file, encoding="latin1") # yes, CMHC does not use UTF-8...
   last_row=match("",dat)
   range=grep("^,.+$",dat)
+  if (length(range)==1) {
+    range[2]=last_row
+  }
   result=read.table(text=dat[range[1]:(range[2]-1)],
                     sep = ",",
                     header=TRUE,
@@ -40,6 +43,14 @@ get_cmhc <- function(query_params) {
   attr(result,"subtitle")=dat[2]
   names(result)[names(result)==""] <- paste0("X",sequence(length(names(result)[names(result)==""])))
   #file.remove(data_file) #keep file for now for debugging purposes
+
+  #parse integers
+  parse_integer <- function(x){return(as.numeric(sub(",", "", x, fixed = TRUE)))}
+  as_integer=c("Bachelor", "1 Bedroom", "2 Bedroom", "3 Bedroom +", "Total",
+               "Single","Semi-Detached","Row","Apartment","All",
+               "Semi / Row / Duplex","Other- Primarily Accessory Suites")
+  result <- result %>% mutate_at(intersect(names(result), as_integer), funs(parse_integer))
+
   return(result)
 }
 

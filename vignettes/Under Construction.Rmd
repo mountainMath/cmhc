@@ -25,8 +25,6 @@ cma="Toronto"
 year=2017
 month=8
 
-# properly parse integer with thousands separator. Yes CMHC sends down formatted number strings.
-parse_integer <- function(x){return(as.integer(sub(",", "", x, fixed = TRUE)))}
 
 census_cma=census_geography_list[[cma]]
 cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
@@ -36,11 +34,9 @@ under_construction <- get_cmhc(cmhc_completion_params(
   geography_id = cmhc_geography_list[[cma]],
   year = year,
   month = month))
-as_integer=c("Single","Semi-Detached","Row","Apartment","All")
-under_construction <- under_construction %>%
-  mutate(GeoUID = paste0(cma_header,X1)) %>%
-  mutate_at(intersect(names(under_construction), as_integer), funs(parse_integer))
 
+under_construction <- under_construction %>%
+  mutate(GeoUID = paste0(cma_header,X1))
 ```
 
 ## Geographic data

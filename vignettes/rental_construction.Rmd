@@ -28,8 +28,6 @@ breakdown_geography_type='CSD'
 
 table_id=cmhc_table_list[paste0("Scss Under Construction", " ", breakdown_geography_type)]
 
-# properly parse integer with thousands separator. Yes CMHC sends down formatted number strings.
-parse_integer <- function(x){return(as.integer(sub(",", "", x, fixed = TRUE)))}
 
 census_cma=census_geography_list[[cma]]
 cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
@@ -42,11 +40,8 @@ rental_under_construction <- get_cmhc(cmhc_snapshot_params(
   table_id=table_id,
   year = year,
   month = month))
-as_integer=c("Single","Semi-Detached","Row","Apartment","All")
 rental_under_construction <- rental_under_construction %>%
-  rename(GeoUID = X1) %>%
-  mutate_at(intersect(names(rental_under_construction), as_integer), funs(parse_integer))
-
+  rename(GeoUID = X1) 
 all_under_construction <- get_cmhc(cmhc_snapshot_params(
   geography_id = cmhc_geography_list[[cma]],
   breakdown_geography_type = breakdown_geography_type,
@@ -54,10 +49,8 @@ all_under_construction <- get_cmhc(cmhc_snapshot_params(
   filter=list("dimension-18"="All"),
   year = year,
   month = month))
-as_integer=c("Single","Semi-Detached","Row","Apartment","All")
 all_under_construction <- all_under_construction %>%
-  rename(GeoUID = X1) %>%
-  mutate_at(intersect(names(all_under_construction), as_integer), funs(parse_integer))
+  rename(GeoUID = X1)
 
 uc=inner_join(all_under_construction,rental_under_construction,by="GeoUID") %>%
   mutate(rental_pct=All.y/All.x)
