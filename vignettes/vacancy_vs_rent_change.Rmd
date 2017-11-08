@@ -32,22 +32,24 @@ library(dplyr)
 library(tidyr)
 
 # A function to read and tidy CMHC data
-vacancy_rent_table_for <- function(geography_id){
-  dat_vacancy=get_cmhc(cmhc_vacancy_history_params(geography_id))
-  region=attr(dat_vacancy,"region")
+vacancy_rent_table_for <- function(geography,geography_type="CMA"){
+  region_params=cmhc_region_params(geography = geography,type=geography_type)
+  params=cmhc_timeseries_params(table_id = cmhc_table_list["Rms Vacancy Rate Time Seris"],region=region_params)
+  dat_vacancy=get_cmhc(params)
   title_x=attr(dat_vacancy,"title")
   dat_vacancy <- dat_vacancy %>% 
     select("X1","Total") %>%
-    mutate(Total=as.numeric(as.character(Total))/100) %>%
+    #mutate(Total=as.numeric(as.character(Total))/100) %>%
     rename(vacancy_rate=Total, X=X1)
-  dat_rent_change=get_cmhc(cmhc_rent_change_history_params(geography_id)) 
+  params=cmhc_timeseries_params(table_id = cmhc_table_list["Rms Rent Change Time Seris"],region=region_params)
+  dat_rent_change=get_cmhc(params)
   title_y=attr(dat_rent_change,"title")
   dat_rent_change <- dat_rent_change %>%
     select("X1","Total") %>%
-    mutate(Total=as.numeric(as.character(Total))/100) %>%
+    #mutate(Total=as.numeric(as.character(Total))/100) %>%
     rename(rent_change=Total, X=X1)
   dat=inner_join(dat_vacancy,dat_rent_change,by="X") %>% rename(Year=X)
-  attr(dat,"region")=region
+  attr(dat,"region")=paste0(geography," ",geography_type)
   attr(dat,"labels")=c(title_x,title_y)
   return(dat)
 }
@@ -57,11 +59,11 @@ Let's take a look at this data now.
 
 ```{r, message=FALSE, warning=FALSE}
 # cmhc_geography_list
-cgy <- vacancy_rent_table_for("0140")
+cgy <- vacancy_rent_table_for("Calgary")
 head(cgy)
-tor <- vacancy_rent_table_for("2270")
+tor <- vacancy_rent_table_for("Toronto")
 head(tor)
-van <- vacancy_rent_table_for("2410")
+van <- vacancy_rent_table_for("Vancouver")
 head(van)
 ```
 
@@ -92,6 +94,50 @@ With the data all tidy, we can now plot it easily.
 ```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
 
+plot_comparison <- ggplot(cmhc, aes(x = Year, y = Rate, color = Series)) +
+  geom_line() + 
+  geom_point() +
+  facet_grid(city~.) + 
+  labs(title="Vacancy Rate vs Change in Rent", 
+       subtitle ="Select Cities",
+       caption="Source: CMHC Rms, code: https://github.com/mountainMath/cmhc") +
+  scale_y_continuous(labels = scales::percent) +
+  xlab("") +
+  scale_color_manual(labels = c("% Rent Change\n(fixed sample)","Vacancy Rate"), values = c("darkgreen", "steelblue"), name = "") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+plot_comparison
+
+ggsave('../images/vacancy_rent_change.png')
+
+```
+
+
+
+We can narrow things down by city instead of CMA.
+
+cmhc_geography_csd_list
+
+
+```{r, message=FALSE, warning=FALSE}
+# 
+cgy <- vacancy_rent_table_for("Calgary","CSD")
+tor <- vacancy_rent_table_for("Toronto","CSD")
+van <- vacancy_rent_table_for("Vancouver","CSD")
+cmhc <- bind_rows(cgy, tor, van, .id = "city")
+# Rename id var
+cmhc <- cmhc %>% 
+  # Gather into tidy long format
+  gather(key = "Series", value = "Rate",vacancy_rate:rent_change) %>%
+  # Tidy up the names and variables
+  mutate(city = case_when(
+    .$city == 1 ~ "Calgary CSD",
+    .$city == 2 ~ "Toronto CSD",
+    .$city == 3 ~ "Vancouver CSD"),
+    Series = case_when(
+    .$Series == "vacancy_rate" ~ "Vacancy Rate",
+    .$Series == "rent_change" ~ "Rent Change"),
+    Year = as.numeric(substr(Year,1,4)))
 plot_comparison <- ggplot(cmhc, aes(x = Year, y = Rate, color = Series)) +
   geom_line() + 
   geom_point() +

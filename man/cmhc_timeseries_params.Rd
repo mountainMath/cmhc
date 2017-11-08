@@ -5,7 +5,7 @@
 \title{Parameters for time series}
 \usage{
 cmhc_timeseries_params(table_id = "1.1.2.9", geography_id = 2410,
-  geography_type = 3)
+  geography_type = 3, region = NA)
 }
 \arguments{
 \item{table_id}{CMHC table id}

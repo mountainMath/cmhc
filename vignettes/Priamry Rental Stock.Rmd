@@ -1,0 +1,196 @@
+---
+title: "Priamry Rental Stock"
+author: "Jens von Bergmann"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  html_notebook: default
+vignette: >
+  %\VignetteIndexEntry{Priamry Rental Stock}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+
+```{r, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+#devtools::install_github("mountainmath/cmhc")
+library(cmhc)
+
+
+graph_table <- function(table,name,level,opts=list(labs(y="Number of Units"))){
+  cmhc_params=cmhc_timeseries_params(table_id = cmhc_table_list[table], region = cmhc_region_params(name,level))               
+  data <- get_cmhc(cmhc_params)  %>% rename(Date=X1) %>% select(-X2)
+  types <- names(data)[!names(data) %in% c("Date","Total")]
+  data[is.na(data)] <- 0
+  plot_data <- data %>% 
+    gather(key="Type",value="Units",types) %>% 
+    mutate(Type=factor(Type,levels=rev(types),ordered=TRUE))
+
+  ggplot(data=plot_data, 
+       aes(x=Date, y=Units, group=Type, fill=Type)) +
+    scale_y_continuous(labels=scales::comma) +
+    scale_fill_brewer(palette="Accent") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+    ggtitle(paste0(name," ",level," Purpose-Built Rental Stock")) + 
+    geom_bar(stat="identity") + opts
+}
+
+
+graph_change_table <- function(table,name,level,opts=list(labs(y="Number of Units"))){
+  cmhc_params=cmhc_timeseries_params(table_id = cmhc_table_list[table], region = cmhc_region_params(name,level))               
+  data <- get_cmhc(cmhc_params)  %>% rename(Date=X1) %>% select(-X2)
+  types <- names(data)[!names(data) %in% c("Date","Total")]
+  data[is.na(data)] <- 0
+  
+  data$ChangeDate=""
+  for (type in types) {
+    data[[paste0("change_",type)]]=0
+    for (i in 2:nrow(data)){
+      data[i,][[paste0("change_",type)]] <- data[i,type] - data[i-1,type]
+      data[i,"ChangeDate"]=paste0(sub(" October","",data[i-1,"Date"])," - ",sub(" October","",data[i,"Date"]))
+    }
+  }
+  
+  change_types=paste0("change_",types)
+  labels=setNames(types,change_types)
+  
+  plot_data <- data %>% 
+    filter(!(Date %in% head(data$Date,2))) %>%
+    gather(key="Type",value="Units",change_types) %>% 
+    mutate(Type=factor(Type,levels=rev(change_types),ordered=TRUE))
+
+  ggplot(data=plot_data, 
+       aes(x=ChangeDate, y=Units, group=Type, fill=Type)) +
+    scale_y_continuous(labels=scales::comma) +
+    scale_fill_brewer(labels=labels, palette="Accent") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+    labs(title=paste0(name," ",level," Purpose-Built Rental Stock"),
+         x="Time Frame") +
+    geom_bar(stat="identity") + 
+    geom_hline(yintercept = 0) + 
+    opts
+}
+
+
+```
+
+Purpose built rentals by number of bedrooms
+```{r, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+graph_table("Rms Rental Universe Time Series","Vancouver","CSD")
+```
+
+
+
+Purpose built rentals by age
+```{r, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+graph_table("Rms Rental Universe Age Time Series","Vancouver","CSD")
+```
+
+
+
+
+Change in purpose built rentals by age
+```{r, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+graph_change_table("Rms Rental Universe Age Time Series","Vancouver","CSD")
+```
+
+
+Purpose built rentals by size of building
+```{r, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+graph_table("Rms Rental Universe Structure Size Time Series","Vancouver","CSD",opts=list(labs(y="Number of Buildings")))
+```
+
+
+
+Looking at where the stock is.
+```{r}
+cma="Vancouver"
+breakdown_geography_type="CT"
+year=2016
+month=""
+table_id=paste0(cmhc_table_list["Rms Rental Universe Base"],".",6)
+cmhc_params=cmhc_snapshot_params(
+  region = cmhc_region_params(cma,"CMA"),
+  #filter=list("dimension-18"="Rental"),
+  table_id=table_id,
+  breakdown_geography_type=breakdown_geography_type,
+  year = year,
+  month = month)
+rental_stock <- get_cmhc(cmhc_params) %>%
+  rename(GeoUID = X1) 
+
+  census_cma=census_geography_list[[cma]]
+  cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
+  rental_stock <- rental_stock %>%  mutate(GeoUID = cmhc_geo_uid_for_ct(cma_header,GeoUID)) 
+
+
+
+geos <- get_census(dataset = 'CA16', regions=list(CMA=census_cma),level=breakdown_geography_type,geo_format='sf')
+geos <- left_join(geos,rental_stock, by=c("GeoUID"="GeoUID"))
+
+```
+
+## Graph
+```{r}
+bg_color="#ffffff"
+theme_opts<-list(theme(panel.grid.minor = element_blank(),
+                       #panel.grid.major = element_blank(), #bug, not working
+                       panel.grid.major = element_line(colour = bg_color),
+                       panel.background = element_rect(fill = bg_color, colour = NA),
+                       plot.background = element_rect(fill=bg_color, size=1,linetype="solid"),
+                       axis.line = element_blank(),
+                       axis.text.x = element_blank(),
+                       axis.text.y = element_blank(),
+                       axis.ticks = element_blank(),
+                       axis.title.x = element_blank(),
+                       axis.title.y = element_blank()))
+
+```
+
+After defining a basic theme we can go ahead and map the data.
+```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
+cov_guid=list_census_regions('CA16') %>% filter(name == "Vancouver",level=="CSD") %>% pull(region)
+van_geos=geos %>% filter(CSD_UID == cov_guid)
+
+ggplot(van_geos) +
+  geom_sf(aes(fill = Total), size = 0.5) +
+  scale_fill_viridis_c("Number of Rental Units") +
+  ggtitle(paste0(cma, " CSD Purpose Built Rental Stock ",year," (",prettyNum(sum(van_geos$Total,na.rm=TRUE),big.mark = ",")," total)")) +
+  theme_opts
+
+ggsave(paste0('../images/rental_stock_',breakdown_geography_type,'.png'),width=10,height=10)
+
+```
+
+
+After defining a basic theme we can go ahead and map the data.
+```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
+van_geos$rt=van_geos$Total/van_geos$`Shape Area`
+
+ggplot(van_geos) +
+  geom_sf(aes(fill = rt), size = 0.5) +
+  scale_fill_viridis_c("Number of Rental Units per km^2") +
+  ggtitle(paste0(cma, " CSD Purpose Built Rental Stock ",year," (",prettyNum(sum(van_geos$Total,na.rm=TRUE),big.mark = ",")," total)")) +
+  theme_opts
+
+ggsave(paste0('../images/rental_stock_',breakdown_geography_type,'.png'),width=10,height=10)
+
+```
+
+
+```{r, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+graph_table("Rms Rental Universe Age Time Series","Burnaby","CSD")
+```
+
+
+
+
+```{r, fig.height=5, fig.width=7, message=FALSE, warning=FALSE}
+graph_change_table("Rms Rental Universe Age Time Series","Burnaby","CSD")
+```

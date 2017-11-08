@@ -48,7 +48,9 @@ get_cmhc <- function(query_params) {
   parse_integer <- function(x){return(as.numeric(sub(",", "", x, fixed = TRUE)))}
   as_integer=c("Bachelor", "1 Bedroom", "2 Bedroom", "3 Bedroom +", "Total",
                "Single","Semi-Detached","Row","Apartment","All",
-               "Semi / Row / Duplex","Other- Primarily Accessory Suites")
+               "Semi / Row / Duplex","Other- Primarily Accessory Suites",
+               "Before 1960", "1960 - 1979", "1980 - 1999", "2000 or Later",
+               "3-5 Units", "6-19 Units", "20-49 Units", "50-199 Units", "200+ Units")
   result <- result %>% mutate_at(intersect(names(result), as_integer), funs(parse_integer))
 
   return(result)
@@ -285,19 +287,23 @@ cmhc_primary_rental_params=  function(geography_id=2410, table_id = "2.2.12",def
 #' @export
 cmhc_snapshot_params=  function(table_id = "2.2.12",
                                 geography_id=2410, geography_type=3, breakdown_geography_type="CSD",
-                                filter=list(),
+                                filter=list(), region=NA,
                                 year=2017, month=7){
 
+  if (length(region)>1 || !is.na(region)) {
+    geography_id=region["geography_id"]
+    geography_type=region["geography_type_id"]
+  }
   query_params=list(
     TableId=as.character(table_id),
-    GeographyId=geography_id,
-    GeographyTypeId=geography_type,
+    GeographyId=as.character(geography_id),
+    GeographyTypeId=as.character(geography_type),
     BreakdownGeographyTypeId=as.integer(as.character(cmhc_geography_type_list[breakdown_geography_type])),
     ForTimePeriod.Year=year,
     ForTimePeriod.Month=month,
     exportType="csv"
   )
-  for (i in 1:length(filter)) {
+  if (length(filter)> 0) for (i in 1:length(filter)) {
     x=filter[i]
     query_params[paste0("AppliedFilters[",i-1,"].Key")]=names(x)
     query_params[paste0("AppliedFilters[",i-1,"].Value")]=as.character(x)
@@ -313,44 +319,101 @@ cmhc_snapshot_params=  function(table_id = "2.2.12",
 #' @param geography_type type corrsponding to geography
 #' @param table_id CMHC table id
 #' @export
-cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geography_type=3){
+cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geography_type=3, region=NA){
   breakdown_geography_type=0
-
+  if (length(region)>1 || !is.na(region)) {
+    geography_id=region["geography_id"]
+    geography_type=region["geography_type_id"]
+  }
   query_params=list(
-    TableId=table_id,
-    GeographyId=geography_id,
-    GeographyTypeId=geography_type,
-    BreakdownGeographyTypeId=breakdown_geography_type,
+    TableId=as.character(table_id),
+    GeographyId=as.character(geography_id),
+    GeographyTypeId=as.character(geography_type),
+    BreakdownGeographyTypeId=as.character(breakdown_geography_type),
     exportType="csv"
   )
   return(query_params)
 }
 
 
+#' table region code lookup
+#' @export
+cmhc_table_region_code=list(
+  CMA=3,
+  ZONES=3,
+  CSD=4,
+  NBHD=9,
+  CT=11
+)
+
+cmhc_survey=list(
+  "Scss"=1,
+  "Rms"=2,
+  "Srms"=4
+)
+
 #' table lookup
 #' @export
 cmhc_table_list=list(
-  "Srms Average Rent" = "4.4.2",
-  "Rms Vacancy Rate Time Seris" = "2.2.1",
-  "Rms Rent Change Time Seris" = "2.2.12",
-  "Rms Average Rent" = "2.1.11.3",
-  "Rms Average Rent Time Series" = "2.2.11",
+  "Scss Starts Base" = "1.1.1",
   "Scss Completions" = "1.1.2.9",
   "Scss Completions Time Seris" = "1.2.2",
   "Scss Under Construction CT" = "1.1.3.11",
-  "Scss Under Construction CSD" = '1.1.3.9'
+  "Scss Under Construction CSD" = '1.1.3.9',
+  "Scss Unabsorbed Inventory Time Series" = "1.2.4",
+  "Scss Unabsorbed Inventory Base" = "1.1.4", # 9 for CT
+  "Srms Average Rent" = "4.4.2",
+  "Srms Vacancy Rate Time Seris" = "4.2.1",
+  "Rms Vacancy Rate Time Seris" = "2.2.1",
+  "Rms Average Rent Time Series" = "2.2.11",
+  "Rms Rental Universe Time Series" = "2.2.26",
+  "Rms Rental Universe Age Time Series" = "2.2.27",
+  "Rms Rental Universe Structure Size Time Series" = "2.2.28",
+  "Rms Rental Universe Bedrooms Base"= "2.1.26",
+  "Rms Rental Universe Age Base"= "2.1.27",
+  "Rms Rental Universe Structure Size Base"= "2.1.28",
+  "Rms Rental Universe CT"="2.1.26.6",
+  "Rms Rent Change Time Seris" = "2.2.12",
+  "Rms Average Rent" = "2.1.11.3",
+  "Rms Average Rent Bedroom Base" = "2.1.11",
+  "Rms Average Rent Age Base" = "2.1.13",
+  "Rms Average Rent Age CT"="2.1.13.6",
+  "Rms Average Rent Bedroom Type CT"="2.1.11.6",
+  "Rms Average Rent Bedroom Type Nbhd"="2.1.11.5"
 )
 
-#' cmhc geography lookup
+
+#' cmhc geography lookup for cma
 #' @export
 cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140", Victoria="2440")
 
 #' cmhc geography type lookup
+#' @export
 cmhc_geography_type_list=list(CMA=3, CSD=4, CT=7)
+
+#' cmhc rms geography type lookup
+#' @export
+cmhc_rms_geography_list=list(CMA=3, CSD=4, NBHD=5, CT=6)
 
 #' census geography lookup
 #' @export
 census_geography_list=list(Vancouver="59933", Toronto="35535", Calgary="48825", Victoria="59935")
+
+#' census geography cities
+#' @export
+cmhc_geography_csd_list=list(Vancouver="5915022", Victoria="5917034", Calgary="4806016", Toronto="3520005", Burnaby="5915025")
+
+
+
+#' census geography params
+#' @export
+cmhc_region_params <- function(geography,type='CMA'){
+  list <- list("geography_type_id"=as.character(cmhc_geography_type_list[type]))
+  list["geography_id"] = ifelse(type=="CMA",
+                                as.character(cmhc_geography_list[geography]),
+                                as.character(cmhc_geography_csd_list[geography]))
+  return(list)
+}
 
 #' census geography lookup
 #' @export

@@ -1,5 +1,5 @@
 ---
-title: "Rental Under Construction"
+title: "Unabsorbed Stock"
 author: "Jens von Bergmann"
 date: '2017-09-22'
 output:
@@ -11,9 +11,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette demonstrates how to pull in under construction data from CMHC using the `cmhc` package,
-link it with geographic data from [CensusMapper](https://censusmapper.ca) using the `cancensus`
-package and map the under construction data.
 ## CMHC data
 
 ```{r, message=FALSE, warning=FALSE}
@@ -21,46 +18,30 @@ library(dplyr)
 #devtools::install_github("mountainmath/cmhc")
 library(cmhc)
 
-cma="Toronto"
+cma="Vancouver"
 year=2017
-month=10
+month=9
 breakdown_geography_type='CT'
 
-table_id=cmhc_table_list[paste0("Scss Under Construction", " ", breakdown_geography_type)]
+table_id=paste0(cmhc_table_list["Scss Unabsorbed Inventory Base"], ".9")
 
 
 census_cma=census_geography_list[[cma]]
 cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
 
 #get all under construction data for Vancouver and pad CT GeoUIDs.
-rental_under_construction <- get_cmhc(cmhc_snapshot_params(
+unabsorbed <- get_cmhc(cmhc_snapshot_params(
   geography_id = cmhc_geography_list[[cma]],
   breakdown_geography_type = breakdown_geography_type,
-  filter=list("dimension-18"="Rental"),
   table_id=table_id,
   year = year,
-  month = month))
-rental_under_construction <- rental_under_construction %>%
+  month = month)) %>%
   rename(GeoUID = X1) 
-all_under_construction <- get_cmhc(cmhc_snapshot_params(
-  geography_id = cmhc_geography_list[[cma]],
-  breakdown_geography_type = breakdown_geography_type,
-  table_id=table_id,
-  filter=list("dimension-18"="All"),
-  year = year,
-  month = month))
-all_under_construction <- all_under_construction %>%
-  rename(GeoUID = X1)
-
-uc=inner_join(all_under_construction,rental_under_construction,by="GeoUID") %>%
-  mutate(rental_pct=All.y/All.x)
-total=sum(uc$All.x)
-rental=sum(uc$All.y)
 
 if (breakdown_geography_type=="CT") {
   census_cma=census_geography_list[[cma]]
   cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
-  uc <- uc %>%  mutate(GeoUID = cmhc_geo_uid_for_ct(cma_header,GeoUID)) 
+  unabsorbed <- unabsorbed %>%  mutate(GeoUID = cmhc_geo_uid_for_ct(cma_header,GeoUID)) 
 }
 
 
@@ -79,9 +60,9 @@ geos <- get_census(dataset = 'CA16', regions=list(CMA=census_cma),level=breakdow
 ## Joining the data
 ```{r}
 if (breakdown_geography_type=='CT') {
-geos <- left_join(geos,uc, by=c("GeoUID"="GeoUID"))
+geos <- left_join(geos,unabsorbed, by=c("GeoUID"="GeoUID"))
 } else {
-geos <- left_join(geos,uc, by=c("name"="GeoUID"))
+geos <- left_join(geos,unabsorbed, by=c("name"="GeoUID"))
 }
 ```
 
@@ -106,27 +87,31 @@ theme_opts<-list(theme(panel.grid.minor = element_blank(),
 After defining a basic theme we can go ahead and map the data.
 ```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
 
+type="Apartment"
+
+geos[[type]][geos[[type]]==0] <- NA
 
 ggplot(geos) +
-  geom_sf(aes(fill = rental_pct), size = 0.05) +
-  scale_fill_viridis_c("%RENTAL") +
-  ggtitle(paste0(cma, " CMA Under Construction ",month,"-",year," (",prettyNum(total,big.mark = ",")," total, ",prettyNum(rental,big.mark = ",")," rental)")) +
+  geom_sf(aes_string(fill = type), size = 0.05) +
+  scale_fill_viridis_c("Units", option="inferno") +
+  ggtitle(paste0(cma, " CMA Unabsorbed ",type," Units ",month,"-",year," (",prettyNum(sum(geos[[type]],na.rm=TRUE),big.mark = ",")," total)")) +
   theme_opts
 
-ggsave(paste0('../images/rental_under_construction_',cma,'_',year,"_",month,"_",breakdown_geography_type,'.png'),width=10,height=10)
+ggsave(paste0('../images/unabsorbed_',type,"_",breakdown_geography_type,'.png'),width=10,height=10)
 
 ```
-
 ```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
-library(classInt)
-breaks=classIntervals(geos$All.y, n = 9, style = "jenks")
-geos <- geos %>% mutate(`Rental Units` = cut(geos$All.y, breaks = c(breaks$brks), dig.lab = 4))
-ggplot(geos ) +
-  geom_sf(aes(fill = `Rental Units`), size = 0.05) +
-  scale_fill_viridis_d("Rental Units",option = "plasma",na.value='#808080') +
-  ggtitle(paste0(cma, " CMA Under Construction ",month,"-",year," (",prettyNum(rental,big.mark = ",")," rental)")) +
+
+type="Row"
+
+geos[[type]][geos[[type]]==0] <- NA
+
+ggplot(geos) +
+  geom_sf(aes_string(fill = type), size = 0.05) +
+  scale_fill_viridis_c("Units", option = "magma") +
+  ggtitle(paste0(cma, " CMA Unabsorbed ",type," Units ",month,"-",year," (",prettyNum(sum(geos[[type]],na.rm=TRUE),big.mark = ",")," total)")) +
   theme_opts
 
-ggsave(paste0('../images/rental_under_construction_total_',cma,'_',year,"_",month,"_",breakdown_geography_type,'.png'),width=10,height=10)
+ggsave(paste0('../images/unabsorbed_',type,"_",breakdown_geography_type,'.png'),width=10,height=10)
 
 ```

@@ -23,7 +23,7 @@ library(cmhc)
 
 cma="Toronto"
 year=2017
-month=8
+month=10
 
 
 census_cma=census_geography_list[[cma]]
@@ -83,7 +83,7 @@ for(i in 2:(length(breaks)-2)){
 labels[length(breaks)-1]=paste0("Over ",breaks[length(breaks)-1])
 #colors=c("darkred",(RColorBrewer::brewer.pal(length(labels)-1,"YlGnBu")))
 labels=factor(labels, levels=labels)
-colors=setNames(RColorBrewer::brewer.pal(length(labels),"PiYG"),labels)
+colors=setNames(c("#808080",RColorBrewer::brewer.pal(length(labels)-1,"PiYG")),labels)
 #colors=factor(as.character(colors),levels=as.character(colors))
 
 # categorize the numbers under contruction
@@ -96,7 +96,7 @@ ggplot(geos) +
   ggtitle(paste0(cma, " CMA Under Construction ",month,"-",year," (",prettyNum(total,big.mark = ",")," total)")) +
   theme_opts
 
-ggsave('../images/under_construction.png',width=10,height=10)
+ggsave(paste0('../images/under_construction_',cma,'_',year,'_',month,'.png'),width=10,height=10)
 
 ```
 
@@ -138,7 +138,7 @@ so let's zoom in a bit and overlay the neighbourhood boundary. While most of the
 are recieving an order of magnitude more active development.
 
 
-```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
+```{r, eval=FALSE, fig.height=5, fig.width=5, message=FALSE, warning=FALSE, include=FALSE}
 
 annex <- read_sf('../data/annex.geojson')
 site <- data.frame(long=-79.40125107,lat=43.674595)
@@ -154,7 +154,7 @@ ggplot() +
   #guides(fill=FALSE) +
   coord_sf(xlim=c(-79.3,-79.5), ylim=c(43.6,43.75))  
 
-ggsave('../images/under_construction_annex.png',width=10,height=10)
+#ggsave('../images/under_construction_annex.png',width=10,height=10)
 
 ```
 Lastly, let's check exactly how many units are under construction in the Annex. The Annex is covered by 3 CTs, so this is

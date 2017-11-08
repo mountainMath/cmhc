@@ -29,12 +29,7 @@ library(cmhc)
 
 cma="Vancouver"
 
-data <- get_cmhc(cmhc_timeseries_params(table_id = cmhc_table_list["Scss Completions Time Seris"], geography_id = cmhc_geography_list[cma])) %>% # yes, CMHC sends down formatter numbers that need to be parsed
-  mutate(Single=parse_integer(Single),
-         `Semi-Detached`=parse_integer(`Semi-Detached`),
-         Row=parse_integer(Row),
-         Apartment=parse_integer(Apartment),
-         All=parse_integer(All)) %>%
+data <- get_cmhc(cmhc_timeseries_params(table_id = cmhc_table_list["Scss Completions Time Seris"], geography_id = cmhc_geography_list[cma])) %>% 
   rename(Date=X1) %>%
   group_by(Date=substr(Date,5,8)) %>% # aggregate to annual data
   summarize(Single=sum(Single),
@@ -51,5 +46,28 @@ ggplot(data=data %>% gather(key="Type",value="Units",types),
   ggtitle(paste0(cma," CMA Completions")) + 
   geom_bar(stat="identity")
 ggsave("../images/van_completions.png")
+```
+
+
+## Unabsorbed Inventory
+
+```{r}
+data <- get_cmhc(cmhc_timeseries_params(table_id = cmhc_table_list["Scss Unabsorbed Inventory Time Series"], geography_id = cmhc_geography_list[cma])) %>% 
+  rename(Date=X1) #%>%
+  # group_by(Date=substr(Date,5,8)) %>% # aggregate to annual data
+  # summarize(Single=sum(Single),
+  #           `Semi-Detached`=sum(`Semi-Detached`),
+  #           Row=sum(Row),
+  #           Apartment=sum(Apartment),
+  #           All=sum(All)) %>%
+  # filter(as.integer(Date)<2017) # ditch partial data
+
+types <- c("Single","Semi-Detached","Row","Apartment")
+ggplot(data=data %>% gather(key="Type",value="Units",types), 
+       aes(x=Date, y=Units, group=Type, fill=Type)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+  ggtitle(paste0(cma," CMA Unabsorbed")) + 
+  geom_bar(stat="identity")
+
 ```
 
