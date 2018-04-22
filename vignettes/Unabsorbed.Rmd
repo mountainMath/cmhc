@@ -14,13 +14,13 @@ vignette: >
 ## CMHC data
 
 ```{r, message=FALSE, warning=FALSE}
-library(dplyr)
+library(tidyverse)
 #devtools::install_github("mountainmath/cmhc")
 library(cmhc)
 
 cma="Vancouver"
 year=2017
-month=9
+month=12
 breakdown_geography_type='CT'
 
 table_id=paste0(cmhc_table_list["Scss Unabsorbed Inventory Base"], ".9")
@@ -69,7 +69,7 @@ geos <- left_join(geos,unabsorbed, by=c("name"="GeoUID"))
 
 ## Graph
 ```{r}
-bg_color="#c0c0c0"
+bg_color="#eeeeee"
 theme_opts<-list(theme(panel.grid.minor = element_blank(),
                        #panel.grid.major = element_blank(), #bug, not working
                        panel.grid.major = element_line(colour = bg_color),
@@ -97,7 +97,7 @@ ggplot(geos) +
   ggtitle(paste0(cma, " CMA Unabsorbed ",type," Units ",month,"-",year," (",prettyNum(sum(geos[[type]],na.rm=TRUE),big.mark = ",")," total)")) +
   theme_opts
 
-ggsave(paste0('../images/unabsorbed_',type,"_",breakdown_geography_type,'.png'),width=10,height=10)
+ggsave(paste0('../images/unabsorbed_',cma,"_",year,"_",month,"_",type,"_",breakdown_geography_type,'.png'),width=10,height=10)
 
 ```
 ```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
@@ -112,6 +112,48 @@ ggplot(geos) +
   ggtitle(paste0(cma, " CMA Unabsorbed ",type," Units ",month,"-",year," (",prettyNum(sum(geos[[type]],na.rm=TRUE),big.mark = ",")," total)")) +
   theme_opts
 
-ggsave(paste0('../images/unabsorbed_',type,"_",breakdown_geography_type,'.png'),width=10,height=10)
+ggsave(paste0('../images/unabsorbed_',cma,"_",year,"_",month,"_",type,"_",breakdown_geography_type,'.png'),width=10,height=10)
 
 ```
+
+```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
+
+type="All"
+
+geos[[type]][geos[[type]]==0] <- NA
+
+geos$units=cut(geos$All,breaks=c(0,1,5,10,50,100,200))
+
+ggplot(geos) +
+  geom_sf(aes_string(fill = "units"), size = 0.05) +
+  scale_fill_viridis_d("Units", option = "magma",na.value="grey") +
+  ggtitle(paste0(cma, " CMA Unabsorbed ",type," Units ",month,"-",year," (",prettyNum(sum(geos[[type]],na.rm=TRUE),big.mark = ",")," total)")) +
+  theme_opts
+
+ggsave(paste0('../images/unabsorbed_',cma,"_",year,"_",month,"_",type,"_",breakdown_geography_type,'.png'),width=10,height=10)
+
+```
+
+
+```{r, fig.width=5,fig.height=2.5}
+table="Scss Unabsorbed Inventory Time Series"
+level="CMA"
+cmhc_params=cmhc_timeseries_params(table_id = cmhc_table_list[table], region = cmhc_region_params(cma,level))               
+data <- get_cmhc(cmhc_params)  %>% rename(Date=X1) %>% select(-X2) %>% mutate(Date= as.Date(paste0("01 ",Date),format="%d %b %Y"))
+types <- names(data)[!names(data) %in% c("Date")]
+data[is.na(data)] <- 0
+
+plot_data=data %>% gather(key="Type",value="Units",types) 
+
+ggplot(plot_data %>% filter(Type %in% c("Row","Apartment","Single","Semi-Detached")),aes(x=Date, y=Units, color=Type, group=Type)) +
+  geom_path() +
+  geom_point() +
+  scale_x_date(date_breaks = "1 year",date_labels = "%b %Y") +
+  theme_bw() + 
+  labs(y="Unmber of Units",
+       x="Month",
+       title=paste0(cma," ",level," Completed and Unabsorbed Inventory")) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggsave(paste0("../images/unabsorbed_time_",cma,"_",level,".png"))
+```
+

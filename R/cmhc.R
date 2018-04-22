@@ -288,7 +288,7 @@ cmhc_primary_rental_params=  function(geography_id=2410, table_id = "2.2.12",def
 cmhc_snapshot_params=  function(table_id = "2.2.12",
                                 geography_id=2410, geography_type=3, breakdown_geography_type="CSD",
                                 filter=list(), region=NA,
-                                year=2017, month=7){
+                                year=2017, month=7,frequency=NA){
 
   if (length(region)>1 || !is.na(region)) {
     geography_id=region["geography_id"]
@@ -300,9 +300,14 @@ cmhc_snapshot_params=  function(table_id = "2.2.12",
     GeographyTypeId=as.character(geography_type),
     BreakdownGeographyTypeId=as.integer(as.character(cmhc_geography_type_list[breakdown_geography_type])),
     ForTimePeriod.Year=year,
-    ForTimePeriod.Month=month,
     exportType="csv"
   )
+  if (!is.na(month)) {
+    query_params["ForTimePeriod.Month"]=month
+  }
+  if (!is.na(frequency)) {
+    query_params["Frequency"]=frequency
+  }
   if (length(filter)> 0) for (i in 1:length(filter)) {
     x=filter[i]
     query_params[paste0("AppliedFilters[",i-1,"].Key")]=names(x)
@@ -355,16 +360,26 @@ cmhc_survey=list(
 #' table lookup
 #' @export
 cmhc_table_list=list(
+  "Scss Absorbtion Rate Time Series" = "1.2.6",
   "Scss Starts Base" = "1.1.1",
   "Scss Completions" = "1.1.2.9",
-  "Scss Completions Time Seris" = "1.2.2",
+  "Scss Completions Time Series" = "1.2.2",
+  "Scss Completions CT" = "1.1.2.11",
   "Scss Under Construction CT" = "1.1.3.11",
   "Scss Under Construction CSD" = '1.1.3.9',
-  "Scss Unabsorbed Inventory Time Series" = "1.2.4",
+  "Scss Under Construction Time Series" = '1.2.3',
+  "Scss Starts Time Series" = '1.2.1',
+  "Scss Unabsorbed Inventory Time Series" ="1.2.4",
+  "Scss Length of Construction Time Series" = "1.2.7",
   "Scss Unabsorbed Inventory Base" = "1.1.4", # 9 for CT
-  "Srms Average Rent" = "4.4.2",
-  "Srms Vacancy Rate Time Seris" = "4.2.1",
-  "Rms Vacancy Rate Time Seris" = "2.2.1",
+  "Srms Condo Number" = "4.2.4",
+  "Srms Condo Average Rent" = "4.4.2",
+  "Srms Other Number" = "4.6.1",
+  "Srms Other Average Rent" = "4.6.2",
+  "Srms Vacancy Rate Time Series" = "4.2.1",
+  "Rms Vacancy Rate Time Series" = "2.2.1",
+  "Rms Vacancy Rate CSD" = "2.1.1.4",
+  "Rms Vacancy Rate CT" = "2.1.1.6",
   "Rms Average Rent Time Series" = "2.2.11",
   "Rms Rental Universe Time Series" = "2.2.26",
   "Rms Rental Universe Age Time Series" = "2.2.27",
@@ -373,19 +388,38 @@ cmhc_table_list=list(
   "Rms Rental Universe Age Base"= "2.1.27",
   "Rms Rental Universe Structure Size Base"= "2.1.28",
   "Rms Rental Universe CT"="2.1.26.6",
-  "Rms Rent Change Time Seris" = "2.2.12",
+  "Rms Rent Change Time Series" = "2.2.12",
+  "Rms Rent Change CT" = "2.1.12.6",
+  "Rms Rent Change CSD" = "2.1.12.4",
   "Rms Average Rent" = "2.1.11.3",
+  "Rms Average Rent Time Series" = "2.2.11",
   "Rms Average Rent Bedroom Base" = "2.1.11",
   "Rms Average Rent Age Base" = "2.1.13",
   "Rms Average Rent Age CT"="2.1.13.6",
   "Rms Average Rent Bedroom Type CT"="2.1.11.6",
-  "Rms Average Rent Bedroom Type Nbhd"="2.1.11.5"
+  "Rms Average Rent Bedroom Type Nbhd"="2.1.11.5",
+  "Rms Median Rent Bedroom Type CT"="2.1.21.6"
+)
+
+#' Start to organize data better
+#' CMCH identifier rules:
+#' first number for survey
+#' second number 1=fixed time, 2=time series
+#' thrid number series
+#' forth number (only for fixed time) geographic breakdown
+#' @export
+cmhc_data_table <- list(
+  Scss="Starts and Completions Survey",
+  Rms="Rental Market Survey",
+  Srms="Secondary Rental Market Survey",
+  Srhs="Seniors Rental Housing Survey"
 )
 
 
 #' cmhc geography lookup for cma
 #' @export
-cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140", Victoria="2440")
+cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140", Victoria="2440", Winnipeg="2680",
+                         Montreal="1060", Ottawa="1265", Halifax="0580", Edmonton="0340")
 
 #' cmhc geography type lookup
 #' @export
@@ -401,7 +435,21 @@ census_geography_list=list(Vancouver="59933", Toronto="35535", Calgary="48825", 
 
 #' census geography cities
 #' @export
-cmhc_geography_csd_list=list(Vancouver="5915022", Victoria="5917034", Calgary="4806016", Toronto="3520005", Burnaby="5915025")
+cmhc_geography_csd_list=list(Vancouver="5915022",
+                             Burnaby="5915025",
+                             "New Westminster"="5915029",
+                             Victoria="5917034",
+                             Calgary="4806016",
+                             Toronto="3520005",
+                             Burnaby="5915025",
+                             Surrey="5915004",
+                             Richmond="5915015",
+                             "North Vancouver (CY)"="5915051",
+                             "North Vancouver (DM)"="5915046",
+                             Edmonton="4811061",
+                             Winnipeg="4611040",
+                             Montreal="2466023",
+                             Ottawa="3506008")
 
 
 
@@ -419,4 +467,7 @@ cmhc_region_params <- function(geography,type='CMA'){
 #' @export
 census_to_cmhc_translation=list("59933"="2410", "35535"="2270", "48825"="0140", "59935"="2440")
 
-#' to filter for rental: {Key: "dimension-18", Value: "Rental"}
+#' intended market rental
+#' @export
+intended_market_rental = list("dimension-18"="Rental")
+

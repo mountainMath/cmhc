@@ -21,10 +21,10 @@ library(dplyr)
 #devtools::install_github("mountainmath/cmhc")
 library(cmhc)
 
-cma="Toronto"
+cma="Vancouver"
 year=2017
 month=10
-breakdown_geography_type='CT'
+breakdown_geography_type='CSD'
 
 table_id=cmhc_table_list[paste0("Scss Under Construction", " ", breakdown_geography_type)]
 

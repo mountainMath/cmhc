@@ -21,7 +21,7 @@ library(dplyr)
 #devtools::install_github("mountainmath/cmhc")
 library(cmhc)
 
-cma="Toronto"
+cma="Vancouver"
 year=2017
 month=10
 
@@ -128,6 +128,8 @@ ggplot(geos) +
   scale_fill_manual(labels=relative_labels, values=relative_colors, name = "# Units per 10k\nExisting 2016",na.value="#808080") +
   ggtitle(title) +
   theme_opts
+ggsave(paste0('../images/rel_under_construction_',cma,'_',year,'_',month,'.png'),width=10,height=10)
+
 ```
 
 We could also just as easily choose other census variables to try and understand why dwelling unit construction is higher in some areas than in others. For example.
@@ -163,6 +165,78 @@ quite easy. Some of the construction might be outside of the Annex, the sliver o
 ```{r}
 annex_cts <- c("5350092.00","5350091.01","5350091.02")
 paste0(sum(geos$All[geos$GeoUID %in% annex_cts]), " units under construction in the Annex")
+
+```
+
+```{r}
+
+bg_color="#c0c0c0"
+theme_opts<-list(theme(panel.grid.minor = element_blank(),
+                       #panel.grid.major = element_blank(), #bug, not working
+                       panel.grid.major = element_line(colour = bg_color),
+                       panel.background = element_rect(fill = bg_color, colour = NA),
+                       plot.background = element_rect(fill=bg_color, size=1,linetype="solid"),
+                       axis.line = element_blank(),
+                       axis.text.x = element_blank(),
+                       axis.text.y = element_blank(),
+                       axis.ticks = element_blank(),
+                       axis.title.x = element_blank(),
+                       axis.title.y = element_blank()))
+
+
+library(cmhc)
+cma="Victoria"
+year=2017
+month=10
+
+census_cma=census_geography_list[[cma]]
+cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
+
+
+census_cma=census_geography_list[[cma]]
+cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
+
+#get all under construction data for Vancouver and pad CT GeoUIDs.
+
+dates <- seq(from=as.Date('2016-05-01'), to=as.Date("2017-10-01"),by='months' )
+
+
+completions <- do.call(rbind,lapply(dates,function(date){
+  month=strftime(date,format="%m")
+  year=strftime(date,format="%Y")
+  c<-get_cmhc(cmhc_snapshot_params(
+  table_id=cmhc_table_list["Scss Completions CT"],
+  geography_id = cmhc_geography_list[[cma]],
+  year = year,
+  month = month)) %>% 
+  mutate(GeoUID = paste0(cma_header,sprintf("%07.2f", X1)),
+         date=date) %>% select(-X1,-X2)
+  return(c)
+  })) %>% select(-date) %>% group_by(GeoUID) %>% summarise_all(sum)
+
+geos <- get_census(dataset = 'CA16', regions=list(CMA=census_cma),level='CT',geo_format='sf') %>%
+   inner_join(completions, by="GeoUID")
+
+breaks=c(-Inf,1,25,50,100,150,200,250,300,400,Inf)
+labels <- c(paste0("0 - ",breaks[2]))
+for(i in 2:(length(breaks)-2)){
+  labels[i] = paste(breaks[i],breaks[i+1], sep=" - ")
+}
+labels[length(breaks)-1]=paste0("Over ",breaks[length(breaks)-1])
+#colors=c("darkred",(RColorBrewer::brewer.pal(length(labels)-1,"YlGnBu")))
+labels=factor(labels, levels=labels)
+colors=setNames(c("#808080",RColorBrewer::brewer.pal(length(labels)-1,"PiYG")),labels)
+#colors=factor(as.character(colors),levels=as.character(colors))
+
+# categorize the numbers under contruction
+geos$categories <- geos$All %>% cut(breaks=breaks, labels=labels)
+total=sum(geos$All)
+
+ggplot(geos) +
+  geom_sf(aes(fill = categories), size = 0.05) +
+  scale_fill_manual(labels=labels, values=colors, name = "# Units") +
+  ggtitle(paste0(cma, " CMA Completions ",month,"-",year," (",prettyNum(total,big.mark = ",")," total)")) +
+  theme_opts
 
 ```
 
