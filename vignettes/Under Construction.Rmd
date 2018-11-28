@@ -21,22 +21,25 @@ library(dplyr)
 #devtools::install_github("mountainmath/cmhc")
 library(cmhc)
 
-cma="Vancouver"
-year=2017
-month=10
+cma="Montreal"
+year=2018
+month=07
 
 
 census_cma=census_geography_list[[cma]]
 cma_header=substr(census_cma, nchar(census_cma)-2,nchar(census_cma))
 
 #get all under construction data for Vancouver and pad CT GeoUIDs.
-under_construction <- get_cmhc(cmhc_completion_params(
-  geography_id = cmhc_geography_list[[cma]],
-  year = year,
-  month = month))
+under_construction <- get_cmhc(
+  cmhc_snapshot_params(
+    table_id = cmhc_table_list["Scss Under Construction CT"],
+    breakdown_geography_type="CT",
+    geography_id = cmhc_geography_list[[cma]],
+    year = year,
+    month = month))
 
 under_construction <- under_construction %>%
-  mutate(GeoUID = paste0(cma_header,X1))
+  mutate(GeoUID = cmhc_geo_uid_for_ct(cma_header,X1))
 ```
 
 ## Geographic data
@@ -239,4 +242,3 @@ ggplot(geos) +
   theme_opts
 
 ```
-

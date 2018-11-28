@@ -5,3 +5,5 @@
 inst/doc
 data_cache
 data_cache/*
+helpers/*
+helpers

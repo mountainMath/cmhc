@@ -15,6 +15,7 @@ get_cmhc <- function(query_params) {
   url="https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/ExportTable"
   cookie='ORDERDESKSID=jFINZMyDxkcEQBY3IJL4p2tWB0kFbPOXLJC7Fv4uVCdYBCNcqIUgi7N53swo1Qty; WT_FPC=id=66.183.109.243-320627712.30508028:lv=1466113349996:ss=1466113349996; BIGipServerpool-HMIP-PROD=rd22o00000000000000000000ffff0a009815o80; _ga=GA1.3.64898709.1458624685; DoNotShowIntro=true; _ga=GA1.4.64898709.1458624685; ORDERDESKSID=cCfzb1jZknrSTdfE1Db8rxWifrIuRL9BGT4ae8kd5xDATcXjkfkVDDDuTn6Fxhgl; LUI=; AUTOLOGINTOKEN='
   share_token="L2htaXAtcGltaC9lbi9UYWJsZU1hcENoYXJ0L1RhYmxlP1RhYmxlSWQ9MS4xLjIuOSZHZW9ncmFwaHlJZD0yNDEwJkdlb2dyYXBoeVR5cGVJZD0zJkJyZWFrZG93bkdlb2dyYXBoeVR5cGVJZD00JkRpc3BsYXlBcz1UYWJsZSZHZW9ncmFnaHlOYW1lPVZhbmNvdXZlciZZdGQ9RmFsc2UmRGVmYXVsdERhdGFGaWVsZD1tZWFzdXJlLTExJlN1cnZleT1TY3NzJkZvclRpbWVQZXJpb2QuWWVhcj0yMDE2JkZvclRpbWVQZXJpb2QuUXVhcnRlcj0zJkZvclRpbWVQZXJpb2QuTW9udGg9OA%253D%253D"
+  #share_token="L2htaXAtcGltaC9lbi9UYWJsZU1hcENoYXJ0L1RhYmxlP1RhYmxlSWQ9MS45LjEuMyZHZW9ncmFwaHlJZD0yNDEwJkdlb2dyYXBoeVR5cGVJZD0zJkJyZWFrZG93bkdlb2dyYXBoeVR5cGVJZD01JkRpc3BsYXlBcz1UYWJsZSZHZW9ncmFnaHlOYW1lPVZhbmNvdXZlciZZdGQ9RmFsc2UmRGVmYXVsdERhdGFGaWVsZD1hYnNvcmJlZF91bml0X3ByaWNlXzIwdGhfcGVyY2VudGlsZV9hbXQmU3VydmV5PVNjc3MmRm9yVGltZVBlcmlvZC5ZZWFyPTIwMTgmRm9yVGltZVBlcmlvZC5RdWFydGVyPTImRm9yVGltZVBlcmlvZC5Nb250aD00"
   dir.create('data_cache', showWarnings = FALSE) # make sure cache directory exists
   data_file="data_cache/test.csv"
 
@@ -36,7 +37,8 @@ get_cmhc <- function(query_params) {
                     header=TRUE,
                     na.strings = c("**"),
                     stringsAsFactors = FALSE,
-                    check.names = FALSE)
+                    check.names = FALSE,
+                    colClasses=c("character"))
   region_title=lapply(strsplit(dat[1],"\u0097"),trimws)[[1]]
   attr(result,"region")=region_title[1]
   attr(result,"title")=region_title[2]
@@ -341,131 +343,7 @@ cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geogr
 }
 
 
-#' table region code lookup
-#' @export
-cmhc_table_region_code=list(
-  CMA=3,
-  ZONES=3,
-  CSD=4,
-  NBHD=9,
-  CT=11
-)
 
-cmhc_survey=list(
-  "Scss"=1,
-  "Rms"=2,
-  "Srms"=4
-)
-
-#' table lookup
-#' @export
-cmhc_table_list=list(
-  "Scss Absorbtion Rate Time Series" = "1.2.6",
-  "Scss Starts Base" = "1.1.1",
-  "Scss Completions" = "1.1.2.9",
-  "Scss Completions Time Series" = "1.2.2",
-  "Scss Completions CT" = "1.1.2.11",
-  "Scss Under Construction CT" = "1.1.3.11",
-  "Scss Under Construction CSD" = '1.1.3.9',
-  "Scss Under Construction Time Series" = '1.2.3',
-  "Scss Starts Time Series" = '1.2.1',
-  "Scss Unabsorbed Inventory Time Series" ="1.2.4",
-  "Scss Length of Construction Time Series" = "1.2.7",
-  "Scss Unabsorbed Inventory Base" = "1.1.4", # 9 for CT
-  "Srms Condo Number" = "4.2.4",
-  "Srms Condo Average Rent" = "4.4.2",
-  "Srms Other Number" = "4.6.1",
-  "Srms Other Average Rent" = "4.6.2",
-  "Srms Vacancy Rate Time Series" = "4.2.1",
-  "Rms Vacancy Rate Time Series" = "2.2.1",
-  "Rms Vacancy Rate CSD" = "2.1.1.4",
-  "Rms Vacancy Rate CT" = "2.1.1.6",
-  "Rms Average Rent Time Series" = "2.2.11",
-  "Rms Rental Universe Time Series" = "2.2.26",
-  "Rms Rental Universe Age Time Series" = "2.2.27",
-  "Rms Rental Universe Structure Size Time Series" = "2.2.28",
-  "Rms Rental Universe Bedrooms Base"= "2.1.26",
-  "Rms Rental Universe Age Base"= "2.1.27",
-  "Rms Rental Universe Structure Size Base"= "2.1.28",
-  "Rms Rental Universe CT"="2.1.26.6",
-  "Rms Rent Change Time Series" = "2.2.12",
-  "Rms Rent Change CT" = "2.1.12.6",
-  "Rms Rent Change CSD" = "2.1.12.4",
-  "Rms Average Rent" = "2.1.11.3",
-  "Rms Average Rent Time Series" = "2.2.11",
-  "Rms Average Rent Bedroom Base" = "2.1.11",
-  "Rms Average Rent Age Base" = "2.1.13",
-  "Rms Average Rent Age CT"="2.1.13.6",
-  "Rms Average Rent Bedroom Type CT"="2.1.11.6",
-  "Rms Average Rent Bedroom Type Nbhd"="2.1.11.5",
-  "Rms Median Rent Bedroom Type CT"="2.1.21.6"
-)
-
-#' Start to organize data better
-#' CMCH identifier rules:
-#' first number for survey
-#' second number 1=fixed time, 2=time series
-#' thrid number series
-#' forth number (only for fixed time) geographic breakdown
-#' @export
-cmhc_data_table <- list(
-  Scss="Starts and Completions Survey",
-  Rms="Rental Market Survey",
-  Srms="Secondary Rental Market Survey",
-  Srhs="Seniors Rental Housing Survey"
-)
-
-
-#' cmhc geography lookup for cma
-#' @export
-cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140", Victoria="2440", Winnipeg="2680",
-                         Montreal="1060", Ottawa="1265", Halifax="0580", Edmonton="0340")
-
-#' cmhc geography type lookup
-#' @export
-cmhc_geography_type_list=list(CMA=3, CSD=4, CT=7)
-
-#' cmhc rms geography type lookup
-#' @export
-cmhc_rms_geography_list=list(CMA=3, CSD=4, NBHD=5, CT=6)
-
-#' census geography lookup
-#' @export
-census_geography_list=list(Vancouver="59933", Toronto="35535", Calgary="48825", Victoria="59935")
-
-#' census geography cities
-#' @export
-cmhc_geography_csd_list=list(Vancouver="5915022",
-                             Burnaby="5915025",
-                             "New Westminster"="5915029",
-                             Victoria="5917034",
-                             Calgary="4806016",
-                             Toronto="3520005",
-                             Burnaby="5915025",
-                             Surrey="5915004",
-                             Richmond="5915015",
-                             "North Vancouver (CY)"="5915051",
-                             "North Vancouver (DM)"="5915046",
-                             Edmonton="4811061",
-                             Winnipeg="4611040",
-                             Montreal="2466023",
-                             Ottawa="3506008")
-
-
-
-#' census geography params
-#' @export
-cmhc_region_params <- function(geography,type='CMA'){
-  list <- list("geography_type_id"=as.character(cmhc_geography_type_list[type]))
-  list["geography_id"] = ifelse(type=="CMA",
-                                as.character(cmhc_geography_list[geography]),
-                                as.character(cmhc_geography_csd_list[geography]))
-  return(list)
-}
-
-#' census geography lookup
-#' @export
-census_to_cmhc_translation=list("59933"="2410", "35535"="2270", "48825"="0140", "59935"="2440")
 
 #' intended market rental
 #' @export

@@ -2,7 +2,6 @@
 % Please edit documentation in R/cmhc.R
 \name{cmhc_completion_params}
 \alias{cmhc_completion_params}
-\alias{cmhc_completion_params}
 \title{Parameters for completion data}
 \usage{
 cmhc_completion_params(geography_id = 2410, year = 2017, month = 7)

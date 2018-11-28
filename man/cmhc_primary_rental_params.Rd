@@ -5,7 +5,8 @@
 \title{Parameters for primary market rent change fixed sample data timeline}
 \usage{
 cmhc_primary_rental_params(geography_id = 2410, table_id = "2.2.12",
-  default_data_field = "fixed_sample_rent_change_pct", data_source = "1")
+  default_data_field = "fixed_sample_rent_change_pct",
+  data_source = "1")
 }
 \arguments{
 \item{geography_id}{Geography for which to get the data}
