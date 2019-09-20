@@ -20,11 +20,12 @@ cmhc_table_list=list(
   "Scss Unabsorbed Inventory Time Series" ="1.2.4",
   "Scss Length of Construction Time Series" = "1.2.7",
   "Scss Unabsorbed Inventory Base" = "1.1.4", # 9 for CT
-  "Srms Condo Number" = "4.2.4",
+  "Srms Condo Number" = "4.2.3",
   "Srms Condo Average Rent" = "4.4.2",
   "Srms Other Number" = "4.6.1",
   "Srms Other Average Rent" = "4.6.2",
   "Srms Vacancy Rate Time Series" = "4.2.1",
+  "Srms Condo Rental Number" = "4.2.4",
   "Rms Vacancy Rate Time Series" = "2.2.1",
   "Rms Vacancy Rate CSD" = "2.1.1.4",
   "Rms Vacancy Rate CT" = "2.1.1.6",
@@ -99,21 +100,21 @@ list_cmhc_geography_types=list(
 
 
 cmhc_table_suffix_for_breakdown_geography_CMA=list(
-  ZONE=6,
+  #ZONE=6,
   CSD=7,
   ZONE=8,
   CT=9
 )
 
 cmhc_table_suffix_for_breakdown_geography_CSD=list(
-  ZONE=7,
+  #ZONE=7,
   CSD=7,
   ZONE=8,
   CT=9
 )
 
 list_cmhc_breakdown_geography_codes=list(
-  #CMA=3,
+  CMA=3,
   CSD=4,
   ZONE=5,
   NEIGHBOUHOOD=6,

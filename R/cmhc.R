@@ -55,7 +55,7 @@ get_cmhc <- function(query_params) {
                "3-5 Units", "6-19 Units", "20-49 Units", "50-199 Units", "200+ Units")
   result <- result %>% mutate_at(intersect(names(result), as_integer), funs(parse_integer))
 
-  return(result)
+  return(tibble::as_tibble(result))
 }
 
 #' Parameters for completion data

@@ -6,7 +6,7 @@ cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140", Victo
 
 #' cmhc geography type lookup
 #' @export
-cmhc_geography_type_list=list(PR=2,CMA=3, CSD=4, CT=7)
+cmhc_geography_type_list=list(PR=2,CMA=3, CSD=4, CT=7, ZONE=5,NEIGHBOUHOOD=6)
 
 #' cmhc rms geography type lookup
 #' @export
@@ -136,3 +136,54 @@ cmhc_to_census_geocode <- function(GeoUID,CMA_GEOUID=NULL){
 #' census geography lookup
 #' @export
 census_to_cmhc_translation=list("59933"="2410", "35535"="2270", "48825"="0140", "59935"="2440")
+
+
+
+
+#' download local copy of cmhc geography data
+#' @param base_directory local directory to hold cmhc geography data
+#' @export
+download_geographies <- function(base_directory=getOption("cmhc.cache_path")){
+  if (is.null(base_directory)) stop(paste0("Not a valid base directory ",base_directory))
+  aws_bucket="mountaimath"
+  aws_path="cmhc"
+  dir.create(file.path(base_directory))
+  message("Downloading geographies, this may take a minute...")
+  for (d in paste0("RMS2017_",seq(1,3),".gdb")) {
+    dir.create(file.path(base_directory,d))
+    for (f in aws.s3::get_bucket(bucket="mountainmath",prefix = file.path(aws_path,d))) {
+      key=f$Key
+      local_path=gsub(paste0("cmhc/",d,"/"),"",key)
+      local_file <- file.path(base_directory,d,local_path)
+      if (!file.exists(local_file))
+        aws.s3::save_object(object=key,bucket="mountainmath",file=local_file)
+    }
+  }
+}
+
+
+#' get cmhc geographies, requires data has been downloaded with `download_geographies()` first
+#' @param level aggreagtion level for geographic data, one of "CT","ZONE","NBHD","CSD","MET"
+#' @param base_directory local directory to hold cmhc geography data
+#' @export
+get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=getOption("cmhc.cache_path")){
+  if (is.null(base_directory)) stop(paste0("Not a valid base directory ",base_directory))
+  if(!(length(level)==1 & (level %in% c("CT","ZONE","NBHD","CSD","MET")))) stop("level needs to be one of CT, ZONE, NBHD, CSD, MET")
+  if (!dir.exists(base_directory)) stop(paste0("Local directory ",base_directory," does not exists.\nMake sure geographit data was downloaded using the `download_geographies()` function."))
+  result=NULL
+  if (level=="CT") {
+    path=file.path(base_directory,"RMS2017_2.gdb")
+    if (!dir.exists(path)) stop(paste0("Local directory ",path," does not exists.\nDownload files first using the `download_geographies()` function."))
+    result=sf::read_sf(path)
+  } else if (level == "CSD") {
+    path=file.path(base_directory,"RMS2017_1.gdb")
+    if (!dir.exists(path)) stop(paste0("Local directory ",path," does not exists.\nDownload files first using the `download_geographies()` function."))
+    result=sf::read_sf(path)
+  } else {
+    path=file.path(base_directory,"RMS2017_3.gdb")
+    if (!dir.exists(path)) stop(paste0("Local directory ",path," does not exists.\nDownload files first using the `download_geographies()` function."))
+    result=sf::read_sf(path,layer=paste0(level,"_2017"))
+  }
+  result
+}
+
