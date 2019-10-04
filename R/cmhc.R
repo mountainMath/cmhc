@@ -325,8 +325,10 @@ cmhc_snapshot_params=  function(table_id = "2.2.12",
 #' @param geography_id Geography for which to get the data
 #' @param geography_type type corrsponding to geography
 #' @param table_id CMHC table id
+#' @param filter optional filter
+#' @param region optional region parameter to replace geography_id and geography_type
 #' @export
-cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geography_type=3, region=NA){
+cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geography_type=3, region=NA, filter=list()){
   breakdown_geography_type=0
   if (length(region)>1 || !is.na(region)) {
     geography_id=region["geography_id"]
@@ -339,6 +341,12 @@ cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geogr
     BreakdownGeographyTypeId=as.character(breakdown_geography_type),
     exportType="csv"
   )
+  if (length(filter)> 0) for (i in 1:length(filter)) {
+    x=filter[i]
+    query_params[paste0("AppliedFilters[",i-1,"].Key")]=names(x)
+    query_params[paste0("AppliedFilters[",i-1,"].Value")]=as.character(x)
+  }
+
   return(query_params)
 }
 

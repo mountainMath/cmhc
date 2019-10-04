@@ -5,7 +5,7 @@
 \title{Parameters for time series}
 \usage{
 cmhc_timeseries_params(table_id = "1.1.2.9", geography_id = 2410,
-  geography_type = 3, region = NA)
+  geography_type = 3, region = NA, filter = list())
 }
 \arguments{
 \item{table_id}{CMHC table id}
@@ -13,6 +13,10 @@ cmhc_timeseries_params(table_id = "1.1.2.9", geography_id = 2410,
 \item{geography_id}{Geography for which to get the data}
 
 \item{geography_type}{type corrsponding to geography}
+
+\item{region}{optional region parameter to replace geography_id and geography_type}
+
+\item{filter}{optional filter}
 }
 \description{
 Parameters for time series
