@@ -4,8 +4,10 @@
 \alias{get_cmhc_geography}
 \title{get cmhc geographies, requires data has been downloaded with `download_geographies()` first}
 \usage{
-get_cmhc_geography(level = c("CT", "ZONE", "NBHD", "CSD", "MET"),
-  base_directory = getOption("cmhc.cache_path"))
+get_cmhc_geography(
+  level = c("CT", "ZONE", "NBHD", "CSD", "MET"),
+  base_directory = getOption("cmhc.cache_path")
+)
 }
 \arguments{
 \item{level}{aggreagtion level for geographic data, one of "CT","ZONE","NBHD","CSD","MET"}

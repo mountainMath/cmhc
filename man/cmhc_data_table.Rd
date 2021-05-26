@@ -9,7 +9,9 @@ first number for survey
 second number 1=fixed time, 2=time series
 thrid number series
 forth number (only for fixed time) geographic breakdown}
-\format{An object of class \code{list} of length 4.}
+\format{
+An object of class \code{list} of length 4.
+}
 \usage{
 cmhc_data_table
 }

@@ -4,10 +4,17 @@
 \alias{cmhc_snapshot_params}
 \title{Parameters for time series}
 \usage{
-cmhc_snapshot_params(table_id = "2.2.12", geography_id = 2410,
-  geography_type = 3, breakdown_geography_type = "CSD",
-  filter = list(), region = NA, year = 2017, month = 7,
-  frequency = NA)
+cmhc_snapshot_params(
+  table_id = "2.2.12",
+  geography_id = 2410,
+  geography_type = 3,
+  breakdown_geography_type = "CSD",
+  filter = list(),
+  region = NA,
+  year = 2017,
+  month = 7,
+  frequency = NA
+)
 }
 \arguments{
 \item{table_id}{CMHC table id}

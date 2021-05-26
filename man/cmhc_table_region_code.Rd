@@ -4,7 +4,9 @@
 \name{cmhc_table_region_code}
 \alias{cmhc_table_region_code}
 \title{table region code lookup}
-\format{An object of class \code{list} of length 5.}
+\format{
+An object of class \code{list} of length 5.
+}
 \usage{
 cmhc_table_region_code
 }

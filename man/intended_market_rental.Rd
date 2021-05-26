@@ -4,7 +4,9 @@
 \name{intended_market_rental}
 \alias{intended_market_rental}
 \title{intended market rental}
-\format{An object of class \code{list} of length 1.}
+\format{
+An object of class \code{list} of length 1.
+}
 \usage{
 intended_market_rental
 }

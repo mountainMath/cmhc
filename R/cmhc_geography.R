@@ -123,8 +123,8 @@ cmhc_to_census_geocode <- function(GeoUID,CMA_GEOUID=NULL){
   if (!is.null(CMA_GEOUID) & nchar(CMA_GEOUID)==5) CMA_GEOUID=substr(CMA_GEOUID,3,5)
 
   result <- switch(geo_level,
-    "CMA" = purrr::map(GeoUID,function(g)cmhc::cmhc_cma_translation_data %>% filter(METCODE==g) %>% pull(CMA_UID)) %>% unlist,
-    "CSD" = purrr::map(GeoUID,function(g)cmhc::cmhc_csd_translation_data %>% filter(CMHC_CSDUID==g) %>% pull(CSDUID)) %>% unlist,
+    "CMA" = lapply(GeoUID,function(g)cmhc::cmhc_cma_translation_data %>% filter(METCODE==g) %>% pull(CMA_UID)) %>% unlist,
+    "CSD" = lapply(GeoUID,function(g)cmhc::cmhc_csd_translation_data %>% filter(CMHC_CSDUID==g) %>% pull(CSDUID)) %>% unlist,
     "CT" = paste0(CMA_GEOUID,GeoUID)
   )
 

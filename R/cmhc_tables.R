@@ -1,7 +1,14 @@
-cmhc_survey=list(
-  "Scss"=1,
-  "Rms"=2,
-  "Srms"=4
+cmhc_survey <- list(
+  "Scss" = 1,
+  "Rms" = 2,
+  "Srms" = 4
+)
+
+cmhc_scss_geo_level <- list(
+  "Survey Zone" = 8,
+  "Census Subdivision" = 9,
+  "Neighbourhood" = 10,
+  "Census Tract" = 11
 )
 
 #' table lookup
@@ -16,6 +23,9 @@ cmhc_table_list=list(
   "Scss Under Construction CSD" = '1.1.3.9',
   "Scss Under Construction Time Series" = '1.2.3',
   "Scss Starts Time Series" = '1.2.1',
+  "Scss Starts SZ" = '1.1.1.8',
+  "Scss Starts CSD" = '1.1.1.9',
+  "Scss Starts NBHD" = '1.1.1.10',
   "Scss Starts CT" = '1.1.1.11',
   "Scss Unabsorbed Inventory Time Series" ="1.2.4",
   "Scss Length of Construction Time Series" = "1.2.7",
@@ -68,10 +78,60 @@ cmhc_data_table <- list(
 )
 
 
+cmhc_series_codes <- list(
+  Scss=1,
+  Rms=2,
+  Srms=4
+)
+
+cmhc_mode_codes <- list(
+  snapshot=1,
+  timeline=2
+)
+
+cmhc_duration_codes <- list(
+  monthyl=1,
+  annual=8
+)
+
+cmhc_timeseries_params2 <- function(census_region,survey,series,level){
+
+}
+
+scss_series_codes <- list(
+  "Starts by Dwelling Type"=1,
+  "Completions by Dwelling Type"=2,
+  "Under Construction"=3,
+  "Starts by Intended Market"=4,
+  "Absorbed Units"=5,
+  "Unabsorbed Inventory"=6,
+  "Length of Construction"=7,
+  "Completions by Intended Market"=8,
+  "Absorbed Prices"=9
+)
+
+rms_series_codes <- list(
+  "Vacancy Rate"=1,
+  "Average Rent"=2,
+  "Availability Rate by Bedrooms"=6,
+  "Availability Rate by Age"=7,
+  "Availability Rate by Size"=8,
+  "Average Rent by Bedrooms"=11,
+  "Average Rent by Age"=13,
+  "Average Rent by Size"=15,
+  "Average Rent by Change by Bedrooms"=12,
+  "Median Rent by Bedrooms"=21,
+  "Median Rent by Age"=22,
+  "Median Rent by Size"=23,
+  "Rental Universe by Bedrooms"=26,
+  "Rental Universe by Age"=27,
+  "Rental Universe by Size"=28
+)
+
 list_cmhc_tables <- function(){
   tibble::tribble(
     ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~Filters,
-    "Scss",1,"Starts","1.1",c(),
+    "Scss",1,"Starts by Dwelling Type","1.1",c(),
     "Scss",1,"Completions","1.2",c(),
     "Scss",1,"Under Construction","1.3",c(),
     "Scss",1,"","1.4",c(),
@@ -88,8 +148,7 @@ list_cmhc_tables <- function(){
     "Rms",2,"Median Rent Bedroom","1.21",c(),
     "Rms",2,"Rental Universe by Bedrooms","1.26",c(),
     "Rms",2,"Rental Universe by Age","1.27",c(),
-    "Rms",2,"Rental Universe by Structure","1.28",c(),
-    "Rms",2,"Average Rent by Age","1.13",c()
+    "Rms",2,"Rental Universe by Structure","1.28",c()
   )
 }
 

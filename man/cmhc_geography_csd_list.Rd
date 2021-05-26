@@ -4,7 +4,9 @@
 \name{cmhc_geography_csd_list}
 \alias{cmhc_geography_csd_list}
 \title{census geography cities}
-\format{An object of class \code{list} of length 17.}
+\format{
+An object of class \code{list} of length 17.
+}
 \usage{
 cmhc_geography_csd_list
 }

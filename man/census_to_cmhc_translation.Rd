@@ -4,7 +4,9 @@
 \name{census_to_cmhc_translation}
 \alias{census_to_cmhc_translation}
 \title{census geography lookup}
-\format{An object of class \code{list} of length 4.}
+\format{
+An object of class \code{list} of length 4.
+}
 \usage{
 census_to_cmhc_translation
 }

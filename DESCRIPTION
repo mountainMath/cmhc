@@ -8,11 +8,15 @@ Description: Wrapper around the CMHC web interface.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Requires: dplyr,
-    purrr
-Suggests: knitr,
+Requires: 
+    dplyr,
+    stringr
+    httr,
+    digest
+Suggests: 
+    knitr,
     rmarkdown,
     sf,
     aws.s3
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
