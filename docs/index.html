@@ -84,25 +84,15 @@
 </h1></div>
 <p>Wrapper for hack into CMHC data</p>
 <p>To discover table parameters, open CMHC data portal and set breakpoint on line 74 of asset TableMapChart.js. Then “export” table, type and inspect variable “model” in the console to read off the parameters.</p>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>Documentation is somewhat sparce, but <a href="https://mountainmath.github.io/cmhc/" class="external-link">available on the GitHub pages</a>.</p>
+<p>Check you the example vignettes for common use cases.</p>
 <p>##Usage</p>
 <pre><code><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"mountainmath/cmhc"</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmhc</span><span class="op">)</span>
 <span class="fu"><a href="reference/get_cmhc.html">get_cmhc</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre>
-<div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h2>
-<p>Check out the <a href="https://htmlpreview.github.io/?https://github.com/mountainMath/cmhc/blob/master/vignettes/vacancy_vs_rent_change.nb.html" class="external-link">vignette plotting vacancy rate against fixed sample rent increases</a> to see how this can be used.</p>
-<div class="figure">
-<img src="images/vacancy_rent_change.png" alt=""><p class="caption">Vacancy rate</p>
-</div>
-<p>Or we can fold in census geographies (and census data) to map the <a href="https://github.com/mountainMath/cmhc/blob/master/vignettes/Under%20Construction.nb.html" class="external-link">current units under construction</a>.</p>
-<div class="figure">
-<img src="images/under_construction.png" alt=""><p class="caption">Under Construction</p>
-</div>
-<p>And since there is a lot of interest in development around the Annex neighbourhood, we can zoom in real quick and overlay the neighbourhood boundary.</p>
-<div class="figure">
-<img src="images/under_construction_annex.png" alt=""><p class="caption">Annex</p>
-</div>
 </div>
 </div>
   </div>
