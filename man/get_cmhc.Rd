@@ -15,7 +15,10 @@ returns dataframe with CMHC data, tile and subtitle are set as attributes}
 Hack into CMHC data portal to pull out csv tables
 }
 \examples{
-dat=get_cmhc(cmhc_rent_change_history_params())
+table <- cmhc_table_list$`Rms Vacancy Rate Time Series`
+region - cmhc_region_params_from_census("59933")
+dat <- get_cmhc(cmhc_timeseries_params(table_id = table, region = region))
+
 }
 \keyword{api}
 \keyword{canada}

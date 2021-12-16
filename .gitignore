@@ -7,3 +7,6 @@ data_cache
 data_cache/*
 helpers/*
 helpers
+/doc/
+/Meta/
+.DS_Store

@@ -39,6 +39,8 @@ cmhc_geography_csd_list=list(Vancouver="5915022",
 
 
 #' cmhc geography params
+#' @param geography cmhc region id
+#' @param type level of geography
 #' @export
 cmhc_region_params <- function(geography,type='CMA'){
   list <- list("geography_type_id"=as.character(cmhc_geography_type_list[type]))
@@ -49,6 +51,7 @@ cmhc_region_params <- function(geography,type='CMA'){
 }
 
 #' census geography params
+#' @param GeoUID census region id
 #' @export
 cmhc_region_params_from_census <- function(GeoUID){
   list <- list("geography_type_id"=as.character(cmhc_geography_type_list[cmhc_geo_level_for_census(GeoUID)]),
@@ -57,6 +60,7 @@ cmhc_region_params_from_census <- function(GeoUID){
 }
 
 #' Get cmhc geo level for census geo_uid
+#' @param GeoUID census region id
 #' @export
 cmhc_geo_level_for_census <- function(GeoUID){
   switch(as.character(nchar(GeoUID)),
@@ -67,6 +71,7 @@ cmhc_geo_level_for_census <- function(GeoUID){
 }
 
 #' Get cmhc geo level for cmhc geo_uid
+#' @param GeoUID census geographic idenitifier
 #' @export
 cmhc_geo_level_for_cmhc <- function(GeoUID){
   switch(as.character(nchar(GeoUID)),
@@ -94,8 +99,8 @@ census_to_cmhc_geocode <- function(GeoUID){
 
   result <- switch(
     geo_level,
-    "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(CMA_UID)==5,substr(CMA_UID,3,5),CMA_UID)) %>% filter(CMA_UID==GeoUID) %>% pull(METCODE),
-    "CSD" = cmhc::cmhc_csd_translation_data %>% filter(CSDUID==GeoUID) %>% pull(CMHC_CSDUID),
+    "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==GeoUID) %>% pull(.data$METCODE),
+    "CSD" = cmhc::cmhc_csd_translation_data %>% filter(.data$CSDUID==GeoUID) %>% pull(.data$CMHC_CSDUID),
     "PR" = GeoUID
   )
 
@@ -104,6 +109,7 @@ census_to_cmhc_geocode <- function(GeoUID){
 
 #' translate CMHC to census geocodes
 #' @param GeoUID CMHC GeoUID for CMA or CSD or CT
+#' @param CMA_GEOUID census geographic identifier for CMA
 #' @export
 cmhc_to_census_geocode <- function(GeoUID,CMA_GEOUID=NULL){
   cmhc_name <- list(
@@ -123,8 +129,8 @@ cmhc_to_census_geocode <- function(GeoUID,CMA_GEOUID=NULL){
   if (!is.null(CMA_GEOUID) & nchar(CMA_GEOUID)==5) CMA_GEOUID=substr(CMA_GEOUID,3,5)
 
   result <- switch(geo_level,
-    "CMA" = lapply(GeoUID,function(g)cmhc::cmhc_cma_translation_data %>% filter(METCODE==g) %>% pull(CMA_UID)) %>% unlist,
-    "CSD" = lapply(GeoUID,function(g)cmhc::cmhc_csd_translation_data %>% filter(CMHC_CSDUID==g) %>% pull(CSDUID)) %>% unlist,
+    "CMA" = lapply(GeoUID,function(g)cmhc::cmhc_cma_translation_data %>% filter(.data$METCODE==g) %>% pull(.data$CMA_UID)) %>% unlist,
+    "CSD" = lapply(GeoUID,function(g)cmhc::cmhc_csd_translation_data %>% filter(.data$CMHC_CSDUID==g) %>% pull(.data$CSDUID)) %>% unlist,
     "CT" = paste0(CMA_GEOUID,GeoUID)
   )
 

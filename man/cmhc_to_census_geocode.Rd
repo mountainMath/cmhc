@@ -8,6 +8,8 @@ cmhc_to_census_geocode(GeoUID, CMA_GEOUID = NULL)
 }
 \arguments{
 \item{GeoUID}{CMHC GeoUID for CMA or CSD or CT}
+
+\item{CMA_GEOUID}{census geographic identifier for CMA}
 }
 \description{
 translate CMHC to census geocodes

@@ -3,20 +3,27 @@ Type: Package
 Title: Access CMHC data from the Housing Market Information Portal
 Version: 0.1.0
 Author: Jens von Bergmann
-Maintainer: The package maintainer <jens@mountainmath.ca>
+Maintainer: Jens von Bergmann <jens@mountainmath.ca>
 Description: Wrapper around the CMHC web interface.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Requires: 
+Imports:
     dplyr,
-    stringr
+    digest,
     httr,
-    digest
+    readr,
+    stringr,
+    tibble
 Suggests: 
     knitr,
+    RColorBrewer,
+    scales,
+    cancensus,
+    classInt,
+    ggplot2,
+    tidyr,
     rmarkdown,
-    sf,
-    aws.s3
+    sf
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

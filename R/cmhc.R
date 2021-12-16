@@ -10,7 +10,10 @@
 #' @export
 #'
 #' @examples
-#' dat=get_cmhc(cmhc_rent_change_history_params())
+#' table <- cmhc_table_list$`Rms Vacancy Rate Time Series`
+#' region - cmhc_region_params_from_census("59933")
+#' dat <- get_cmhc(cmhc_timeseries_params(table_id = table, region = region))
+#'
 get_cmhc <- function(query_params) {
   filehash <- digest::digest(query_params)
   data_file=file.path(tempdir(),paste0("cmhc_",filehash,".csv"))
@@ -41,21 +44,20 @@ get_cmhc <- function(query_params) {
     warning(paste0(dat,collapse = "\n"))
     return(NULL)
   } else if (length(range)==1) {
-      range[2]=last_row
+    while (dat[last_row]=="") last_row <- last_row - 1
+    range[2]=last_row
   }
-  result=read.table(text=dat[range[1]:(range[2]-1)],
-                    sep = ",",
-                    header=TRUE,
-                    na.strings = c("**"),
-                    stringsAsFactors = FALSE,
-                    check.names = FALSE,
-                    colClasses=c("character")) %>%
-    dplyr::as_tibble(.name_repair="minimal")
+  result=suppressMessages(readr::read_csv(data_file,skip = range[1]-1,n_max=range[2]-range[1],
+                  locale = readr::locale(encoding = "latin1"),
+                  col_types = readr::cols(.default = "c"),
+                  col_names=TRUE,
+                  na = c("**")) %>%
+                    dplyr::as_tibble(.name_repair="minimal"))
   region_title=lapply(strsplit(dat[1],"\u0097"),trimws)[[1]]
   attr(result,"region")=region_title[1]
   attr(result,"title")=region_title[2]
   attr(result,"subtitle")=dat[2]
-  names(result)[names(result)==""] <- paste0("X",sequence(length(names(result)[names(result)==""])))
+  names(result)[grepl("^\\.\\.\\.",names(result))] <- paste0("X",sequence(length(names(result)[grepl("^\\.\\.\\.",names(result))])))
 
   #parse integers
   parse_integer <- function(x){
@@ -77,7 +79,7 @@ get_cmhc <- function(query_params) {
     result <- result %>% mutate(`Census geography`=census_year)
   }
 
-  if ("X2" %in% names(result) && unique(result$X2)=="") result <- result %>% select(-X2)
+  if ("X2" %in% names(result) && unique(result$X2)=="") result <- result %>% select(-.data$X2)
 
 
   return(result)
@@ -168,7 +170,12 @@ cmhc_completion_params=  function(geography_id=2410, year=2017, month=7){
 #' @param GeoUID ct geo_uid
 #' @export
 cmhc_geo_uid_for_ct <- function(cma_header,GeoUID) {
-  return(paste0(cma_header,sprintf("%07.2f", GeoUID)))
+  if (is.numeric(GeoUID)) {
+    result <- paste0(cma_header,sprintf("%07.2f", GeoUID))
+  } else {
+    result <- paste0(cma_header,GeoUID)
+  }
+  result
 }
 
 #' Parameters for primary market vacancy data by survey zones
@@ -317,7 +324,7 @@ cmhc_snapshot_params=  function(table_id = "2.2.12",
                                 filter=list(), region=NA,
                                 year=2017, month=7,frequency=NA){
 
-  if (length(region)>1 || !is.na(region)) {
+  if (length(as.character(region))==2) {
     geography_id=region["geography_id"]
     geography_type=region["geography_type_id"]
   }
@@ -335,7 +342,7 @@ cmhc_snapshot_params=  function(table_id = "2.2.12",
   if (!is.na(frequency)) {
     query_params["Frequency"]=frequency
   }
-  if (length(filter)> 0) for (i in 1:length(filter)) {
+  if (length(filter)> 0) for (i in seq(1,length(filter))) {
     x=filter[i]
     query_params[paste0("AppliedFilters[",i-1,"].Key")]=names(x)
     query_params[paste0("AppliedFilters[",i-1,"].Value")]=as.character(x)
@@ -355,7 +362,7 @@ cmhc_snapshot_params=  function(table_id = "2.2.12",
 #' @export
 cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geography_type=3, region=NA, filter=list()){
   breakdown_geography_type=0
-  if (length(region)>1 || !is.na(region)) {
+  if (length(as.character(region))==2) {
     geography_id=region["geography_id"]
     geography_type=region["geography_type_id"]
   }
@@ -381,6 +388,9 @@ cmhc_timeseries_params=  function(table_id = "1.1.2.9", geography_id=2410, geogr
 #' intended market rental
 #' @export
 intended_market_rental = list("dimension-18"="Rental")
+
+# Suppress warnings for missing bindings for '.' in R CMD check.
+if (getRversion() >= "2.15.1") utils::globalVariables(c("."))
 
 #' @import dplyr
 

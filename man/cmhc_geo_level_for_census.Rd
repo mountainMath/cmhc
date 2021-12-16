@@ -6,6 +6,9 @@
 \usage{
 cmhc_geo_level_for_census(GeoUID)
 }
+\arguments{
+\item{GeoUID}{census region id}
+}
 \description{
 Get cmhc geo level for census geo_uid
 }

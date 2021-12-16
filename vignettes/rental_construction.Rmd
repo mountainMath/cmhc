@@ -2,11 +2,9 @@
 title: "Rental Under Construction"
 author: "Jens von Bergmann"
 date: '2017-09-22'
-output:
-  html_document: default
-  html_notebook: default
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Under Construction}
+  %\VignetteIndexEntry{Rental Under Construction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -113,8 +111,6 @@ ggplot(geos) +
   ggtitle(paste0(cma, " CMA Under Construction ",month,"-",year," (",prettyNum(total,big.mark = ",")," total, ",prettyNum(rental,big.mark = ",")," rental)")) +
   theme_opts
 
-ggsave(paste0('../images/rental_under_construction_',cma,'_',year,"_",month,"_",breakdown_geography_type,'.png'),width=10,height=10)
-
 ```
 
 ```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
@@ -126,7 +122,4 @@ ggplot(geos ) +
   scale_fill_viridis_d("Rental Units",option = "plasma",na.value='#808080') +
   ggtitle(paste0(cma, " CMA Under Construction ",month,"-",year," (",prettyNum(rental,big.mark = ",")," rental)")) +
   theme_opts
-
-ggsave(paste0('../images/rental_under_construction_total_',cma,'_',year,"_",month,"_",breakdown_geography_type,'.png'),width=10,height=10)
-
 ```

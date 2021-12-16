@@ -2,11 +2,9 @@
 title: "Unabsorbed Stock"
 author: "Jens von Bergmann"
 date: '2017-09-22'
-output:
-  html_document: default
-  html_notebook: default
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Under Construction}
+  %\VignetteIndexEntry{Unabsorbed Stock}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +12,9 @@ vignette: >
 ## CMHC data
 
 ```{r, message=FALSE, warning=FALSE}
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 #devtools::install_github("mountainmath/cmhc")
 library(cmhc)
 
@@ -97,7 +97,6 @@ ggplot(geos) +
   ggtitle(paste0(cma, " CMA Unabsorbed ",type," Units ",month,"-",year," (",prettyNum(sum(geos[[type]],na.rm=TRUE),big.mark = ",")," total)")) +
   theme_opts
 
-ggsave(paste0('../images/unabsorbed_',cma,"_",year,"_",month,"_",type,"_",breakdown_geography_type,'.png'),width=10,height=10)
 
 ```
 ```{r, fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
@@ -112,7 +111,6 @@ ggplot(geos) +
   ggtitle(paste0(cma, " CMA Unabsorbed ",type," Units ",month,"-",year," (",prettyNum(sum(geos[[type]],na.rm=TRUE),big.mark = ",")," total)")) +
   theme_opts
 
-ggsave(paste0('../images/unabsorbed_',cma,"_",year,"_",month,"_",type,"_",breakdown_geography_type,'.png'),width=10,height=10)
 
 ```
 
@@ -130,8 +128,6 @@ ggplot(geos) +
   ggtitle(paste0(cma, " CMA Unabsorbed ",type," Units ",month,"-",year," (",prettyNum(sum(geos[[type]],na.rm=TRUE),big.mark = ",")," total)")) +
   theme_opts
 
-ggsave(paste0('../images/unabsorbed_',cma,"_",year,"_",month,"_",type,"_",breakdown_geography_type,'.png'),width=10,height=10)
-
 ```
 
 
@@ -139,21 +135,20 @@ ggsave(paste0('../images/unabsorbed_',cma,"_",year,"_",month,"_",type,"_",breakd
 table="Scss Unabsorbed Inventory Time Series"
 level="CMA"
 cmhc_params=cmhc_timeseries_params(table_id = cmhc_table_list[table], region = cmhc_region_params(cma,level))               
-data <- get_cmhc(cmhc_params)  %>% rename(Date=X1) %>% select(-X2) %>% mutate(Date= as.Date(paste0("01 ",Date),format="%d %b %Y"))
+data <- get_cmhc(cmhc_params)  %>% rename(Date=X1) %>% mutate(Date= as.Date(paste0("01 ",Date),format="%d %b %Y"))
 types <- names(data)[!names(data) %in% c("Date")]
-data[is.na(data)] <- 0
+#data[is.na(data)] <- 0
 
-plot_data=data %>% gather(key="Type",value="Units",types) 
+plot_data=data %>% pivot_longer(all_of(types),names_to="Type",values_to="Units") 
 
 ggplot(plot_data %>% filter(Type %in% c("Row","Apartment","Single","Semi-Detached")),aes(x=Date, y=Units, color=Type, group=Type)) +
   geom_path() +
   geom_point() +
   scale_x_date(date_breaks = "1 year",date_labels = "%b %Y") +
   theme_bw() + 
-  labs(y="Unmber of Units",
+  labs(y="Number of Units",
        x="Month",
        title=paste0(cma," ",level," Completed and Unabsorbed Inventory")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
-ggsave(paste0("../images/unabsorbed_time_",cma,"_",level,".png"))
 ```
 

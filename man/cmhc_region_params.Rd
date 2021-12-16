@@ -6,6 +6,11 @@
 \usage{
 cmhc_region_params(geography, type = "CMA")
 }
+\arguments{
+\item{geography}{cmhc region id}
+
+\item{type}{level of geography}
+}
 \description{
 cmhc geography params
 }

@@ -6,7 +6,7 @@ inspect variable "model" in the console to read off the parameters.
 
 ##Usage
 ```
-devtools::install_github("mountainmath/cmhc")
+remotes::install_github("mountainmath/cmhc")
 library(cmhc)
 get_cmhc(...)
 ```

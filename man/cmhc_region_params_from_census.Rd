@@ -6,6 +6,9 @@
 \usage{
 cmhc_region_params_from_census(GeoUID)
 }
+\arguments{
+\item{GeoUID}{census region id}
+}
 \description{
 census geography params
 }

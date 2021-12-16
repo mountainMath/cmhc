@@ -2,9 +2,7 @@
 title: "Time Lines"
 author: "Jens von Bergmann"
 date: "`r Sys.Date()`"
-output:
-  html_document: default
-  html_notebook: default
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Time Lines}
   %\VignetteEngine{knitr::rmarkdown}
@@ -15,7 +13,7 @@ This vignette demonstrates how to pull timelines from CMHC.
 
 ## Completions
 
-```{r, include=FALSE}
+```{r setup}
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -29,23 +27,24 @@ library(cmhc)
 
 cma="Vancouver"
 
-data <- get_cmhc(cmhc_timeseries_params(table_id = cmhc_table_list["Scss Completions Time Seris"], geography_id = cmhc_geography_list[cma])) %>% 
-  rename(Date=X1) %>%
-  group_by(Date=substr(Date,5,8)) %>% # aggregate to annual data
+data <- get_cmhc(cmhc_timeseries_params(table_id = cmhc_table_list$`Scss Completions Time Series`, 
+                                        region = cmhc_region_params_from_census("59933"))) %>% 
+mutate(Date=date_from_cmhc_year_month(X1)) %>%
+  select(-X1) %>%
+  group_by(Date=strftime(Date,"%Y")) %>% # aggregate to annual data
   summarize(Single=sum(Single),
             `Semi-Detached`=sum(`Semi-Detached`),
             Row=sum(Row),
             Apartment=sum(Apartment),
-            All=sum(All)) %>%
+            All=sum(All),.groups="drop") %>%
   filter(as.integer(Date)<2017) # ditch partial data
 
 types <- c("Single","Semi-Detached","Row","Apartment")
-ggplot(data=data %>% gather(key="Type",value="Units",types), 
+ggplot(data=data %>% pivot_longer(all_of(types),names_to="Type",values_to="Units",), 
        aes(x=Date, y=Units, group=Type, fill=Type)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   ggtitle(paste0(cma," CMA Completions")) + 
   geom_bar(stat="identity")
-ggsave("../images/van_completions.png")
 ```
 
 
@@ -53,21 +52,15 @@ ggsave("../images/van_completions.png")
 
 ```{r}
 data <- get_cmhc(cmhc_timeseries_params(table_id = cmhc_table_list["Scss Unabsorbed Inventory Time Series"], geography_id = cmhc_geography_list[cma])) %>% 
-  rename(Date=X1) #%>%
-  # group_by(Date=substr(Date,5,8)) %>% # aggregate to annual data
-  # summarize(Single=sum(Single),
-  #           `Semi-Detached`=sum(`Semi-Detached`),
-  #           Row=sum(Row),
-  #           Apartment=sum(Apartment),
-  #           All=sum(All)) %>%
-  # filter(as.integer(Date)<2017) # ditch partial data
+  mutate(Date=date_from_cmhc_year_month(X1)) %>%
+  select(-X1)
 
 types <- c("Single","Semi-Detached","Row","Apartment")
 ggplot(data=data %>% gather(key="Type",value="Units",types), 
        aes(x=Date, y=Units, group=Type, fill=Type)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   ggtitle(paste0(cma," CMA Unabsorbed")) + 
-  geom_bar(stat="identity")
+  geom_area(stat="identity")
 
 ```
 
