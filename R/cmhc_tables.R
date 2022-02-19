@@ -90,7 +90,7 @@ cmhc_mode_codes <- list(
 )
 
 cmhc_duration_codes <- list(
-  monthyl=1,
+  monthly=1,
   annual=8
 )
 

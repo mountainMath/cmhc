@@ -32,7 +32,7 @@ The CMHC API is a bit of a mess. `cmhc` uses several internal functions to acces
 library(dplyr)
 library(tidyr)
 
-regions <- c("35535"="Vancouver","24462"="Montréal","59933"="Toronto")
+regions <- c("59933"="Vancouver","24462"="Montréal","35535"="Toronto")
 
 data <- regions %>% 
   lapply(function(name){

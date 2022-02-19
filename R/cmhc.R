@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' table <- cmhc_table_list$`Rms Vacancy Rate Time Series`
-#' region - cmhc_region_params_from_census("59933")
+#' region <- cmhc_region_params_from_census("59933")
 #' dat <- get_cmhc(cmhc_timeseries_params(table_id = table, region = region))
 #'
 get_cmhc <- function(query_params) {
@@ -61,9 +61,12 @@ get_cmhc <- function(query_params) {
 
   #parse integers
   parse_integer <- function(x){
-    x %>%
+    xx<-x %>%
       sub(",", "", ., fixed = TRUE) %>%
-      sub(" %","",.,fixed = TRUE) %>%
+      sub(" %","",.,fixed = TRUE)
+    xx[xx=="-"]=NA_character_
+    xx[xx=="++"]=NA_character_
+    xx %>%
       as.numeric
   }
   as_integer=c("Bachelor", "1 Bedroom", "2 Bedroom", "3 Bedroom +", "Total",
@@ -79,7 +82,10 @@ get_cmhc <- function(query_params) {
     result <- result %>% mutate(`Census geography`=census_year)
   }
 
-  if ("X2" %in% names(result) && unique(result$X2)=="") result <- result %>% select(-.data$X2)
+  last_column <- names(result) %>% last
+
+  if (grepl("^X\\d$",last_column) && sum(result[,last_column]!="")==0) result <- result %>% select(-all_of(last_column))
+
 
 
   return(result)
