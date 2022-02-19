@@ -79,10 +79,8 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">table</span> <span class="op">&lt;-</span> <span class="va">cmhc_table_list</span><span class="op">$</span><span class="va">`Rms Vacancy Rate Time Series`</span></span>
-<span class="r-in"><span class="va">region</span> <span class="op">-</span> <span class="fu"><a href="cmhc_region_params_from_census.html">cmhc_region_params_from_census</a></span><span class="op">(</span><span class="st">"59933"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'region' not found</span>
+<span class="r-in"><span class="va">region</span> <span class="op">&lt;-</span> <span class="fu"><a href="cmhc_region_params_from_census.html">cmhc_region_params_from_census</a></span><span class="op">(</span><span class="st">"59933"</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">get_cmhc</span><span class="op">(</span><span class="fu"><a href="cmhc_timeseries_params.html">cmhc_timeseries_params</a></span><span class="op">(</span>table_id <span class="op">=</span> <span class="va">table</span>, region <span class="op">=</span> <span class="va">region</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in cmhc_timeseries_params(table_id = table, region = region):</span> object 'region' not found</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

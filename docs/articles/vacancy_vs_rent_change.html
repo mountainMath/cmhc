@@ -113,7 +113,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
 
-<span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"35535"</span><span class="op">=</span><span class="st">"Vancouver"</span>,<span class="st">"24462"</span><span class="op">=</span><span class="st">"Montréal"</span>,<span class="st">"59933"</span><span class="op">=</span><span class="st">"Toronto"</span><span class="op">)</span>
+<span class="va">regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"59933"</span><span class="op">=</span><span class="st">"Vancouver"</span>,<span class="st">"24462"</span><span class="op">=</span><span class="st">"Montréal"</span>,<span class="st">"35535"</span><span class="op">=</span><span class="st">"Toronto"</span><span class="op">)</span>
 
 <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">regions</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">name</span><span class="op">)</span><span class="op">{</span>
@@ -143,15 +143,15 @@
 <span class="co">## <span style="color: #949494;"># Groups:   City [3]</span></span>
 <span class="co">##   Year         vacancy_rate rent_change City     </span>
 <span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> 2018 October          1.9         2.5 Montréal </span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> 2019 October          1.5         3.6 Montréal </span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> 2020 October          2.7         4.2 Montréal </span>
-<span class="co">## <span style="color: #BCBCBC;">4</span> 2018 October          1           6.1 Toronto  </span>
-<span class="co">## <span style="color: #BCBCBC;">5</span> 2019 October          1.1         4.7 Toronto  </span>
-<span class="co">## <span style="color: #BCBCBC;">6</span> 2020 October          2.6         2   Toronto  </span>
-<span class="co">## <span style="color: #BCBCBC;">7</span> 2018 October          1.1         5.4 Vancouver</span>
-<span class="co">## <span style="color: #BCBCBC;">8</span> 2019 October          1.5         6.4 Vancouver</span>
-<span class="co">## <span style="color: #BCBCBC;">9</span> 2020 October          3.4         4.7 Vancouver</span></code></pre>
+<span class="co">## <span style="color: #BCBCBC;">1</span> 2019 October          1.5         3.6 Montréal </span>
+<span class="co">## <span style="color: #BCBCBC;">2</span> 2020 October          2.7         4.2 Montréal </span>
+<span class="co">## <span style="color: #BCBCBC;">3</span> 2021 October          3           3.6 Montréal </span>
+<span class="co">## <span style="color: #BCBCBC;">4</span> 2019 October          1.5         6.4 Toronto  </span>
+<span class="co">## <span style="color: #BCBCBC;">5</span> 2020 October          3.4         4.7 Toronto  </span>
+<span class="co">## <span style="color: #BCBCBC;">6</span> 2021 October          4.5         1   Toronto  </span>
+<span class="co">## <span style="color: #BCBCBC;">7</span> 2019 October          1.1         4.7 Vancouver</span>
+<span class="co">## <span style="color: #BCBCBC;">8</span> 2020 October          2.6         2   Vancouver</span>
+<span class="co">## <span style="color: #BCBCBC;">9</span> 2021 October          1.2         2.1 Vancouver</span></code></pre>
 <p>And combine it into a single data frame for comparing directly:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Rename id var</span>

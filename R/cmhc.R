@@ -321,9 +321,16 @@ cmhc_primary_rental_params=  function(geography_id=2410, table_id = "2.2.12",def
 
 
 #' Parameters for time series
+#' @param table_id CMHC table number to query
 #' @param geography_id Geography for which to get the data
 #' @param geography_type type corrsponding to geography
-#' @param table_id CMHC table id
+#' @param breakdown_geography_type breakdown geography type for results
+#' @param filter optional filter for table
+#' @param region can be used instead of the geography arguments, in particular in conjunction with cmhc_region_params_from_census
+#' @param year year for which to query the data
+#' @param month month for which to query the data
+#' @param frequency frequency at which the data should be aggregated
+#'
 #' @export
 cmhc_snapshot_params=  function(table_id = "2.2.12",
                                 geography_id=2410, geography_type=3, breakdown_geography_type="CSD",

@@ -17,11 +17,23 @@ cmhc_snapshot_params(
 )
 }
 \arguments{
-\item{table_id}{CMHC table id}
+\item{table_id}{CMHC table number to query}
 
 \item{geography_id}{Geography for which to get the data}
 
 \item{geography_type}{type corrsponding to geography}
+
+\item{breakdown_geography_type}{breakdown geography type for results}
+
+\item{filter}{optional filter for table}
+
+\item{region}{can be used instead of the geography arguments, in particular in conjunction with cmhc_region_params_from_census}
+
+\item{year}{year for which to query the data}
+
+\item{month}{month for which to query the data}
+
+\item{frequency}{frequency at which the data should be aggregated}
 }
 \description{
 Parameters for time series

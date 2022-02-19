@@ -16,7 +16,7 @@ Hack into CMHC data portal to pull out csv tables
 }
 \examples{
 table <- cmhc_table_list$`Rms Vacancy Rate Time Series`
-region - cmhc_region_params_from_census("59933")
+region <- cmhc_region_params_from_census("59933")
 dat <- get_cmhc(cmhc_timeseries_params(table_id = table, region = region))
 
 }
