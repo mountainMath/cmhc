@@ -2,7 +2,7 @@
 % Please edit documentation in R/cmhc.R
 \name{get_cmhc}
 \alias{get_cmhc}
-\title{Hack into CMHC data portal to pull out csv tables}
+\title{Access CMHC data via the HMIP.}
 \usage{
 get_cmhc(
   survey,
@@ -17,16 +17,16 @@ get_cmhc(
 )
 }
 \arguments{
-\item{survey}{The CMHC survey, one of Scss, or Rms,  consult `list_cmhc_tables()` for possible values.
-(Other surveys will be supported in future versions.)}
+\item{survey}{The CMHC survey, one of "Scss", "Rms", and "Seniors",  consult `list_cmhc_surveys()` for possible values.
+(Other surveys and more data series will be supported in future versions.)}
 
-\item{series}{The CMHC data series of the survey, consult `list_cmhc_tables()` for possible values.}
+\item{series}{The CMHC data series of the survey, consult `list_cmhc_series()` for possible values.}
 
-\item{dimension}{The dimension to show in the results, consult `list_cmhc_tables()` for possible values.}
+\item{dimension}{The dimension to show in the results, consult `list_cmhc_dimensions()` for possible values.}
 
 \item{breakdown}{The geographic breakdown, one of "Survey Zones", "Census Subdivision", "Neighbourhoods", "Census Tracts",
 if querying data for a snapshot in time or "Historical Time Periods" if querying time series data. Not all geographic breakdowns are available for all series.
-returns data frame with CMHC data, tile and subtitle are set as attributes.  Consult `list_cmhc_tables()` for possible values.}
+returns data frame with CMHC data, tile and subtitle are set as attributes.  Consult `list_cmhc_breakdowns()` for possible values.}
 
 \item{geo_uid}{Census geographic identifier for which to query the data. Can be a census tract, census subdivision,
 or census metropolitan area.}
@@ -37,13 +37,17 @@ or census metropolitan area.}
 
 \item{frequency}{optional, only needed when querying time series data, one of "Monthly", "Quarterly" or "Annual".}
 
-\item{filters}{optional list of filters, consult `list_cmhc_tables()` for possible values.}
+\item{filters}{optional list of filters, consult `list_cmhc_filters()` for possible values.}
 }
 \value{
 A tibble with the data in long form.
 }
 \description{
-Hack into CMHC data portal to pull out csv tables
+The data access needs to specify the survey, series, dimension (if any), and breakdown to specify the
+CMHC table to pull the data from. The `list_cmhc_tables()` function can be used to list all the tables available
+via this package. Snapshot data needs to specify the year, or if it is monthly data the month. Time series data, i.e.
+when  `breakdown="Historical Time Series` is specified, does not need year or month parameters, but may have the
+frequency parameter set. Filters provide additional ways to filter the tables by sub-categories.
 }
 \examples{
 \dontrun{

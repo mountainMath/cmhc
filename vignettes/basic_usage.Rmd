@@ -47,11 +47,17 @@ ggplot(vacancy_data,aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
        caption="CMHC Rms")
 ```
 
-By default this fetches the data for the October survey only, in the past the Rental Market Survey was conducted twice a year. We can pass a filter option to access the April data and fold that in.
+By default this fetches the data for the October survey only, in the past the Rental Market Survey was conducted twice a year. We can pass a filter option to access the April data and fold that in. We can explore the possible filter values could be used for this series via the `list_cmhc_filters` convenience function.
+
+```{r}
+list_cmhc_filters("Rms","Vacancy Rate","Bedroom Type","Historical Time Periods")$Filters
+```
+
+This tells us we could filter by dwelling type, with "Row" or "Apartment" as possible values, and by season, with "April" or "October" as possible values. We want the get April values to add to our existing data.
 
 ```{r}
 vacancy_data2 <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom Type",
-                         breakdown="Historical Time Periods",  geo_uid="3506008",filters = list(season="April"))
+                         breakdown="Historical Time Periods",  geo_uid="3506008",filters = list("season"="April"))
 
 bind_rows(vacancy_data,vacancy_data2) |>
   ggplot(aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
@@ -65,7 +71,7 @@ bind_rows(vacancy_data,vacancy_data2) |>
 ```
 
 
-For monthly data, we can specify the frequency and also get annual or quarterly data.
+For data that is collected on a monthly basis, like the Survey of Starts and Completions (Scss) data, we can specify the frequency and also get annual or quarterly data. That makes things more efficient if we are just interested in annual data.
 
 ```{r}
 completions_data <- get_cmhc(survey="Scss",series="Completions",dimension="Dwelling Type",

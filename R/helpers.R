@@ -22,8 +22,9 @@ parse_numeric <- function(x){
     sub(" %","",.,fixed = TRUE)
   xx[xx=="-"]="0"
   xx[xx=="++"]=NA_character_
-  xx %>%
-    as.numeric
+  xx[xx=="n/a"]=NA_character_
+  xx[xx=="**"]=NA_character_
+  as.numeric(xx)
 }
 
 #' A dataset with geo identifiers for CMHC and Census at the CMA level

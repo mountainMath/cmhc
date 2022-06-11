@@ -29,8 +29,8 @@ list_cmhc_tables <- function(short=TRUE){
     left_join(tibble(a="1",
                      DimensionName=c("Dwelling Type","Intended Market"),
                      DimensionCode=c("1","4"),
-                     Filters=c(list("dimension-18"=cmhc_intended_markets),
-                               list("dimension-1"=cmhc_dwelling_types))),
+                     Filters=list("dimension-18"=cmhc_intended_markets,
+                                    "dimension-1"=cmhc_dwelling_types)),
               by="a")
 
 
@@ -42,8 +42,8 @@ list_cmhc_tables <- function(short=TRUE){
     left_join(tibble(a="1",
                      DimensionName=c("Dwelling Type","Intended Market"),
                      DimensionCode=c("1","4"),
-                     Filters=c(list("dimension-18"=c("Condo","Homeowner","All")),
-                               list("dimension-1"=cmhc_dwelling_types))),
+                     Filters=list("dimension-18"=c("Condo","Homeowner","All"),
+                                  "dimension-1"=cmhc_dwelling_types)),
               by="a")
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
@@ -114,8 +114,15 @@ list_cmhc_tables <- function(short=TRUE){
     mutate(SeriesBreakdown="Historical Time Periods") |>
     mutate(Filters=lapply(Filters,function(f)append(f,list(season=c("October","April")))))
 
+  seniors <- tibble::tribble(
+    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~SeriesBreakdown,~SeriesBreakdownCode,~Filters,
+    "Seniors","3","Universe and Number of Residents","1",NA,NA, "Snapshot","2",list(),
+    "Seniors","3","Universe and Number of Residents","8",NA,NA, "Historical Time Periods","6",list()
+  ) |>
+    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$SeriesBreakdownCode))
+
   table_list <- bind_rows(
-    scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries
+    scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries,seniors
   )
 
   if (short) {
@@ -128,7 +135,7 @@ list_cmhc_tables <- function(short=TRUE){
 
 #' List available CMHC surveys
 #'
-#' @return A data frame wtih survey names
+#' @return A data frame with survey names.
 #'
 #' @examples
 #' list_cmhc_surveys()
@@ -140,10 +147,10 @@ list_cmhc_surveys <- function(){
     unique()
 }
 
-#' List available CMHC surveys
+#' List available CMHC series
 #'
 #' @param survey Optional survey to filter by
-#' @return A data frame wtih survey names
+#' @return A data frame with survey names, and series names.
 #'
 #' @examples
 #' list_cmhc_series("Rms")
@@ -167,7 +174,7 @@ list_cmhc_series <- function(survey=NULL){
 #'
 #' @param survey Optional survey to filter by
 #' @param series Optional series to filter by
-#' @return A data frame wtih survey names
+#' @return A data frame with survey names, series names, and dimension names.
 #'
 #' @examples
 #' list_cmhc_dimensions("Rms","Vacancy Rate")
@@ -194,5 +201,85 @@ list_cmhc_dimensions <- function(survey=NULL,series=NULL){
 
 }
 
+
+#' List available CMHC breakdowns
+#'
+#' @param survey Optional survey to filter by
+#' @param series Optional series to filter by
+#' @param dimension Optional dimension to filter by
+#' @return A data frame with survey names, series names, dimension names and series breakdowns.
+#'
+#' @examples
+#' list_cmhc_breakdowns("Rms","Vacancy Rate","Bedroom Type")
+#'
+#' @export
+list_cmhc_breakdowns <- function(survey=NULL,series=NULL,dimension=NULL){
+  l <- list_cmhc_tables() |>
+    select(.data$SurveyName,.data$SeriesName,.data$DimensionName,.data$SeriesBreakdown) |>
+    unique()
+
+  if (!is.null(survey)) {
+    l <- l |>
+      filter(.data$SurveyName==survey) |>
+      unique()
+  }
+
+  if (!is.null(series)) {
+    l <- l |>
+      filter(.data$SeriesName==series) |>
+      unique()
+  }
+  if (!is.null(dimension)) {
+    l <- l |>
+      filter(.data$DimensionName==dimension) |>
+      unique()
+  }
+
+  l
+
+}
+
+#' List available CMHC filters
+#'
+#' @param survey Optional survey to filter by
+#' @param series Optional series to filter by
+#' @param dimension Optional dimension to filter by
+#' @param breakdown Optional breakdown to filter by
+#' @return A data frame wtih survey names
+#'
+#' @examples
+#' list_cmhc_filters("Rms","Vacancy Rate","Bedroom Type","Historical Time Periods")
+#'
+#' @export
+list_cmhc_filters <- function(survey=NULL,series=NULL,dimension=NULL, breakdown=NULL){
+  l <- list_cmhc_tables() |>
+    select(.data$SurveyName,.data$SeriesName,.data$DimensionName,.data$SeriesBreakdown,.data$Filters) |>
+    unique()
+
+  if (!is.null(survey)) {
+    l <- l |>
+      filter(.data$SurveyName==survey) |>
+      unique()
+  }
+
+  if (!is.null(series)) {
+    l <- l |>
+      filter(.data$SeriesName==series) |>
+      unique()
+  }
+  if (!is.null(dimension)) {
+    l <- l |>
+      filter(.data$DimensionName==dimension) |>
+      unique()
+  }
+  if (!is.null(breakdown)) {
+    l <- l |>
+      filter(.data$SeriesBreakdown==breakdown) |>
+      unique()
+  }
+
+  l
+
+}
 
 

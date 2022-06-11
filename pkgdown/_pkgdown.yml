@@ -15,6 +15,11 @@ reference:
   - title: Data discovery
   - contents:
     - list_cmhc_tables
+    - list_cmhc_surveys
+    - list_cmhc_series
+    - list_cmhc_dimensions
+    - list_cmhc_breakdowns
+    - list_cmhc_filters
   - title: Helper functions
   - contents:
     - cmhc_quality_labels

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cmhc_tables.R
 \name{list_cmhc_series}
 \alias{list_cmhc_series}
-\title{List available CMHC surveys}
+\title{List available CMHC series}
 \usage{
 list_cmhc_series(survey = NULL)
 }
@@ -10,10 +10,10 @@ list_cmhc_series(survey = NULL)
 \item{survey}{Optional survey to filter by}
 }
 \value{
-A data frame wtih survey names
+A data frame with survey names, and series names.
 }
 \description{
-List available CMHC surveys
+List available CMHC series
 }
 \examples{
 list_cmhc_series("Rms")

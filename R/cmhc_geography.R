@@ -77,9 +77,9 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
     "CSD" = lapply(GeoUID,function(g) cmhc::cmhc_csd_translation_data %>% filter(.data$CMHC_CSDUID==g) %>% pull(.data$CSDUID)) %>% unlist,
     "CT" = {
       if (!is.null(parent_region)) {
-        parent_geo_level <- cmhc_geo_level_for_cmhc(parent_region)
+        parent_geo_level <- cmhc_geo_level_for_census(parent_region)
         if (parent_geo_level=="CMA") {
-          CMA_GEOUID <- parent_geo_level
+          CMA_GEOUID <- parent_region
         } else if (parent_geo_level=="CSD"){
           link <- cmhc::cmhc_ct_translation_data |>
             filter(.data$CSDUID==parent_region) |>
@@ -128,10 +128,26 @@ download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
 }
 
 
-#' Get cmhc geographies
+#' Get CMHC geographies for CMHC Survey Zones and Neighbourhoods
+#'
+#' @description The data can be queried for Census Tracts, Survey Zones, Neighbourhoods, Census Subdivisions and Metropolitan Areas,
+#' but it's most useful for Survey Zones, Neighbourhoods which are particular to CMHC and not available from other sources.
+#' The geographic data corresponds to an extract from 2017, and won't necessarily match regions from other years. The Survey Zones
+#' and Neighbourhoods have been quite stable, but census geographies change over time and can be matched with geographic
+#' data obtained by using the `cancensus` package.
+#'
+#' The geographic data is quite large and a local cache directory needs to be provided. By default the
+#' "CMHC_CACHE_PATH" environment variable is used to determine the cache directory, it can be set via the
+#' `set_cache_path` function.
 #'
 #' @param level aggreagtion level for geographic data, one of "CT","ZONE","NBHD","CSD","MET"
 #' @param base_directory local directory to hold cmhc geography data
+#' @return A spatial data fram wtih the geographies for the specified geographic level.
+#'
+#' @examples
+#' \dontrun{
+#' get_cmhc_geography("ZONE")
+#' }
 #'
 #' @export
 get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=Sys.getenv("CMHC_CACHE_PATH")){

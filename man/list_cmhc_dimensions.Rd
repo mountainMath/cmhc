@@ -12,7 +12,7 @@ list_cmhc_dimensions(survey = NULL, series = NULL)
 \item{series}{Optional series to filter by}
 }
 \value{
-A data frame wtih survey names
+A data frame with survey names, series names, and dimension names.
 }
 \description{
 List available CMHC dimensions
