@@ -241,44 +241,6 @@ get_cmhc <- function(survey,series, dimension, breakdown,
 
 
 
-#' convert CMHC data to long form with quality indicator
-#'
-#' @param data cmhc data frame as returned by get_cmhc
-#' @return a long form data frame with values in Value column and quality indicators in Quality column
-#' @examples
-#' \dontrun{
-#' query_params <- cmhc_timeseries_params(cmhc_table_list$`Rms Rent Change Time Series`,
-#'                                        region=cmhc_region_params_from_census("59933"))
-#' data <- get_cmhc(query_params)
-#'
-#' d <- standardize_cmhc_data(data)
-#'
-#' }
-#' @export
-standardize_cmhc_data <- function(data){
-  n <- names(data)
-
-  metric <- dplyr::case_when("Bachelor" %in% n ~ "Bedrooms",
-                             "Single" %in% n ~ "Dwelling type",
-                             sum(grepl("Before \\d{4}",n))>0 ~ "Age of structure",
-                             sum(grepl("Units$",n))>0 ~ "Number of units",
-                             TRUE ~ "Metric")
-
-  xs <- which(grepl("^X",n)) %>% setdiff(1)
-  l <- length(xs)
-  if (l<=0) stop("Don't know how to convert this data to long form")
-  vs <- xs -1
-  n[xs] <- paste0(n[vs]," - Quality")
-  n[vs] <- paste0(n[vs]," - Value")
-
-  d <- data %>%
-    setNames(n) %>%
-    tidyr::pivot_longer(sort(c(vs,xs)),
-                        names_pattern = "(.+) - (.+)",
-                        names_to = c(metric,".value"))
-}
-
-
 # Suppress warnings for missing bindings for '.' in R CMD check.
 if (getRversion() >= "4.1") utils::globalVariables(c("."))
 

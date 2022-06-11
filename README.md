@@ -1,8 +1,10 @@
 # cmhc
 
-[![R build status](https://github.com/mountainMath/cmhc/workflows/R-CMD-check/badge.svg)](https://github.com/mountainMath/cancensus/actions)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/mountainMath/cmhc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mountainMath/cmhc/actions/workflows/R-CMD-check.yaml)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/cmhc)](https://cran.r-project.org/package=cmhc)
 [![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/cmhc)](https://cranlogs.r-pkg.org/badges/cmhc)
+<!-- badges: end -->
 
 
 API wrapper for extracting CMHC data out of the [CMHC Housing Market Information Portal](https://www.cmhc-schl.gc.ca/hmiportal).

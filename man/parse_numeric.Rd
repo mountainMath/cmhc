@@ -12,3 +12,4 @@ parse_numeric(x)
 \description{
 parse numeric values
 }
+\keyword{internal}

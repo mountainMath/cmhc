@@ -2,7 +2,6 @@
 #'
 #' @param X1 month and date field as returned by CMHC
 #' @return a vector of dates
-#' @export
 date_from_cmhc_year_month <- function(X1){
   as.Date(paste0("01 ",X1),format="%d %b %Y")
 }
@@ -13,8 +12,10 @@ date_from_cmhc_year_month <- function(X1){
 #' @export
 cmhc_quality_labels <- c(a = "Excellent", b = "Very good", c = "Good", d = "Fair (Use with Caution)")
 
+
 #' parse numeric values
 #' @param x character vector to convert to mumeric
+#' @keywords internal
 parse_numeric <- function(x){
   xx<-x %>%
     sub(",", "", ., fixed = TRUE) %>%
