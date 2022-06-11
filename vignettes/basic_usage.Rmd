@@ -10,11 +10,13 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = nzchar(Sys.getenv("COMPILE_VIG"))
 )
 ```
 
 ```{r setup}
+knitr::opts_chunk$set(message = FALSE)
 library(cmhc)
 library(dplyr)
 library(ggplot2)
