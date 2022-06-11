@@ -35,17 +35,35 @@ To access a time series for a region with census geographic identifier `geo_uid`
 
 ```{r}
 vacancy_data <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom Type",
-                         breakdown="Historical Time Periods",  geo_uid="5915022")
+                         breakdown="Historical Time Periods",  geo_uid="3506008")
 
 ggplot(vacancy_data,aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
   geom_point(aes(shape=Quality), data=~filter(.,!is.na(Value))) +
   geom_line() +
   scale_shape_discrete(labels=cmhc_quality_labels) +
   scale_y_continuous(labels=scales::percent) +
-  labs(title="City of Vancouver rental vacancy rate",
-       x=NULL, y="Vacancy rate",
+  labs(title="City of Ottawa rental vacancy rate",
+       x=NULL, y="Rental vacancy rate",
        caption="CMHC Rms")
 ```
+
+By default this fetches the data for the October survey only, in the past the Rental Market Survey was conducted twice a year. We can pass a filter option to access the April data and fold that in.
+
+```{r}
+vacancy_data2 <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom Type",
+                         breakdown="Historical Time Periods",  geo_uid="3506008",filters = list(season="April"))
+
+bind_rows(vacancy_data,vacancy_data2) |>
+  ggplot(aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
+  geom_point(aes(shape=Quality), data=~filter(.,!is.na(Value))) +
+  geom_line() +
+  scale_shape_discrete(labels=cmhc_quality_labels) +
+  scale_y_continuous(labels=scales::percent) +
+  labs(title="City of Ottawa rental vacancy rate",
+       x=NULL, y="Rental vacancy rate",
+       caption="CMHC Rms")
+```
+
 
 For monthly data, we can specify the frequency and also get annual or quarterly data.
 

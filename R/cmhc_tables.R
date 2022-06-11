@@ -86,8 +86,7 @@ list_cmhc_tables <- function(short=TRUE){
     "Rms","2","Average Rent","1", "Bedroom Type","11","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
     "Rms","2","Average Rent","1", "Year of Construction","13","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
                                                                        bedroom_count_type_desc_en=cmhc_bedroom_types),
-    "Rms","2","Average Rent","1", "Structure Size","15","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
-                                                                 season=c("October","April")),
+    "Rms","2","Average Rent","1", "Structure Size","15","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
     "Rms","2","Average Rent Change","1", "Bedroom Type","12","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
     "Rms","2","Median Rent","1", "Bedroom Type","21","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
     "Rms","2","Median Rent","1", "Year of Construction","22","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
@@ -112,7 +111,8 @@ list_cmhc_tables <- function(short=TRUE){
     unique() %>%
     mutate(SeriesCode="2") |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$DimensionCode)) |>
-    mutate(SeriesBreakdown="Historical Time Periods")
+    mutate(SeriesBreakdown="Historical Time Periods") |>
+    mutate(Filters=lapply(Filters,function(f)append(f,list(season=c("October","April")))))
 
   table_list <- bind_rows(
     scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries

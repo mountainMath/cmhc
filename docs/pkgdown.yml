@@ -3,7 +3,7 @@ pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   basic_usage: basic_usage.html
-last_built: 2022-06-11T07:09Z
+last_built: 2022-06-11T18:23Z
 urls:
   reference: https://mountainmath.github.io/cmhc/index.html/reference
   article: https://mountainmath.github.io/cmhc/index.html/articles

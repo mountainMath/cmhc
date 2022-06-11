@@ -9,4 +9,8 @@
 ^doc$
 ^Meta$
 ^\.github$
-R/hex_sticker.R
+^R/hex_sticker.R$
+^logo.png$
+^logo.svg$
+^pkgdown
+^pkgdown/*

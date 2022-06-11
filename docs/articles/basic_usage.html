@@ -183,20 +183,39 @@ identifier <code>geo_uid</code> we use
 <code>breakdown="Historical Time Periods"</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vacancy_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_cmhc.html">get_cmhc</a></span><span class="op">(</span>survey<span class="op">=</span><span class="st">"Rms"</span>,series<span class="op">=</span><span class="st">"Vacancy Rate"</span>,dimension<span class="op">=</span><span class="st">"Bedroom Type"</span>,
-                         breakdown<span class="op">=</span><span class="st">"Historical Time Periods"</span>,  geo_uid<span class="op">=</span><span class="st">"5915022"</span><span class="op">)</span>
+                         breakdown<span class="op">=</span><span class="st">"Historical Time Periods"</span>,  geo_uid<span class="op">=</span><span class="st">"3506008"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vacancy_data</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Date</span>,y<span class="op">=</span><span class="va">Value</span><span class="op">/</span><span class="fl">100</span>,colour<span class="op">=</span><span class="va">`Bedroom Type`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>shape<span class="op">=</span><span class="va">Quality</span><span class="op">)</span>, data<span class="op">=</span><span class="op">~</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">.</span>,<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_shape.html" class="external-link">scale_shape_discrete</a></span><span class="op">(</span>labels<span class="op">=</span><span class="va">cmhc_quality_labels</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels<span class="op">=</span><span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"City of Vancouver rental vacancy rate"</span>,
-       x<span class="op">=</span><span class="cn">NULL</span>, y<span class="op">=</span><span class="st">"Vacancy rate"</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"City of Ottawa rental vacancy rate"</span>,
+       x<span class="op">=</span><span class="cn">NULL</span>, y<span class="op">=</span><span class="st">"Rental vacancy rate"</span>,
        caption<span class="op">=</span><span class="st">"CMHC Rms"</span><span class="op">)</span></code></pre></div>
 <p><img src="basic_usage_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>By default this fetches the data for the October survey only, in the
+past the Rental Market Survey was conducted twice a year. We can pass a
+filter option to access the April data and fold that in.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">vacancy_data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_cmhc.html">get_cmhc</a></span><span class="op">(</span>survey<span class="op">=</span><span class="st">"Rms"</span>,series<span class="op">=</span><span class="st">"Vacancy Rate"</span>,dimension<span class="op">=</span><span class="st">"Bedroom Type"</span>,
+                         breakdown<span class="op">=</span><span class="st">"Historical Time Periods"</span>,  geo_uid<span class="op">=</span><span class="st">"3506008"</span>,filters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>season<span class="op">=</span><span class="st">"April"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning in get_cmhc(survey = "Rms", series = "Vacancy Rate", dimension =</span>
+<span class="co">#&gt; "Bedroom Type", : NAs introduced by coercion</span>
+
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">vacancy_data</span>,<span class="va">vacancy_data2</span><span class="op">)</span> |&gt;
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Date</span>,y<span class="op">=</span><span class="va">Value</span><span class="op">/</span><span class="fl">100</span>,colour<span class="op">=</span><span class="va">`Bedroom Type`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>shape<span class="op">=</span><span class="va">Quality</span><span class="op">)</span>, data<span class="op">=</span><span class="op">~</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">.</span>,<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_shape.html" class="external-link">scale_shape_discrete</a></span><span class="op">(</span>labels<span class="op">=</span><span class="va">cmhc_quality_labels</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels<span class="op">=</span><span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"City of Ottawa rental vacancy rate"</span>,
+       x<span class="op">=</span><span class="cn">NULL</span>, y<span class="op">=</span><span class="st">"Rental vacancy rate"</span>,
+       caption<span class="op">=</span><span class="st">"CMHC Rms"</span><span class="op">)</span></code></pre></div>
+<p><img src="basic_usage_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>For monthly data, we can specify the frequency and also get annual or
 quarterly data.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">completions_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_cmhc.html">get_cmhc</a></span><span class="op">(</span>survey<span class="op">=</span><span class="st">"Scss"</span>,series<span class="op">=</span><span class="st">"Completions"</span>,dimension<span class="op">=</span><span class="st">"Dwelling Type"</span>,
                              breakdown<span class="op">=</span><span class="st">"Historical Time Periods"</span>, geo_uid<span class="op">=</span><span class="st">"5915022"</span>,
                              frequency <span class="op">=</span> <span class="st">"Annual"</span><span class="op">)</span>
@@ -209,11 +228,11 @@ quarterly data.</p>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"City of Vancouver housing completions"</span>,
        x<span class="op">=</span><span class="cn">NULL</span>, y<span class="op">=</span><span class="st">"Annual completions"</span>,
        caption<span class="op">=</span><span class="st">"CMHC Rms"</span><span class="op">)</span></code></pre></div>
-<p><img src="basic_usage_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="basic_usage_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>To get snapshot data for sub-geographies, we can select the breakdown
 geography type. This can be linked back with census geographies for
 plotting.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">under_construction_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_cmhc.html">get_cmhc</a></span><span class="op">(</span>survey<span class="op">=</span><span class="st">"Scss"</span>,series<span class="op">=</span><span class="st">"Under Construction"</span>,dimension<span class="op">=</span><span class="st">"Dwelling Type"</span>,
                                     breakdown<span class="op">=</span><span class="st">"Census Tracts"</span>, geo_uid<span class="op">=</span><span class="st">"5915022"</span>,
                                     year <span class="op">=</span> <span class="fl">2022</span>, month <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
@@ -232,7 +251,7 @@ plotting.</p>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"City of Vancouver housing units under construction April 2022"</span>,
        fill<span class="op">=</span><span class="st">"Number of units"</span>,
        caption<span class="op">=</span><span class="st">"CMCH Scss"</span><span class="op">)</span></code></pre></div>
-<p><img src="basic_usage_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="basic_usage_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
