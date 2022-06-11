@@ -13,7 +13,7 @@ API wrapper for extracting CMHC data out of the [CMHC Housing Market Information
 ### Reference
 Documentation is [available on the GitHub pages](https://mountainmath.github.io/cmhc/).
 
-Check you the example vignettes for common use cases.
+The example vignettes contain some [common use cases](https://mountainmath.github.io/cmhc/articles/basic_usage.html).
 
 ## Installation
 ```
