@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cmhc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -26,25 +26,13 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Unabsorbed.html">Unabsorbed Stock</a>
-    </li>
-    <li>
-      <a href="../articles/rental_construction.html">Rental Under Construction</a>
-    </li>
-    <li>
-      <a href="../articles/timelines.html">Time Lines</a>
-    </li>
-    <li>
-      <a href="../articles/under_construction.html">Under Construction</a>
-    </li>
-    <li>
-      <a href="../articles/vacancy_vs_rent_change.html">Vacancy Rates and Rent Changes</a>
+      <a href="../articles/basic_usage.html">Basic usage</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
@@ -64,30 +52,21 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="census_geography_list.html">census_geography_list</a></code> </p>
-        </td>
-        <td><p>census geography lookup</p></td>
-      </tr><tr><td>
           <p><code><a href="census_to_cmhc_geocode.html">census_to_cmhc_geocode()</a></code> </p>
         </td>
         <td><p>translate census to CMHC geocodes</p></td>
       </tr><tr><td>
-          <p><code><a href="census_to_cmhc_translation.html">census_to_cmhc_translation</a></code> </p>
+          <p><code><a href="cmhc_cma_translation_data.html">cmhc_cma_translation_data</a></code> </p>
         </td>
-        <td><p>census geography lookup</p></td>
+        <td><p>A dataset with geo identifiers for CMHC and Census at the CMA level</p></td>
       </tr><tr><td>
-          <p><code><a href="cmhc_completion_params.html">cmhc_completion_params()</a></code> <code><a href="cmhc_completion_params.html">cmhc_completion_params()</a></code> </p>
+          <p><code><a href="cmhc_csd_translation_data.html">cmhc_csd_translation_data</a></code> </p>
         </td>
-        <td><p>Parameters for completion data</p></td>
+        <td><p>A dataset with geo identifiers for CMHC and Census at the CSD level</p></td>
       </tr><tr><td>
-          <p><code><a href="cmhc_data_table.html">cmhc_data_table</a></code> </p>
+          <p><code><a href="cmhc_ct_translation_data.html">cmhc_ct_translation_data</a></code> </p>
         </td>
-        <td><p>Start to organize data better
-CMCH identifier rules:
-first number for survey
-second number 1=fixed time, 2=time series
-thrid number series
-forth number (only for fixed time) geographic breakdown</p></td>
+        <td><p>A dataset with geo identifiers for CMHC and Census at the CT level</p></td>
       </tr><tr><td>
           <p><code><a href="cmhc_geo_level_for_census.html">cmhc_geo_level_for_census()</a></code> </p>
         </td>
@@ -97,69 +76,17 @@ forth number (only for fixed time) geographic breakdown</p></td>
         </td>
         <td><p>Get cmhc geo level for cmhc geo_uid</p></td>
       </tr><tr><td>
-          <p><code><a href="cmhc_geo_uid_for_ct.html">cmhc_geo_uid_for_ct()</a></code> </p>
+          <p><code><a href="cmhc_quality_labels.html">cmhc_quality_labels</a></code> </p>
         </td>
-        <td><p>Build ct_uid out of cmhc data</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_geography_csd_list.html">cmhc_geography_csd_list</a></code> </p>
-        </td>
-        <td><p>census geography cities</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_geography_list.html">cmhc_geography_list</a></code> </p>
-        </td>
-        <td><p>cmhc geography lookup for cma</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_geography_type_list.html">cmhc_geography_type_list</a></code> </p>
-        </td>
-        <td><p>cmhc geography type lookup</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_primary_rental_params.html">cmhc_primary_rental_params()</a></code> </p>
-        </td>
-        <td><p>Parameters for primary market rent change fixed sample data timeline</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_region_params.html">cmhc_region_params()</a></code> </p>
-        </td>
-        <td><p>cmhc geography params</p></td>
+        <td><p>CMHC quality indicators</p></td>
       </tr><tr><td>
           <p><code><a href="cmhc_region_params_from_census.html">cmhc_region_params_from_census()</a></code> </p>
         </td>
         <td><p>census geography params</p></td>
       </tr><tr><td>
-          <p><code><a href="cmhc_rent_change_history_params.html">cmhc_rent_change_history_params()</a></code> </p>
-        </td>
-        <td><p>Parameters for primary market rent change fixed sample data timeline</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_rms_geography_list.html">cmhc_rms_geography_list</a></code> </p>
-        </td>
-        <td><p>cmhc rms geography type lookup</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_snapshot_params.html">cmhc_snapshot_params()</a></code> </p>
-        </td>
-        <td><p>Parameters for time series</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_table_list.html">cmhc_table_list</a></code> </p>
-        </td>
-        <td><p>table lookup</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_table_region_code.html">cmhc_table_region_code</a></code> </p>
-        </td>
-        <td><p>table region code lookup</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_timeseries_params.html">cmhc_timeseries_params()</a></code> </p>
-        </td>
-        <td><p>Parameters for time series</p></td>
-      </tr><tr><td>
           <p><code><a href="cmhc_to_census_geocode.html">cmhc_to_census_geocode()</a></code> </p>
         </td>
         <td><p>translate CMHC to census geocodes</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_vacancy_history_params.html">cmhc_vacancy_history_params()</a></code> </p>
-        </td>
-        <td><p>Parameters for primary market vacancy data timeline</p></td>
-      </tr><tr><td>
-          <p><code><a href="cmhc_vacancy_params.html">cmhc_vacancy_params()</a></code> </p>
-        </td>
-        <td><p>Parameters for primary market vacancy data by survey zones</p></td>
       </tr><tr><td>
           <p><code><a href="date_from_cmhc_year_month.html">date_from_cmhc_year_month()</a></code> </p>
         </td>
@@ -177,9 +104,29 @@ forth number (only for fixed time) geographic breakdown</p></td>
         </td>
         <td><p>get cmhc geographies, requires data has been downloaded with `download_geographies()` first</p></td>
       </tr><tr><td>
-          <p><code><a href="intended_market_rental.html">intended_market_rental</a></code> </p>
+          <p><code><a href="list_cmhc_dimensions.html">list_cmhc_dimensions()</a></code> </p>
         </td>
-        <td><p>intended market rental</p></td>
+        <td><p>List available CMHC dimensions</p></td>
+      </tr><tr><td>
+          <p><code><a href="list_cmhc_series.html">list_cmhc_series()</a></code> </p>
+        </td>
+        <td><p>List available CMHC surveys</p></td>
+      </tr><tr><td>
+          <p><code><a href="list_cmhc_surveys.html">list_cmhc_surveys()</a></code> </p>
+        </td>
+        <td><p>List available CMHC surveys</p></td>
+      </tr><tr><td>
+          <p><code><a href="list_cmhc_tables.html">list_cmhc_tables()</a></code> </p>
+        </td>
+        <td><p>List available CMHC tables</p></td>
+      </tr><tr><td>
+          <p><code><a href="parse_numeric.html">parse_numeric()</a></code> </p>
+        </td>
+        <td><p>parse numeric values</p></td>
+      </tr><tr><td>
+          <p><code><a href="standardize_cmhc_data.html">standardize_cmhc_data()</a></code> </p>
+        </td>
+        <td><p>convert CMHC data to long form with quality indicator</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -193,7 +140,7 @@ forth number (only for fixed time) geographic breakdown</p></td>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

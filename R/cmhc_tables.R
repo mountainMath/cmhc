@@ -1,193 +1,198 @@
-cmhc_survey <- list(
-  "Scss" = 1,
-  "Rms" = 2,
-  "Srms" = 4
-)
+cmhc_dwelling_types <- c("Single","Semi-detached","Row","Apartment","All")
+cmhc_intended_markets <- c("Homeowner","Rental","Condo","Co-op","All")
+cmhc_type_codes1 <- c("Survey Zones"=8,"Census Subdivision"=9,"Neighbourhoods"=10,"Census Tracts"=11)
+cmhc_type_codes2 <- c("Survey Zones"=6,"Census Subdivision"=7,"Neighbourhoods"=8,"Census Tracts"=9)
+cmhc_type_codes3 <- c("Survey Zones"=3,"Census Subdivision"=4,"Neighbourhoods"=5,"Census Tracts"=6)
+cmhc_type_codes4 <- c("Survey Zones"=3,"Census Subdivision"=4)
+cmhc_series_dimension_codes1 <- c("Dwelling Type"=1,"Intended Market"=4)
+cmhc_bedroom_types <- c("Bachelor","1 Bedroom","2 Bedroom","3 Bedroom +","Total")
 
-cmhc_scss_geo_level <- list(
-  "Survey Zone" = 8,
-  "Census Subdivision" = 9,
-  "Neighbourhood" = 10,
-  "Census Tract" = 11
-)
 
-#' table lookup
+#' List available CMHC tables
+#'
+#' @param short Logical, determines how much detail is returned. Default is `TRUE`.
+#' @return A tibble with the table list
+#'
+#' @examples
+#' list_cmhc_tables()
+#'
 #' @export
-cmhc_table_list=list(
-  "Scss Absorbtion Rate Time Series" = "1.2.6",
-  "Scss Starts Base" = "1.1.1",
-  "Scss Completions" = "1.1.2.9",
-  "Scss Completions Time Series" = "1.2.2",
-  "Scss Completions CT" = "1.1.2.11",
-  "Scss Under Construction CT" = "1.1.3.11",
-  "Scss Under Construction CSD" = '1.1.3.9',
-  "Scss Under Construction Time Series" = '1.2.3',
-  "Scss Starts Time Series" = '1.2.1',
-  "Scss Starts SZ" = '1.1.1.8',
-  "Scss Starts CSD" = '1.1.1.9',
-  "Scss Starts NBHD" = '1.1.1.10',
-  "Scss Starts CT" = '1.1.1.11',
-  "Scss Unabsorbed Inventory Time Series" ="1.2.4",
-  "Scss Length of Construction Time Series" = "1.2.7",
-  "Scss Unabsorbed Inventory Base" = "1.1.4", # 9 for CT
-  "Srms Condo Number" = "4.2.3",
-  "Srms Condo Average Rent" = "4.4.2",
-  "Srms Other Number" = "4.6.1",
-  "Srms Other Average Rent" = "4.6.2",
-  "Srms Vacancy Rate Time Series" = "4.2.1",
-  "Srms Condo Rental Number" = "4.2.4",
-  "Rms Vacancy Rate Time Series" = "2.2.1",
-  "Rms Vacancy Rate CSD" = "2.1.1.4",
-  "Rms Vacancy Rate CT" = "2.1.1.6",
-  "Rms Vacancy Rate Base" = "2.1.1",
-  "Rms Rental Universe Time Series" = "2.2.26",
-  "Rms Rental Universe Age Time Series" = "2.2.27",
-  "Rms Rental Universe Structure Size Time Series" = "2.2.28",
-  "Rms Rental Universe Bedrooms Base"= "2.1.26",
-  "Rms Rental Universe Age Base"= "2.1.27",
-  "Rms Rental Universe Structure Size Base"= "2.1.28",
-  "Rms Rental Universe CT"="2.1.26.6",
-  "Rms Rent Change Time Series" = "2.2.12",
-  "Rms Rent Change CT" = "2.1.12.6",
-  "Rms Rent Change CSD" = "2.1.12.4",
-  "Rms Average Rent" = "2.1.11.3",
-  "Rms Average Rent Time Series" = "2.2.11",
-  "Rms Average Rent Bedroom Base" = "2.1.11",
-  "Rms Average Rent Age Base" = "2.1.13",
-  "Rms Average Rent Age CT"="2.1.13.6",
-  "Rms Average Rent Bedroom Type CT"="2.1.11.6",
-  "Rms Average Rent Bedroom Type Nbhd"="2.1.11.5",
-  "Rms Median Rent Bedroom Type CT"="2.1.21.6",
-  "Rms Median Rent Bedroom Type Time Series"="2.2.21",
-  "Scss Absorbed Unit Price CSD"="1.9.1.7",
-  "Scss Absorbed Unit Price Time Series"="1.10.1"
-)
-
-#' Start to organize data better
-#' CMCH identifier rules:
-#' first number for survey
-#' second number 1=fixed time, 2=time series
-#' thrid number series
-#' forth number (only for fixed time) geographic breakdown
-#' @export
-cmhc_data_table <- list(
-  Scss="Starts and Completions Survey",
-  Rms="Rental Market Survey",
-  Srms="Secondary Rental Market Survey",
-  Srhs="Seniors Rental Housing Survey"
-)
+list_cmhc_tables <- function(short=TRUE){
+  scss_snapshot1 <- tibble::tribble(
+    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~GeoCodes,
+    "Scss","1","Starts","1","1",
+    "Scss","1","Completions","2","1",
+    "Scss","1","Under Construction","3","1",
+    "Scss","1","Length of Construction","7","2",
+    "Scss","1","Absorbed Units","5","2") |>
+  mutate(a="1") |>
+    left_join(tibble(a="1",
+                     DimensionName=c("Dwelling Type","Intended Market"),
+                     DimensionCode=c("1","4"),
+                     Filters=c(list("dimension-18"=cmhc_intended_markets),
+                               list("dimension-1"=cmhc_dwelling_types))),
+              by="a")
 
 
-cmhc_series_codes <- list(
-  Scss=1,
-  Rms=2,
-  Srms=4
-)
+  scss_snapshot2 <- tibble::tribble(
+    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~GeoCodes,
+    "Scss","1","Share absorbed at completion","6","2",
+    "Scss","1","Unabsorbed Inventory","4","2") |>
+    mutate(a="1") |>
+    left_join(tibble(a="1",
+                     DimensionName=c("Dwelling Type","Intended Market"),
+                     DimensionCode=c("1","4"),
+                     Filters=c(list("dimension-18"=c("Condo","Homeowner","All")),
+                               list("dimension-1"=cmhc_dwelling_types))),
+              by="a")
 
-cmhc_mode_codes <- list(
-  snapshot=1,
-  timeline=2
-)
+  scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
+    left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes1))),
+                     SeriesBreakdown=c(names(cmhc_type_codes1),names(cmhc_type_codes2)),
+                     SeriesBreakdownCode=as.character(c(cmhc_type_codes1,cmhc_type_codes2))),
+              by="GeoCodes") |>
+    select(-.data$a,-.data$GeoCodes) |>
+    mutate(TableCode=paste0(.data$SureveyCode,".",.data$DimensionCode,".",
+                            .data$SeriesCode,".",.data$SeriesBreakdownCode))
 
-cmhc_duration_codes <- list(
-  monthly=1,
-  annual=8
-)
 
-cmhc_timeseries_params2 <- function(census_region,survey,series,level){
+  scss_timeseries <- scss_snapshot |>
+    select(-.data$TableCode,-.data$SeriesBreakdown,-.data$SeriesBreakdownCode) |>
+    unique() %>%
+    mutate(DimensionCode=recode(.data$DimensionCode,"1"="2","4"="9")) |>
+    mutate(TableCode=paste0(.data$SureveyCode,".",.data$DimensionCode,".",.data$SeriesCode)) |>
+    mutate(SeriesBreakdown="Historical Time Periods")
 
-}
+  scss_snapshot3 <- tibble::tribble(
+    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~Filters,
+    "Scss","1","Absorbed Prices","1","Dwelling Type","9",list("dwelling_type_desc_en"=c("Single / Semi-detached","Single", "Semi-detached")),
+    "Scss","1","Unabsorbed Prices","2","Dwelling Type","9",list("dwelling_type_desc_en"=c("Single / Semi-detached","Single", "Semi-detached")))
 
-scss_series_codes <- list(
-  "Starts by Dwelling Type"=1,
-  "Completions by Dwelling Type"=2,
-  "Under Construction"=3,
-  "Starts by Intended Market"=4,
-  "Absorbed Units"=5,
-  "Unabsorbed Inventory"=6,
-  "Length of Construction"=7,
-  "Completions by Intended Market"=8,
-  "Absorbed Prices"=9
-)
 
-rms_series_codes <- list(
-  "Vacancy Rate"=1,
-  "Average Rent"=2,
-  "Availability Rate by Bedrooms"=6,
-  "Availability Rate by Age"=7,
-  "Availability Rate by Size"=8,
-  "Average Rent by Bedrooms"=11,
-  "Average Rent by Age"=13,
-  "Average Rent by Size"=15,
-  "Average Rent by Change by Bedrooms"=12,
-  "Median Rent by Bedrooms"=21,
-  "Median Rent by Age"=22,
-  "Median Rent by Size"=23,
-  "Rental Universe by Bedrooms"=26,
-  "Rental Universe by Age"=27,
-  "Rental Universe by Size"=28
-)
+  rms_snapshot <- tibble::tribble(
+    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~GeoCodes,~Filters,
+    "Rms","2","Vacancy Rate","1", "Bedroom Type","1","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Vacancy Rate","1", "Year of Construction","2","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                                      bedroom_count_type_desc_en=cmhc_bedroom_types),
+    "Rms","2","Vacancy Rate","1", "Structure Size","3","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Vacancy Rate","1", "Rent Ranges","4","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                             bedroom_count_type_desc_en=cmhc_bedroom_types),
+    "Rms","2","Vacancy Rate","1", "Rent Quartiles","33","4",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                                 bedroom_count_type_desc_en=cmhc_bedroom_types),
+    "Rms","2","Availability Rate","1", "Bedroom Type","6","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Availability Rate","1", "Year of Construction","7","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                                           bedroom_count_type_desc_en=cmhc_bedroom_types),
+    "Rms","2","Availability Rate","1", "Structure Size","8","3",list(bedroom_count_type_desc_en=cmhc_bedroom_types),
+    "Rms","2","Average Rent","1", "Bedroom Type","11","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Average Rent","1", "Year of Construction","13","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                                       bedroom_count_type_desc_en=cmhc_bedroom_types),
+    "Rms","2","Average Rent","1", "Structure Size","15","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                                 season=c("October","April")),
+    "Rms","2","Average Rent Change","1", "Bedroom Type","12","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Median Rent","1", "Bedroom Type","21","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Median Rent","1", "Year of Construction","22","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                                      bedroom_count_type_desc_en=cmhc_bedroom_types),
+    "Rms","2","Median Rent","1", "Structure Size","23","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Rental Universe","1", "Bedroom Type","26","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Rental Universe","1", "Year of Construction","27","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                                          bedroom_count_type_desc_en=cmhc_bedroom_types),
+    "Rms","2","Rental Universe","1", "Structure Size","28","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
+    "Rms","2","Summary Statistics","1", NA, "31","4",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
+                                                          bedroom_count_type_desc_en=cmhc_bedroom_types)) |>
+    left_join(tibble(GeoCodes=c(rep("3",length(cmhc_type_codes3)),rep("4",length(cmhc_type_codes4))),
+                     SeriesBreakdown=c(names(cmhc_type_codes3),names(cmhc_type_codes4)),
+                     SeriesBreakdownCode=as.character(c(cmhc_type_codes3,cmhc_type_codes4))),
+              by="GeoCodes") |>
+    select(-.data$GeoCodes) |>
+    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",
+                            .data$DimensionCode,".",.data$SeriesBreakdownCode))
 
-list_cmhc_tables <- function(){
-  tibble::tribble(
-    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~Filters,
-    "Scss",1,"Starts by Dwelling Type","1.1",c(),
-    "Scss",1,"Completions","1.2",c(),
-    "Scss",1,"Under Construction","1.3",c(),
-    "Scss",1,"","1.4",c(),
-    "Scss",1,"Absorbed Units","1.5",c("Condo","Homeowner","All"),
-    "Scss",1,"Unabsorbed Inventory","1.6",c(),
-    "Scss",1,"Length of Construction","1.7",c(),
-    "Scss",1,"Absorbed Prices","9.1",c(),
-    "Rms",2,"Vacancy Rate","1.1",c(),
-    "Rms",2,"Vacancy Rate","1.2",c(),
-    "Rms",2,"Average Rent","1.3",c(),
-    "Rms",2,"Average Rent by Bedrooms","1.11",c(),
-    "Rms",2,"Average Rent Change by Bedrooms","1.12",c(),
-    "Rms",2,"Average Rent by Age","1.13",c(),
-    "Rms",2,"Median Rent Bedroom","1.21",c(),
-    "Rms",2,"Rental Universe by Bedrooms","1.26",c(),
-    "Rms",2,"Rental Universe by Age","1.27",c(),
-    "Rms",2,"Rental Universe by Structure","1.28",c()
+  rms_timeseries <- rms_snapshot |>
+    select(-.data$TableCode,-.data$SeriesBreakdown,-.data$SeriesBreakdownCode) |>
+    unique() %>%
+    mutate(SeriesCode="2") |>
+    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$DimensionCode)) |>
+    mutate(SeriesBreakdown="Historical Time Periods")
+
+  table_list <- bind_rows(
+    scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries
   )
+
+  if (short) {
+    table_list <- table_list |>
+      select(.data$SurveyName,.data$SeriesName,.data$DimensionName,.data$SeriesBreakdown,.data$Filters)
+  }
+
+  table_list
 }
 
-list_cmhc_geography_types=list(
-  CMA=3,
-  CSD=5
-)
-
-
-cmhc_table_suffix_for_breakdown_geography_CMA=list(
-  #ZONE=6,
-  CSD=7,
-  ZONE=8,
-  CT=9
-)
-
-cmhc_table_suffix_for_breakdown_geography_CSD=list(
-  #ZONE=7,
-  CSD=7,
-  ZONE=8,
-  CT=9
-)
-
-list_cmhc_breakdown_geography_codes=list(
-  CMA=3,
-  CSD=4,
-  ZONE=5,
-  NEIGHBOUHOOD=6,
-  CT=7
-)
-
-
-#' table region code lookup
+#' List available CMHC surveys
+#'
+#' @return A data frame wtih survey names
+#'
+#' @examples
+#' list_cmhc_surveys()
+#'
 #' @export
-cmhc_table_region_code=list(
-  CMA=3,
-  ZONES=3,
-  CSD=4,
-  NBHD=9,
-  CT=11
-)
+list_cmhc_surveys <- function(){
+  list_cmhc_tables() |>
+    select(.data$SurveyName) |>
+    unique()
+}
+
+#' List available CMHC surveys
+#'
+#' @param survey Optional survey to filter by
+#' @return A data frame wtih survey names
+#'
+#' @examples
+#' list_cmhc_series("Rms")
+#'
+#' @export
+list_cmhc_series <- function(survey=NULL){
+  l <- list_cmhc_tables() |>
+    select(.data$SurveyName,.data$SeriesName) |>
+    unique()
+
+  if (!is.null(survey)) {
+    l <- l |>
+      filter(.data$SurveyName==survey) |>
+      unique()
+  }
+
+  l
+}
+
+#' List available CMHC dimensions
+#'
+#' @param survey Optional survey to filter by
+#' @param series Optional series to filter by
+#' @return A data frame wtih survey names
+#'
+#' @examples
+#' list_cmhc_dimensions("Rms","Vacancy Rate")
+#'
+#' @export
+list_cmhc_dimensions <- function(survey=NULL,series=NULL){
+  l <- list_cmhc_tables() |>
+    select(.data$SurveyName,.data$SeriesName,.data$DimensionName) |>
+    unique()
+
+  if (!is.null(survey)) {
+    l <- l |>
+      filter(.data$SurveyName==survey) |>
+      unique()
+  }
+
+  if (!is.null(series)) {
+    l <- l |>
+      filter(.data$SeriesName==series) |>
+      unique()
+  }
+
+  l
+
+}
+
+
 

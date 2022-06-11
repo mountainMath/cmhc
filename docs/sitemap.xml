@@ -16,6 +16,9 @@
     <loc>/articles/Under Construction.html</loc>
   </url>
   <url>
+    <loc>/articles/basic_usage.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -46,7 +49,16 @@
     <loc>/reference/census_to_cmhc_translation.html</loc>
   </url>
   <url>
+    <loc>/reference/cmhc_cma_translation_data.html</loc>
+  </url>
+  <url>
     <loc>/reference/cmhc_completion_params.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cmhc_csd_translation_data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cmhc_ct_translation_data.html</loc>
   </url>
   <url>
     <loc>/reference/cmhc_data_table.html</loc>
@@ -71,6 +83,9 @@
   </url>
   <url>
     <loc>/reference/cmhc_primary_rental_params.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cmhc_quality_labels.html</loc>
   </url>
   <url>
     <loc>/reference/cmhc_region_params.html</loc>
@@ -125,5 +140,23 @@
   </url>
   <url>
     <loc>/reference/intended_market_rental.html</loc>
+  </url>
+  <url>
+    <loc>/reference/list_cmhc_dimensions.html</loc>
+  </url>
+  <url>
+    <loc>/reference/list_cmhc_series.html</loc>
+  </url>
+  <url>
+    <loc>/reference/list_cmhc_surveys.html</loc>
+  </url>
+  <url>
+    <loc>/reference/list_cmhc_tables.html</loc>
+  </url>
+  <url>
+    <loc>/reference/parse_numeric.html</loc>
+  </url>
+  <url>
+    <loc>/reference/standardize_cmhc_data.html</loc>
   </url>
 </urlset>

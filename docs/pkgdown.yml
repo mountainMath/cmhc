@@ -1,11 +1,7 @@
-pandoc: 2.14.0.3
-pkgdown: 2.0.1
+pandoc: 2.17.1.1
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
-  Unabsorbed: Unabsorbed.html
-  rental_construction: rental_construction.html
-  timelines: timelines.html
-  under_construction: under_construction.html
-  vacancy_vs_rent_change: vacancy_vs_rent_change.html
-last_built: 2022-02-19T01:59Z
+  basic_usage: basic_usage.html
+last_built: 2022-06-11T01:49Z
 

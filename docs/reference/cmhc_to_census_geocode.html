@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cmhc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -26,25 +26,13 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Unabsorbed.html">Unabsorbed Stock</a>
-    </li>
-    <li>
-      <a href="../articles/rental_construction.html">Rental Under Construction</a>
-    </li>
-    <li>
-      <a href="../articles/timelines.html">Time Lines</a>
-    </li>
-    <li>
-      <a href="../articles/under_construction.html">Under Construction</a>
-    </li>
-    <li>
-      <a href="../articles/vacancy_vs_rent_change.html">Vacancy Rates and Rent Changes</a>
+      <a href="../articles/basic_usage.html">Basic usage</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
@@ -66,15 +54,15 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cmhc_to_census_geocode</span><span class="op">(</span><span class="va">GeoUID</span>, CMA_GEOUID <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cmhc_to_census_geocode</span><span class="op">(</span><span class="va">GeoUID</span>, parent_region <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>GeoUID</dt>
 <dd><p>CMHC GeoUID for CMA or CSD or CT</p></dd>
-<dt>CMA_GEOUID</dt>
-<dd><p>census geographic identifier for CMA</p></dd>
+<dt>parent_region</dt>
+<dd><p>census geographic identifier to identify CMA if needed</p></dd>
 </dl></div>
 
   </div>
@@ -89,7 +77,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

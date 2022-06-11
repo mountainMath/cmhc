@@ -1,26 +1,28 @@
 Package: cmhc
 Type: Package
-Title: Access CMHC data from the Housing Market Information Portal
-Version: 0.1.0
+Title: R package to access, retrieve, and work with CMHC data
+Version: 0.2.0
 Author: Jens von Bergmann
 Maintainer: Jens von Bergmann <jens@mountainmath.ca>
-Description: Wrapper around the CMHC web interface.
+Description: Wrapper around the Canadian Mortgange and Housing Corportation (CMHC) web interface. It enables programmatic and reproducible access to a wide variety of housing data from CMHC.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends: 
+    R (>= 4.1)
 Imports:
     dplyr,
     digest,
     httr,
     readr,
     stringr,
-    tibble
+    tibble,
+    rlang,
+    aws.s3
 Suggests: 
     knitr,
-    RColorBrewer,
     scales,
     cancensus,
-    classInt,
     ggplot2,
     tidyr,
     rmarkdown,

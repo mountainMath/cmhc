@@ -8,3 +8,4 @@
 ^images/*
 ^doc$
 ^Meta$
+^\.github$

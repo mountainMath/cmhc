@@ -4,12 +4,12 @@
 \alias{cmhc_to_census_geocode}
 \title{translate CMHC to census geocodes}
 \usage{
-cmhc_to_census_geocode(GeoUID, CMA_GEOUID = NULL)
+cmhc_to_census_geocode(GeoUID, parent_region = NULL)
 }
 \arguments{
 \item{GeoUID}{CMHC GeoUID for CMA or CSD or CT}
 
-\item{CMA_GEOUID}{census geographic identifier for CMA}
+\item{parent_region}{census geographic identifier to identify CMA if needed}
 }
 \description{
 translate CMHC to census geocodes

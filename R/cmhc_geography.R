@@ -1,54 +1,4 @@
-
-#' cmhc geography lookup for cma
-#' @export
-cmhc_geography_list=list(Vancouver="2410", Toronto="2270", Calgary="0140", Victoria="2440", Winnipeg="2680",
-                         Montreal="1060", Ottawa="1265", Halifax="0580", Edmonton="0340")
-
-#' cmhc geography type lookup
-#' @export
 cmhc_geography_type_list=list(PR=2,CMA=3, CSD=4, CT=7, ZONE=5,NEIGHBOUHOOD=6)
-
-#' cmhc rms geography type lookup
-#' @export
-cmhc_rms_geography_list=list(CMA=3, CSD=4, NBHD=5, CT=6)
-
-#' census geography lookup
-#' @export
-census_geography_list=list(Vancouver="59933", Toronto="35535", Calgary="48825", Victoria="59935",Montreal="24462")
-
-#' census geography cities
-#' @export
-cmhc_geography_csd_list=list(Vancouver="5915022",
-                             Burnaby="5915025",
-                             "New Westminster"="5915029",
-                             Victoria="5917034",
-                             Calgary="4806016",
-                             Toronto="3520005",
-                             Burnaby="5915025",
-                             Surrey="5915004",
-                             Richmond="5915015",
-                             "North Vancouver (CY)"="5915051",
-                             "North Vancouver (DM)"="5915046",
-                             "Langley (CY)"= "5915002",
-                             "Langley (DM)"= "5915001",
-                             Edmonton="4811061",
-                             Winnipeg="4611040",
-                             Montreal="2466023",
-                             Ottawa="3506008")
-
-
-
-#' cmhc geography params
-#' @param geography cmhc region id
-#' @param type level of geography
-#' @export
-cmhc_region_params <- function(geography,type='CMA'){
-  list <- list("geography_type_id"=as.character(cmhc_geography_type_list[type]))
-  list["geography_id"] = ifelse(type=="CMA",
-                                as.character(cmhc_geography_list[geography]),
-                                as.character(cmhc_geography_csd_list[geography]))
-  return(list)
-}
 
 #' census geography params
 #' @param GeoUID census region id
@@ -109,9 +59,9 @@ census_to_cmhc_geocode <- function(GeoUID){
 
 #' translate CMHC to census geocodes
 #' @param GeoUID CMHC GeoUID for CMA or CSD or CT
-#' @param CMA_GEOUID census geographic identifier for CMA
+#' @param parent_region census geographic identifier to identify CMA if needed
 #' @export
-cmhc_to_census_geocode <- function(GeoUID,CMA_GEOUID=NULL){
+cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
   cmhc_name <- list(
     "CT"="CMHCCT_UID",
     "CSD"="CMHC_CSDUID",
@@ -126,22 +76,38 @@ cmhc_to_census_geocode <- function(GeoUID,CMA_GEOUID=NULL){
 
   if (is.null(geo_level)) stop("Could not recognize GeoUID.")
 
-  if (!is.null(CMA_GEOUID) & nchar(CMA_GEOUID)==5) CMA_GEOUID=substr(CMA_GEOUID,3,5)
 
   result <- switch(geo_level,
-    "CMA" = lapply(GeoUID,function(g)cmhc::cmhc_cma_translation_data %>% filter(.data$METCODE==g) %>% pull(.data$CMA_UID)) %>% unlist,
-    "CSD" = lapply(GeoUID,function(g)cmhc::cmhc_csd_translation_data %>% filter(.data$CMHC_CSDUID==g) %>% pull(.data$CSDUID)) %>% unlist,
-    "CT" = paste0(CMA_GEOUID,GeoUID)
+    "CMA" = lapply(GeoUID,function(g) cmhc::cmhc_cma_translation_data %>% filter(.data$METCODE==g) %>% pull(.data$CMA_UID)) %>% unlist,
+    "CSD" = lapply(GeoUID,function(g) cmhc::cmhc_csd_translation_data %>% filter(.data$CMHC_CSDUID==g) %>% pull(.data$CSDUID)) %>% unlist,
+    "CT" = {
+      if (!is.null(parent_region)) {
+        parent_geo_level <- cmhc_geo_level_for_cmhc(parent_region)
+        if (parent_geo_level=="CMA") {
+          CMA_GEOUID <- parent_geo_level
+        } else if (parent_geo_level=="CSD"){
+          link <- cmhc::cmhc_ct_translation_data |>
+            filter(.data$CSDUID==parent_region) |>
+            select(.data$CTUID,.data$CMHC_CT) %>%
+            mutate(CMA_UID=substr(.data$CTUID,1,3))
+          CMA_GEOUID <- unique(link$CMA_UID)
+          if (length(CMA_GEOUID)!=1) {
+            warning("Unable to tranfrom CT UIDs.")
+            CMA_GEOUID=""
+          }
+        }
+        if (!is.null(CMA_GEOUID) & nchar(CMA_GEOUID)==5) CMA_GEOUID=substr(CMA_GEOUID,3,5)
+      } else {
+        CMA_GEOUID <- ""
+        warning("Need parent geo level when converting CMHC census tract names to GeoUID")
+      }
+
+      paste0(CMA_GEOUID,GeoUID)
+    }
   )
 
   result
 }
-
-
-
-#' census geography lookup
-#' @export
-census_to_cmhc_translation=list("59933"="2410", "35535"="2270", "48825"="0140", "59935"="2440")
 
 
 

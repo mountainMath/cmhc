@@ -1,0 +1,92 @@
+---
+title: "Basic usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Basic usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(cmhc)
+library(dplyr)
+library(ggplot2)
+```
+
+To list the CMHC tables available via the package we can call `list_cmhc_tables`.
+```{r}
+list_cmhc_tables() |>
+  head() |>
+  knitr::kable()
+```
+
+It lists all possible tables by survey, series, dimension and breakdown, as well as the possible filters that can be applied.
+
+To access a time series for a region with census geographic identifier `geo_uid` we use `breakdown="Historical Time Periods"`.
+
+```{r}
+vacancy_data <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom Type",
+                         breakdown="Historical Time Periods",  geo_uid="5915022")
+
+ggplot(vacancy_data,aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
+  geom_point(aes(shape=Quality), data=~filter(.,!is.na(Value))) +
+  geom_line() +
+  scale_shape_discrete(labels=cmhc_quality_labels) +
+  scale_y_continuous(labels=scales::percent) +
+  labs(title="City of Vancouver rental vacancy rate",
+       x=NULL, y="Vacancy rate",
+       caption="CMHC Rms")
+```
+
+For monthly data, we can specify the frequency and also get annual or quarterly data.
+
+```{r}
+completions_data <- get_cmhc(survey="Scss",series="Completions",dimension="Dwelling Type",
+                             breakdown="Historical Time Periods", geo_uid="5915022",
+                             frequency = "Annual")
+
+ggplot(completions_data,aes(x=Date,y=Value,fill=`Dwelling Type`)) +
+  geom_bar(stat="identity") +
+  facet_wrap(~`Dwelling Type`,scales="free_y") +
+  scale_fill_discrete(guide="none") +
+  scale_y_continuous(labels=scales::comma) +
+  labs(title="City of Vancouver housing completions",
+       x=NULL, y="Annual completions",
+       caption="CMHC Rms")
+```
+
+To get snapshot data for sub-geographies, we can select the breakdown geography type. This can be linked back with census geographies for plotting.
+
+```{r}
+under_construction_data <- get_cmhc(survey="Scss",series="Under Construction",dimension="Dwelling Type",
+                                    breakdown="Census Tracts", geo_uid="5915022",
+                                    year = 2022, month = 4)
+
+geo_data <- cancensus::get_census("CA16",regions=list(CSD="5915022"),geo_format = 'sf', level="CT")
+
+geo_data |>
+  left_join(under_construction_data |> 
+              filter(`Dwelling Type`=="All"),
+            by="GeoUID") |>
+  mutate(value=cut(coalesce(Value,0),c(-Inf,0,10,50,100,500,1000,1500,Inf))) |>
+  ggplot(aes(fill=value)) +
+  geom_sf() +
+  scale_fill_viridis_d() +
+  coord_sf(datum=NA) +
+  labs(title="City of Vancouver housing units under construction April 2022",
+       fill="Number of units",
+       caption="CMCH Scss")
+```
+
+
+
+
+
+

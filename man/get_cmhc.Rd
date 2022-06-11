@@ -4,24 +4,53 @@
 \alias{get_cmhc}
 \title{Hack into CMHC data portal to pull out csv tables}
 \usage{
-get_cmhc(query_params)
+get_cmhc(
+  survey,
+  series,
+  dimension,
+  breakdown,
+  geo_uid,
+  year = NULL,
+  month = NULL,
+  frequency = NULL,
+  filters = list()
+)
 }
 \arguments{
-\item{query_params}{Query parameters to be sent to CMHC.
+\item{survey}{The CMHC survey, one of Scss, or Rms,  consult `list_cmhc_tables()` for possible values.
+(Other surveys will be supported in future versions.)}
 
-returns dataframe with CMHC data, tile and subtitle are set as attributes}
+\item{series}{The CMHC data series of the survey, consult `list_cmhc_tables()` for possible values.}
+
+\item{dimension}{The dimension to show in the results, consult `list_cmhc_tables()` for possible values.}
+
+\item{breakdown}{The geographic breakdown, one of "Survey Zones", "Census Subdivision", "Neighbourhoods", "Census Tracts",
+if querying data for a snapshot in time or "Historical Time Periods" if querying time series data. Not all geographic breakdowns are available for all series.
+returns data frame with CMHC data, tile and subtitle are set as attributes.  Consult `list_cmhc_tables()` for possible values.}
+
+\item{geo_uid}{Census geographic identifier for which to query the data. Can be a census tract, census subdivision,
+or census metropolitan area.}
+
+\item{year}{optional, only needed when querying data for a snapshot in time.}
+
+\item{month}{optional, only needed when querying data for a snapshot in time.}
+
+\item{frequency}{optional, only needed when querying time series data, one of "Monthly", "Quarterly" or "Annual".}
+
+\item{filters}{optional list of filters, consult `list_cmhc_tables()` for possible values.}
+}
+\value{
+A tibble with the data in long form.
 }
 \description{
 Hack into CMHC data portal to pull out csv tables
 }
 \examples{
-table <- cmhc_table_list$`Rms Vacancy Rate Time Series`
-region <- cmhc_region_params_from_census("59933")
-dat <- get_cmhc(cmhc_timeseries_params(table_id = table, region = region))
-
+\dontrun{
+data <- get_cmhc("Rms","Vacancy Rate","Bedroom Type","Historical Time Periods","5915022")
 }
-\keyword{api}
-\keyword{canada}
-\keyword{cmhc}
+}
+\keyword{API}
+\keyword{CMHC}
+\keyword{Canada}
 \keyword{data}
-\keyword{hack}

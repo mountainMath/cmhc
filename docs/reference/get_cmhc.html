@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cmhc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -26,25 +26,13 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Unabsorbed.html">Unabsorbed Stock</a>
-    </li>
-    <li>
-      <a href="../articles/rental_construction.html">Rental Under Construction</a>
-    </li>
-    <li>
-      <a href="../articles/timelines.html">Time Lines</a>
-    </li>
-    <li>
-      <a href="../articles/under_construction.html">Under Construction</a>
-    </li>
-    <li>
-      <a href="../articles/vacancy_vs_rent_change.html">Vacancy Rates and Rent Changes</a>
+      <a href="../articles/basic_usage.html">Basic usage</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
@@ -66,22 +54,54 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_cmhc</span><span class="op">(</span><span class="va">query_params</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_cmhc</span><span class="op">(</span>
+  <span class="va">survey</span>,
+  <span class="va">series</span>,
+  <span class="va">dimension</span>,
+  <span class="va">breakdown</span>,
+  <span class="va">geo_uid</span>,
+  year <span class="op">=</span> <span class="cn">NULL</span>,
+  month <span class="op">=</span> <span class="cn">NULL</span>,
+  frequency <span class="op">=</span> <span class="cn">NULL</span>,
+  filters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>query_params</dt>
-<dd><p>Query parameters to be sent to CMHC.</p>
-<p>returns dataframe with CMHC data, tile and subtitle are set as attributes</p></dd>
+    <dl><dt>survey</dt>
+<dd><p>The CMHC survey, one of Scss, or Rms,  consult `list_cmhc_tables()` for possible values.
+(Other surveys will be supported in future versions.)</p></dd>
+<dt>series</dt>
+<dd><p>The CMHC data series of the survey, consult `list_cmhc_tables()` for possible values.</p></dd>
+<dt>dimension</dt>
+<dd><p>The dimension to show in the results, consult `list_cmhc_tables()` for possible values.</p></dd>
+<dt>breakdown</dt>
+<dd><p>The geographic breakdown, one of "Survey Zones", "Census Subdivision", "Neighbourhoods", "Census Tracts",
+if querying data for a snapshot in time or "Historical Time Periods" if querying time series data. Not all geographic breakdowns are available for all series.
+returns data frame with CMHC data, tile and subtitle are set as attributes.  Consult `list_cmhc_tables()` for possible values.</p></dd>
+<dt>geo_uid</dt>
+<dd><p>Census geographic identifier for which to query the data. Can be a census tract, census subdivision,
+or census metropolitan area.</p></dd>
+<dt>year</dt>
+<dd><p>optional, only needed when querying data for a snapshot in time.</p></dd>
+<dt>month</dt>
+<dd><p>optional, only needed when querying data for a snapshot in time.</p></dd>
+<dt>frequency</dt>
+<dd><p>optional, only needed when querying time series data, one of "Monthly", "Quarterly" or "Annual".</p></dd>
+<dt>filters</dt>
+<dd><p>optional list of filters, consult `list_cmhc_tables()` for possible values.</p></dd>
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    <p>A tibble with the data in long form.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">table</span> <span class="op">&lt;-</span> <span class="va">cmhc_table_list</span><span class="op">$</span><span class="va">`Rms Vacancy Rate Time Series`</span></span>
-<span class="r-in"><span class="va">region</span> <span class="op">&lt;-</span> <span class="fu"><a href="cmhc_region_params_from_census.html">cmhc_region_params_from_census</a></span><span class="op">(</span><span class="st">"59933"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">get_cmhc</span><span class="op">(</span><span class="fu"><a href="cmhc_timeseries_params.html">cmhc_timeseries_params</a></span><span class="op">(</span>table_id <span class="op">=</span> <span class="va">table</span>, region <span class="op">=</span> <span class="va">region</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_cmhc</span><span class="op">(</span><span class="st">"Rms"</span>,<span class="st">"Vacancy Rate"</span>,<span class="st">"Bedroom Type"</span>,<span class="st">"Historical Time Periods"</span>,<span class="st">"5915022"</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
   </div>
@@ -96,7 +116,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
