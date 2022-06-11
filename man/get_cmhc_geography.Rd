@@ -6,7 +6,7 @@
 \usage{
 get_cmhc_geography(
   level = c("CT", "ZONE", "NBHD", "CSD", "MET"),
-  base_directory = getOption("cmhc.cache_path")
+  base_directory = Sys.getenv("CMHC_CACHE_PATH")
 )
 }
 \arguments{

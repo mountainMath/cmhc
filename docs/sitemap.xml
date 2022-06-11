@@ -1,81 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/basic_usage.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/articles/basic_usage.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/articles/index.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/index.html</loc>
   </url>
   <url>
-    <loc>/reference/census_to_cmhc_geocode.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/census_to_cmhc_geocode.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_cma_translation_data.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/cmhc_cma_translation_data.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_csd_translation_data.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/cmhc_csd_translation_data.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_ct_translation_data.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/cmhc_ct_translation_data.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_geo_level_for_census.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/cmhc_geo_level_for_census.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_geo_level_for_cmhc.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/cmhc_geo_level_for_cmhc.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_quality_labels.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/cmhc_quality_labels.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_region_params_from_census.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/cmhc_region_params_from_census.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_to_census_geocode.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/cmhc_to_census_geocode.html</loc>
   </url>
   <url>
-    <loc>/reference/date_from_cmhc_year_month.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/date_from_cmhc_year_month.html</loc>
   </url>
   <url>
-    <loc>/reference/download_geographies.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/download_geographies.html</loc>
   </url>
   <url>
-    <loc>/reference/get_cmhc.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/get_cmhc.html</loc>
   </url>
   <url>
-    <loc>/reference/get_cmhc_geography.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/get_cmhc_geography.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/list_cmhc_dimensions.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/list_cmhc_dimensions.html</loc>
   </url>
   <url>
-    <loc>/reference/list_cmhc_series.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/list_cmhc_series.html</loc>
   </url>
   <url>
-    <loc>/reference/list_cmhc_surveys.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/list_cmhc_surveys.html</loc>
   </url>
   <url>
-    <loc>/reference/list_cmhc_tables.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/list_cmhc_tables.html</loc>
   </url>
   <url>
-    <loc>/reference/parse_numeric.html</loc>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/parse_numeric.html</loc>
+  </url>
+  <url>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/set_cache_path.html</loc>
+  </url>
+  <url>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/show_cache_path.html</loc>
   </url>
 </urlset>

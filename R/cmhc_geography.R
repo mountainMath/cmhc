@@ -109,8 +109,8 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
 
 #' download local copy of cmhc geography data
 #' @param base_directory local directory to hold cmhc geography data
-download_geographies <- function(base_directory=getOption("cmhc.cache_path")){
-  if (is.null(base_directory)) stop(paste0("Not a valid base directory ",base_directory))
+download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
+  if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory))
   aws_bucket="mountaimath"
   aws_path="cmhc"
   dir.create(file.path(base_directory))
@@ -134,8 +134,8 @@ download_geographies <- function(base_directory=getOption("cmhc.cache_path")){
 #' @param base_directory local directory to hold cmhc geography data
 #'
 #' @export
-get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=getOption("cmhc.cache_path")){
-  if (is.null(base_directory)) stop(paste0("Not a valid base directory ",base_directory))
+get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=Sys.getenv("CMHC_CACHE_PATH")){
+  if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory))
   paths <- dir(base_directory)
   if (!dir.exists(base_directory)) dir.create(base_directory)
   if (!dir.exists(base_directory)) stop ("Could not create base directory.")

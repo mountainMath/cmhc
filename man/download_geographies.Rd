@@ -4,7 +4,7 @@
 \alias{download_geographies}
 \title{download local copy of cmhc geography data}
 \usage{
-download_geographies(base_directory = getOption("cmhc.cache_path"))
+download_geographies(base_directory = Sys.getenv("CMHC_CACHE_PATH"))
 }
 \arguments{
 \item{base_directory}{local directory to hold cmhc geography data}

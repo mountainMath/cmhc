@@ -1,0 +1,60 @@
+pandoc: 2.3.1
+pkgdown_sha: ~
+
+url: https://mountainmath.github.io/cmhc/index.html
+
+home:
+  title: Access, retrieve, and work with CMHC data.
+
+reference:
+  - title: Retrieving CMHC data
+  - contents:
+    - get_cmhc
+    - get_cmhc_geography
+    #- get_census_geometry # deprecated function, removed from online docs
+  - title: Data discovery
+  - contents:
+    - list_cmhc_tables
+    - list_cmhc_surveys
+    - list_cmhc_series
+    - list_cmhc_dimensions
+  - title: User settings
+  - contents:
+    - set_cache_path
+    - show_cache_path
+articles:
+    - title: Extending Cancensus
+      navbar: ~
+      contents:
+      - Making_maps_with_cancensus
+    - title: Search and data discovery
+      navbar: ~
+      contents:
+      - data_discovery
+    - title: Combining custom geographies with census data
+      navbar: ~
+      contents:
+      - intersecting_geometries
+    - title: Additional datasets
+      navbar: ~
+      contents:
+      - Dwellings_by_document_type_cross_tabulation
+      - Taxfiler_Data
+
+authors:
+  Jens von Bergmann:
+    href: https://mountainmath.ca
+  Dmitry Shkolnik:
+    href: https://dshkol.com
+template:
+  params:
+    ganalytics: UA-107390160-3
+    bootswatch: simplex
+  opengraph:
+    image:
+      src: 'https://mountainmath.github.io/cancensus/logo.png'
+      alt: "cancensus"
+    twitter:
+      creator: "@vb_jens"
+      card: summary_large_image
+      site: "https://mountainmath.github.io/cancensus/"
