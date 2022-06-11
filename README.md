@@ -11,7 +11,7 @@
 API wrapper for extracting CMHC data out of the [CMHC Housing Market Information Portal](https://www.cmhc-schl.gc.ca/hmiportal).
 
 
-### Reference
+## Reference
 Documentation is [available on the GitHub pages](https://mountainmath.github.io/cmhc/).
 
 The example vignettes contain some [common use cases](https://mountainmath.github.io/cmhc/articles/basic_usage.html).
@@ -37,7 +37,7 @@ vacancy_data <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom T
 * We encourage contributions to improve this project. The best way is through issues and pull requests.
 * If you want to get in touch, we are pretty good at responding via email or via twitter at [@vb_jens](https://twitter.com/vb_jens). 
 
-### Cite **cmhc**
+## Cite **cmhc**
 
 If you wish to cite cmhc:
 
@@ -55,6 +55,7 @@ A BibTeX entry for LaTeX users is
     url = {https://mountainmath.github.io/cmhc/},
   }
 ```
-### Related packages
+
+## Related packages
 
 The cmhc package is designed to work well with the [cancensus package](https://mountainmath.github.io/cancensus/) working with Canadian Census data and matches the census geographies.

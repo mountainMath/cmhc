@@ -21,7 +21,7 @@ parse_numeric <- function(x){
     sub(",", "", ., fixed = TRUE) %>%
     sub(" %","",.,fixed = TRUE)
   xx[xx=="-"]="0"
-  #xx[xx=="++"]=NA_character_
+  xx[xx=="++"]=NA_character_
   xx %>%
     as.numeric
 }
