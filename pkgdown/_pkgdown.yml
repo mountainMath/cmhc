@@ -15,46 +15,31 @@ reference:
   - title: Data discovery
   - contents:
     - list_cmhc_tables
-    - list_cmhc_surveys
-    - list_cmhc_series
-    - list_cmhc_dimensions
+  - title: Helper functions
+  - contents:
+    - cmhc_quality_labels
   - title: User settings
   - contents:
     - set_cache_path
     - show_cache_path
 articles:
-    - title: Extending Cancensus
+    - title: Basic usage
       navbar: ~
       contents:
-      - Making_maps_with_cancensus
-    - title: Search and data discovery
-      navbar: ~
-      contents:
-      - data_discovery
-    - title: Combining custom geographies with census data
-      navbar: ~
-      contents:
-      - intersecting_geometries
-    - title: Additional datasets
-      navbar: ~
-      contents:
-      - Dwellings_by_document_type_cross_tabulation
-      - Taxfiler_Data
+      - basic_usage
 
 authors:
   Jens von Bergmann:
     href: https://mountainmath.ca
-  Dmitry Shkolnik:
-    href: https://dshkol.com
 template:
   params:
-    ganalytics: UA-107390160-3
+    #ganalytics: UA-107390160-3
     bootswatch: simplex
   opengraph:
     image:
-      src: 'https://mountainmath.github.io/cancensus/logo.png'
-      alt: "cancensus"
+      src: 'https://mountainmath.github.io/cmhc/logo.png'
+      alt: "cmhc"
     twitter:
       creator: "@vb_jens"
       card: summary_large_image
-      site: "https://mountainmath.github.io/cancensus/"
+      site: "https://mountainmath.github.io/cmhc/"

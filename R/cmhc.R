@@ -235,6 +235,17 @@ get_cmhc <- function(survey,series, dimension, breakdown,
     table <- table %>% mutate(`Census geography`=census_year)
   }
 
+  table <- table |>
+    mutate(Survey=survey,Series=series)
+
+  if (length(filters>0)) {
+    ff <- filters |>
+      unlist() |>
+      as.character() |>
+      paste0(collapse = " - ")
+    table <- table |>
+      mutate(Filters=ff)
+  }
 
   return(table)
 }
