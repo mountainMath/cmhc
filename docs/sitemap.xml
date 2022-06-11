@@ -10,28 +10,10 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/Unabsorbed.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Under Construction.html</loc>
-  </url>
-  <url>
     <loc>/articles/basic_usage.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/rental_construction.html</loc>
-  </url>
-  <url>
-    <loc>/articles/timelines.html</loc>
-  </url>
-  <url>
-    <loc>/articles/under_construction.html</loc>
-  </url>
-  <url>
-    <loc>/articles/vacancy_vs_rent_change.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -40,19 +22,10 @@
     <loc>/index.html</loc>
   </url>
   <url>
-    <loc>/reference/census_geography_list.html</loc>
-  </url>
-  <url>
     <loc>/reference/census_to_cmhc_geocode.html</loc>
   </url>
   <url>
-    <loc>/reference/census_to_cmhc_translation.html</loc>
-  </url>
-  <url>
     <loc>/reference/cmhc_cma_translation_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_completion_params.html</loc>
   </url>
   <url>
     <loc>/reference/cmhc_csd_translation_data.html</loc>
@@ -61,64 +34,19 @@
     <loc>/reference/cmhc_ct_translation_data.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_data_table.html</loc>
-  </url>
-  <url>
     <loc>/reference/cmhc_geo_level_for_census.html</loc>
   </url>
   <url>
     <loc>/reference/cmhc_geo_level_for_cmhc.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_geo_uid_for_ct.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_geography_csd_list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_geography_list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_geography_type_list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_primary_rental_params.html</loc>
-  </url>
-  <url>
     <loc>/reference/cmhc_quality_labels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_region_params.html</loc>
   </url>
   <url>
     <loc>/reference/cmhc_region_params_from_census.html</loc>
   </url>
   <url>
-    <loc>/reference/cmhc_rent_change_history_params.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_rms_geography_list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_snapshot_params.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_table_list.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_table_region_code.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_timeseries_params.html</loc>
-  </url>
-  <url>
     <loc>/reference/cmhc_to_census_geocode.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_vacancy_history_params.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cmhc_vacancy_params.html</loc>
   </url>
   <url>
     <loc>/reference/date_from_cmhc_year_month.html</loc>
@@ -133,13 +61,7 @@
     <loc>/reference/get_cmhc_geography.html</loc>
   </url>
   <url>
-    <loc>/reference/hello.html</loc>
-  </url>
-  <url>
     <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/intended_market_rental.html</loc>
   </url>
   <url>
     <loc>/reference/list_cmhc_dimensions.html</loc>
@@ -155,8 +77,5 @@
   </url>
   <url>
     <loc>/reference/parse_numeric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/standardize_cmhc_data.html</loc>
   </url>
 </urlset>

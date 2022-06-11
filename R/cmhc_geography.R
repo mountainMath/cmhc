@@ -2,7 +2,6 @@ cmhc_geography_type_list=list(PR=2,CMA=3, CSD=4, CT=7, ZONE=5,NEIGHBOUHOOD=6)
 
 #' census geography params
 #' @param GeoUID census region id
-#' @export
 cmhc_region_params_from_census <- function(GeoUID){
   list <- list("geography_type_id"=as.character(cmhc_geography_type_list[cmhc_geo_level_for_census(GeoUID)]),
                "geography_id"=census_to_cmhc_geocode(GeoUID))
@@ -11,7 +10,6 @@ cmhc_region_params_from_census <- function(GeoUID){
 
 #' Get cmhc geo level for census geo_uid
 #' @param GeoUID census region id
-#' @export
 cmhc_geo_level_for_census <- function(GeoUID){
   switch(as.character(nchar(GeoUID)),
          "5" = "CMA",
@@ -22,7 +20,6 @@ cmhc_geo_level_for_census <- function(GeoUID){
 
 #' Get cmhc geo level for cmhc geo_uid
 #' @param GeoUID census geographic idenitifier
-#' @export
 cmhc_geo_level_for_cmhc <- function(GeoUID){
   switch(as.character(nchar(GeoUID)),
          "7" = ifelse(grepl("\\.",GeoUID),"CT","CSD"),
@@ -31,7 +28,6 @@ cmhc_geo_level_for_cmhc <- function(GeoUID){
 
 #' translate census to CMHC geocodes
 #' @param GeoUID Census GeoUID for CMA or CSD
-#' @export
 census_to_cmhc_geocode <- function(GeoUID){
   cmhc_name <- list(
     "CT"="CMHCCT_UID",
@@ -60,7 +56,6 @@ census_to_cmhc_geocode <- function(GeoUID){
 #' translate CMHC to census geocodes
 #' @param GeoUID CMHC GeoUID for CMA or CSD or CT
 #' @param parent_region census geographic identifier to identify CMA if needed
-#' @export
 cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
   cmhc_name <- list(
     "CT"="CMHCCT_UID",
@@ -114,7 +109,6 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
 
 #' download local copy of cmhc geography data
 #' @param base_directory local directory to hold cmhc geography data
-#' @export
 download_geographies <- function(base_directory=getOption("cmhc.cache_path")){
   if (is.null(base_directory)) stop(paste0("Not a valid base directory ",base_directory))
   aws_bucket="mountaimath"
@@ -134,12 +128,24 @@ download_geographies <- function(base_directory=getOption("cmhc.cache_path")){
 }
 
 
-#' get cmhc geographies, requires data has been downloaded with `download_geographies()` first
+#' Get cmhc geographies
+#'
 #' @param level aggreagtion level for geographic data, one of "CT","ZONE","NBHD","CSD","MET"
 #' @param base_directory local directory to hold cmhc geography data
+#'
 #' @export
 get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=getOption("cmhc.cache_path")){
   if (is.null(base_directory)) stop(paste0("Not a valid base directory ",base_directory))
+  paths <- dir(base_directory)
+  if (!dir.exists(base_directory)) dir.create(base_directory)
+  if (!dir.exists(base_directory)) stop ("Could not create base directory.")
+  paths <- dir(base_directory)
+  if (length(setdiff(c("RMS2017_1.gdb", "RMS2017_2.gdb", "RMS2017_3.gdb"),paths))>0) {
+    download_geographies(base_directory = base_directory)
+  }
+  if (length(setdiff(c("RMS2017_1.gdb", "RMS2017_2.gdb", "RMS2017_3.gdb"),paths))>0) {
+    stop("Problem finding local geographies, please file an issue report on GitHub.")
+  }
   if(!(length(level)==1 & (level %in% c("CT","ZONE","NBHD","CSD","MET")))) stop("level needs to be one of CT, ZONE, NBHD, CSD, MET")
   if (!dir.exists(base_directory)) stop(paste0("Local directory ",base_directory," does not exists.\nMake sure geographit data was downloaded using the `download_geographies()` function."))
   result=NULL

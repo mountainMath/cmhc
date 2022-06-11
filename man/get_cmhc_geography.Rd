@@ -2,7 +2,7 @@
 % Please edit documentation in R/cmhc_geography.R
 \name{get_cmhc_geography}
 \alias{get_cmhc_geography}
-\title{get cmhc geographies, requires data has been downloaded with `download_geographies()` first}
+\title{Get cmhc geographies}
 \usage{
 get_cmhc_geography(
   level = c("CT", "ZONE", "NBHD", "CSD", "MET"),
@@ -15,5 +15,5 @@ get_cmhc_geography(
 \item{base_directory}{local directory to hold cmhc geography data}
 }
 \description{
-get cmhc geographies, requires data has been downloaded with `download_geographies()` first
+Get cmhc geographies
 }
