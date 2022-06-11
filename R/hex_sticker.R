@@ -73,13 +73,13 @@ generate_cmhc_hex_sticker <- function (){
                                ymin=bbox$ymin*0.8+bbox$ymax*0.2,ymax=bbox$ymax*1.1) +
     hexSticker::theme_transparent()
 
-  # hexSticker::sticker(pp, package="cmhc",
-  #                     p_size=22, p_y=1.5,
-  #                     s_x=1, s_y=0.78, s_width=1.5, s_height=1.5,
-  #                     h_color="#FF0000",
-  #                     h_fill="grey40",
-  #                     p_color="white",
-  #                     filename=here::here("logo.svg"))
+  hexSticker::sticker(pp, package="cmhc",
+                      p_size=12, p_y=1.5,
+                      s_x=1, s_y=0.78, s_width=1.5, s_height=1.5,
+                      h_color="#FF0000",
+                      h_fill="grey40",
+                      p_color="white",
+                      filename=here::here("logo.svg"))
 
   hexSticker::sticker(pp, package="cmhc",
                       p_size=22, p_y=1.65,
