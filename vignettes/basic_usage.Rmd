@@ -15,8 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-knitr::opts_chunk$set(message = FALSE)
+```{r setup,  message=FALSE, warning=FALSE}
 library(cmhc)
 library(dplyr)
 library(ggplot2)
@@ -60,6 +59,7 @@ vacancy_data2 <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom 
                          breakdown="Historical Time Periods",  geo_uid="3506008",filters = list("season"="April"))
 
 bind_rows(vacancy_data,vacancy_data2) |>
+  filter(!is.na(Value)) |>
   ggplot(aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
   geom_point(aes(shape=Quality), data=~filter(.,!is.na(Value))) +
   geom_line() +

@@ -701,6 +701,15 @@
 <circle cx='122.73' cy='75.07' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
 <circle cx='126.97' cy='69.00' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
 <circle cx='131.20' cy='72.70' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<circle cx='69.86' cy='84.05' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<circle cx='74.09' cy='80.35' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<polygon points='78.32,70.18 80.95,74.74 75.69,74.74 ' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<polygon points='82.55,69.39 85.18,73.95 79.92,73.95 ' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<polygon points='86.78,74.14 89.41,78.70 84.14,78.70 ' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<polygon points='91.01,75.46 93.65,80.02 88.38,80.02 ' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<circle cx='95.24' cy='82.46' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<circle cx='99.47' cy='82.20' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
+<polygon points='103.69,74.41 106.33,78.97 101.06,78.97 ' style='stroke-width: 0.71; stroke: none; fill: #D95F02;' />
 <circle cx='4.30' cy='90.13' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
 <polygon points='8.54,88.05 11.17,92.61 5.90,92.61 ' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
 <circle cx='12.76' cy='94.34' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
@@ -728,10 +737,16 @@
 <circle cx='118.51' cy='87.60' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
 <circle cx='122.73' cy='85.80' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
 <circle cx='126.97' cy='86.32' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
+<polygon points='69.86,63.58 72.49,68.14 67.22,68.14 ' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
+<polygon points='72.14,75.19 76.05,75.19 76.05,71.28 72.14,71.28 ' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
+<polygon points='82.55,102.51 85.18,107.07 79.92,107.07 ' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
+<polygon points='89.06,79.15 92.97,79.15 92.97,75.24 89.06,75.24 ' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
+<circle cx='95.24' cy='66.65' r='1.95' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
+<polygon points='99.47,74.24 102.10,78.80 96.83,78.80 ' style='stroke-width: 0.71; stroke: none; fill: #1B9E77;' />
 <polyline points='4.30,90.13 8.54,91.09 12.76,94.34 ' style='stroke-width: 1.07; stroke: #1B9E77; stroke-linecap: butt;' />
 <polyline points='21.22,89.94 25.46,84.64 29.68,69.94 33.91,51.85 38.14,86.14 42.38,90.05 46.60,73.67 50.83,87.64 ' style='stroke-width: 1.07; stroke: #1B9E77; stroke-linecap: butt;' />
-<polyline points='63.52,89.24 67.75,41.07 71.98,51.54 76.21,79.56 80.44,95.63 84.67,98.42 88.89,89.05 93.13,72.85 97.36,67.30 101.59,74.96 105.81,87.30 110.05,108.85 114.28,93.01 118.51,87.60 122.73,85.80 126.97,86.32 ' style='stroke-width: 1.07; stroke: #1B9E77; stroke-linecap: butt;' />
-<polyline points='0.072,80.09 4.30,76.13 8.54,71.11 12.76,70.06 16.99,72.17 21.22,76.13 25.46,81.67 29.68,84.31 33.91,84.05 38.14,78.50 42.38,82.46 46.60,82.46 50.83,78.24 55.06,74.02 59.29,74.28 63.52,81.14 67.75,84.31 71.98,81.41 76.21,79.82 80.44,71.64 84.67,76.13 88.89,80.35 93.13,82.20 97.36,82.99 101.59,81.94 105.81,72.17 110.05,67.15 114.28,69.00 118.51,75.34 122.73,75.07 126.97,69.00 131.20,72.70 ' style='stroke-width: 1.07; stroke: #D95F02; stroke-linecap: butt;' />
+<polyline points='63.52,89.24 67.75,41.07 69.86,66.62 71.98,51.54 74.09,73.23 76.21,79.56 80.44,95.63 82.55,105.55 84.67,98.42 88.89,89.05 91.01,77.19 93.13,72.85 95.24,66.65 97.36,67.30 99.47,77.28 101.59,74.96 105.81,87.30 110.05,108.85 114.28,93.01 118.51,87.60 122.73,85.80 126.97,86.32 ' style='stroke-width: 1.07; stroke: #1B9E77; stroke-linecap: butt;' />
+<polyline points='0.072,80.09 4.30,76.13 8.54,71.11 12.76,70.06 16.99,72.17 21.22,76.13 25.46,81.67 29.68,84.31 33.91,84.05 38.14,78.50 42.38,82.46 46.60,82.46 50.83,78.24 55.06,74.02 59.29,74.28 63.52,81.14 67.75,84.31 69.86,84.05 71.98,81.41 74.09,80.35 76.21,79.82 78.32,73.22 80.44,71.64 82.55,72.43 84.67,76.13 86.78,77.18 88.89,80.35 91.01,78.50 93.13,82.20 95.24,82.46 97.36,82.99 99.47,82.20 101.59,81.94 103.69,77.45 105.81,72.17 110.05,67.15 114.28,69.00 118.51,75.34 122.73,75.07 126.97,69.00 131.20,72.70 ' style='stroke-width: 1.07; stroke: #D95F02; stroke-linecap: butt;' />
 </g>
 <g clip-path='url(#cpOS4yNnwxMTUuMDR8NDIuMzl8MTMyLjc4)'>
 </g>

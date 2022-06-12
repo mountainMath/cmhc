@@ -5,18 +5,28 @@ generate_cmhc_hex_sticker <- function (){
   library(cmhc)
   ggplot2::theme_set(ggplot2::theme_gray())
   inflation <- cansim::get_cansim_vector("v41690973") |>
-    select(Date,CPI=val_norm)
+    select(Date,CPI=val_norm) |>
+    mutate(CPIchange=CPI/lag(CPI,order_by = Date,n=12)-1)
+
   pd1 <- get_cmhc("Rms","Vacancy Rate","Bedroom Type","Historical Time Periods","48825") |>
+    bind_rows(get_cmhc("Rms","Vacancy Rate","Bedroom Type","Historical Time Periods","48825",filter=list("season"="April"))) |>
     mutate(Value=Value/100)
   pd2 <- get_cmhc("Rms","Average Rent Change","Bedroom Type","Historical Time Periods","48825") |>
+    bind_rows(get_cmhc("Rms","Average Rent Change","Bedroom Type","Historical Time Periods","48825",filter=list("season"="April"))) |>
     mutate(Value=Value/100) |>
     left_join(inflation,by="Date") |>
-    group_by(`Bedroom Type`) |>
-    mutate(Change=CPI/lag(CPI,order_by = Date)-1) |>
-    mutate(Value=Value-Change)
+    mutate(Value=Value-CPIchange)
 
   pd <- bind_rows(pd1,pd2) |>
-    filter(`Bedroom Type`=="Total")
+    filter(`Bedroom Type`=="Total") %>%
+    left_join(filter(.,!is.na(Value)) |>
+                select(Series,Date) |>
+                group_by(Series) |>
+                mutate(diff=as.integer(Date-lag(Date,order_by=Date))),
+              by=c("Date","Series")) |>
+    group_by(Series) |>
+    filter(!is.na(Value) | (!is.na(lead(diff,order_by = Date)) & lead(diff,order_by = Date)>366))
+
 
   library(png)
   library(grid)
@@ -44,7 +54,10 @@ generate_cmhc_hex_sticker <- function (){
   p<-ggplot2::ggplot(pd,ggplot2::aes(x=Date,y=Value,color=Series)) +
     ggplot2::geom_point(aes(shape=Quality)) +
     ggplot2::geom_line() +
-    ggplot2::scale_color_brewer(palette="Dark2",guide="none") +
+    ggplot2::scale_colour_brewer(palette="Dark2",guide="none") +
+    # ggplot2::scale_color_manual(values=c("Average Rent Change"="#FF5733",
+    #                                      "Vacancy Rate"="#0BA68A"),
+    #                             guide="none") +
     ggplot2::scale_shape_discrete(guide="none") +
     ggplot2::labs(x="",y="") +
     ggplot2::theme_void() +
@@ -64,10 +77,6 @@ generate_cmhc_hex_sticker <- function (){
                                ymin=cities$Y[2],ymax=cities$Y[2]+2*size*ywidth) +
     ggplot2::annotation_custom(i2, xmin=cities$X[3]-size*xwidth,xmax=cities$X[3]+size*xwidth,
                                ymin=cities$Y[3],ymax=cities$Y[3]+2*size*ywidth) +
-    # ggplot2::annotation_custom(i2, xmin=1.425*bbox$xmin,xmax=1.3*bbox$xmax,
-    #                            ymin=bbox$ymin*0.8+bbox$ymax*0.1,ymax=bbox$ymax*0.5) +
-    # ggplot2::annotation_custom(i3, xmin=1.425*bbox$xmin,xmax=1.3*bbox$xmax,
-    #                            ymin=bbox$ymin*0.8+bbox$ymax*0.1,ymax=bbox$ymax*0.5) +
     ggplot2::annotation_custom(ggplot2::ggplotGrob(p),
                                xmin=1.5*bbox$xmin,xmax=1.5*bbox$xmax,
                                ymin=bbox$ymin*0.8+bbox$ymax*0.2,ymax=bbox$ymax*1.1) +
