@@ -10,15 +10,16 @@
 #' @param overwrite Option to overwrite any existing cache path already stored locally.
 #' @param install Option to install permanently for use across sessions.
 #'
-#' @export
-#'
 #' @examples
 #'\dontrun{
+#' # This sets the cache path for the duration of the current session
 #' set_cache_path("~/cmhc_cache")
 #'
-#' # This will set the cache path permanently until ovewritten again
+#' # This will set the cache path permanently until overwritten again
 #' set_cache_path("~/cmhc_cache", install = TRUE)
 #' }
+#'
+#' @export
 set_cache_path <- function(cache_path, overwrite = FALSE, install = FALSE){
   if (install) {
     home <- Sys.getenv("HOME")
@@ -55,7 +56,10 @@ set_cache_path <- function(cache_path, overwrite = FALSE, install = FALSE){
 
 #' View saved cache directory path
 #'
-#' @description View saved cache path'
+#' @description View saved cache path
+#'
+#' @examples
+#' show_cache_path()
 #'
 #' @export
 show_cache_path <- function() {

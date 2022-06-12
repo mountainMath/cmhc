@@ -28,12 +28,19 @@ generate_cmhc_hex_sticker <- function (){
     filter(!is.na(Value) | (!is.na(lead(diff,order_by = Date)) & lead(diff,order_by = Date)>366))
 
 
-  library(png)
+  read_white_image <- function(path){
+    logo<-magick::image_read(path)
+    img <- logo[[1]]
+    img[1,,] <- as.raw(205)
+    img[2,,] <- as.raw(133)
+    img[3,,] <- as.raw(63)
+    magick::image_read(img)
+  }
+
   library(grid)
-  i1 <- png::readPNG(here::here("images/cityscape.png")) |> rasterGrob(interpolate=TRUE)
-  i2 <- png::readPNG(here::here("images/buildings.png")) |> rasterGrob(interpolate=TRUE)
-  i3 <- png::readPNG(here::here("images/skyline.png")) |> rasterGrob(interpolate=TRUE)
-  library(grid)
+  i1 <- read_white_image(here::here("images/cityscape.png")) |> rasterGrob(interpolate=TRUE)
+  i2 <- read_white_image(here::here("images/buildings.png")) |> rasterGrob(interpolate=TRUE)
+  i3 <- read_white_image(here::here("images/skyline.png")) |> rasterGrob(interpolate=TRUE)
 
   crs <- "+proj=lcc +lat_1=50 +lat_2=70 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m no_defs"
 
@@ -51,13 +58,13 @@ generate_cmhc_hex_sticker <- function (){
     ggplot2::theme_void() +
     hexSticker::theme_transparent()
   bbox=sf::st_bbox(ca_data)
-  p<-ggplot2::ggplot(pd,ggplot2::aes(x=Date,y=Value,color=Series)) +
-    ggplot2::geom_point(aes(shape=Quality)) +
-    ggplot2::geom_line() +
-    ggplot2::scale_colour_brewer(palette="Dark2",guide="none") +
-    # ggplot2::scale_color_manual(values=c("Average Rent Change"="#FF5733",
-    #                                      "Vacancy Rate"="#0BA68A"),
-    #                             guide="none") +
+  p<-ggplot2::ggplot(pd %>% filter(!is.na(Value)),ggplot2::aes(x=Date,y=Value,color=Series)) +
+    ggplot2::geom_point(aes(shape=Quality),size=0.8) +
+    ggplot2::geom_line(size=0.3) +
+    #ggplot2::scale_colour_brewer(palette="Dark2",guide="none") +
+    ggplot2::scale_color_manual(values=c("Average Rent Change"="#f0c60a",
+                                         "Vacancy Rate"="#f0430a"),
+                                guide="none") +
     ggplot2::scale_shape_discrete(guide="none") +
     ggplot2::labs(x="",y="") +
     ggplot2::theme_void() +

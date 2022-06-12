@@ -9,7 +9,6 @@ date_from_cmhc_year_month <- function(X1){
 
 #' CMHC quality indicators
 #'
-#' @export
 cmhc_quality_labels <- c(a = "Excellent", b = "Very good", c = "Good", d = "Fair (Use with Caution)")
 
 

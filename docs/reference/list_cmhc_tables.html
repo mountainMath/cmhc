@@ -77,18 +77,18 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">list_cmhc_tables</span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 175 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    SurveyName SeriesName  DimensionName   SeriesBreakdown    Filters     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;named list&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Scss       Starts      Dwelling Type   Survey Zones       <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Scss       Starts      Dwelling Type   Census Subdivision <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Scss       Starts      Dwelling Type   Neighbourhoods     <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Scss       Starts      Dwelling Type   Census Tracts      <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Scss       Starts      Intended Market Survey Zones       <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Scss       Starts      Intended Market Census Subdivision <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Scss       Starts      Intended Market Neighbourhoods     <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Scss       Starts      Intended Market Census Tracts      <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Scss       Completions Dwelling Type   Survey Zones       <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Scss       Completions Dwelling Type   Census Subdivision <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Survey Series      Dimension       Breakdown          Filters     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;named list&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Scss   Starts      Dwelling Type   Survey Zones       <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Scss   Starts      Dwelling Type   Census Subdivision <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Scss   Starts      Dwelling Type   Neighbourhoods     <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Scss   Starts      Dwelling Type   Census Tracts      <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Scss   Starts      Intended Market Survey Zones       <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Scss   Starts      Intended Market Census Subdivision <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Scss   Starts      Intended Market Neighbourhoods     <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Scss   Starts      Intended Market Census Tracts      <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Scss   Completions Dwelling Type   Survey Zones       <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Scss   Completions Dwelling Type   Census Subdivision <span style="color: #949494;">&lt;chr [5]&gt;</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 165 more rows</span></span>
 <span class="r-in"></span>
 </code></pre></div>

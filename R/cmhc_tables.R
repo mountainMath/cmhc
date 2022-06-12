@@ -19,7 +19,7 @@ cmhc_bedroom_types <- c("Bachelor","1 Bedroom","2 Bedroom","3 Bedroom +","Total"
 #' @export
 list_cmhc_tables <- function(short=TRUE){
   scss_snapshot1 <- tibble::tribble(
-    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~GeoCodes,
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,
     "Scss","1","Starts","1","1",
     "Scss","1","Completions","2","1",
     "Scss","1","Under Construction","3","1",
@@ -27,7 +27,7 @@ list_cmhc_tables <- function(short=TRUE){
     "Scss","1","Absorbed Units","5","2") |>
   mutate(a="1") |>
     left_join(tibble(a="1",
-                     DimensionName=c("Dwelling Type","Intended Market"),
+                     Dimension=c("Dwelling Type","Intended Market"),
                      DimensionCode=c("1","4"),
                      Filters=list("dimension-18"=cmhc_intended_markets,
                                     "dimension-1"=cmhc_dwelling_types)),
@@ -35,12 +35,12 @@ list_cmhc_tables <- function(short=TRUE){
 
 
   scss_snapshot2 <- tibble::tribble(
-    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~GeoCodes,
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,
     "Scss","1","Share absorbed at completion","6","2",
     "Scss","1","Unabsorbed Inventory","4","2") |>
     mutate(a="1") |>
     left_join(tibble(a="1",
-                     DimensionName=c("Dwelling Type","Intended Market"),
+                     Dimension=c("Dwelling Type","Intended Market"),
                      DimensionCode=c("1","4"),
                      Filters=list("dimension-18"=c("Condo","Homeowner","All"),
                                   "dimension-1"=cmhc_dwelling_types)),
@@ -48,29 +48,29 @@ list_cmhc_tables <- function(short=TRUE){
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
     left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes1))),
-                     SeriesBreakdown=c(names(cmhc_type_codes1),names(cmhc_type_codes2)),
-                     SeriesBreakdownCode=as.character(c(cmhc_type_codes1,cmhc_type_codes2))),
+                     Breakdown=c(names(cmhc_type_codes1),names(cmhc_type_codes2)),
+                     BreakdownCode=as.character(c(cmhc_type_codes1,cmhc_type_codes2))),
               by="GeoCodes") |>
     select(-.data$a,-.data$GeoCodes) |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$DimensionCode,".",
-                            .data$SeriesCode,".",.data$SeriesBreakdownCode))
+                            .data$SeriesCode,".",.data$BreakdownCode))
 
 
   scss_timeseries <- scss_snapshot |>
-    select(-.data$TableCode,-.data$SeriesBreakdown,-.data$SeriesBreakdownCode) |>
+    select(-.data$TableCode,-.data$Breakdown,-.data$BreakdownCode) |>
     unique() %>%
     mutate(DimensionCode=recode(.data$DimensionCode,"1"="2","4"="9")) |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$DimensionCode,".",.data$SeriesCode)) |>
-    mutate(SeriesBreakdown="Historical Time Periods")
+    mutate(Breakdown="Historical Time Periods")
 
   scss_snapshot3 <- tibble::tribble(
-    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~Filters,
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Filters,
     "Scss","1","Absorbed Prices","1","Dwelling Type","9",list("dwelling_type_desc_en"=c("Single / Semi-detached","Single", "Semi-detached")),
     "Scss","1","Unabsorbed Prices","2","Dwelling Type","9",list("dwelling_type_desc_en"=c("Single / Semi-detached","Single", "Semi-detached")))
 
 
   rms_snapshot <- tibble::tribble(
-    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~GeoCodes,~Filters,
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~GeoCodes,~Filters,
     "Rms","2","Vacancy Rate","1", "Bedroom Type","1","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
     "Rms","2","Vacancy Rate","1", "Year of Construction","2","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
                                                                       bedroom_count_type_desc_en=cmhc_bedroom_types),
@@ -99,23 +99,23 @@ list_cmhc_tables <- function(short=TRUE){
     "Rms","2","Summary Statistics","1", NA, "31","4",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
                                                           bedroom_count_type_desc_en=cmhc_bedroom_types)) |>
     left_join(tibble(GeoCodes=c(rep("3",length(cmhc_type_codes3)),rep("4",length(cmhc_type_codes4))),
-                     SeriesBreakdown=c(names(cmhc_type_codes3),names(cmhc_type_codes4)),
-                     SeriesBreakdownCode=as.character(c(cmhc_type_codes3,cmhc_type_codes4))),
+                     Breakdown=c(names(cmhc_type_codes3),names(cmhc_type_codes4)),
+                     BreakdownCode=as.character(c(cmhc_type_codes3,cmhc_type_codes4))),
               by="GeoCodes") |>
     select(-.data$GeoCodes) |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",
-                            .data$DimensionCode,".",.data$SeriesBreakdownCode))
+                            .data$DimensionCode,".",.data$BreakdownCode))
 
   rms_timeseries <- rms_snapshot |>
-    select(-.data$TableCode,-.data$SeriesBreakdown,-.data$SeriesBreakdownCode) |>
+    select(-.data$TableCode,-.data$Breakdown,-.data$BreakdownCode) |>
     unique() %>%
     mutate(SeriesCode="2") |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$DimensionCode)) |>
-    mutate(SeriesBreakdown="Historical Time Periods") |>
+    mutate(Breakdown="Historical Time Periods") |>
     mutate(Filters=lapply(Filters,function(f)append(f,list(season=c("October","April")))))
 
   seniors <- tibble::tribble(
-    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~SeriesBreakdown,~SeriesBreakdownCode,~Filters,
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
     "Seniors","3","Rental Housing Vacancy Rates","2","Unit Type",NA, "Snapshot","1",list(),
     "Seniors","3","Rental Housing Vacancy Rates","8","Unit Type",NA, "Historical Time Periods","1",list(),
     "Seniors","3","Spaces","3","Unit Type",NA, "Snapshot","1",list(),
@@ -131,10 +131,10 @@ list_cmhc_tables <- function(short=TRUE){
     "Seniors","3","Bachelor Units and Private Rooms where Meals are included in Rent","8","Rent and Vacancy Rate",NA, "Snapshot","7",list(),
     "Seniors","3","Bachelor Units and Private Rooms where Meals are included in Rent","8","Rent and Vacancy Rate",NA, "Historical Time Periods","4",list()
   ) |>
-    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$SeriesBreakdownCode))
+    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
 
   srms <- tibble::tribble(
-    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~SeriesBreakdown,~SeriesBreakdownCode,~Filters,
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
     "Srms","4","Other Rental","6","Dwelling Type",NA, "Estimated Number of Households","1",list(),
     "Srms","4","Other Rental","6","Dwelling Type",NA, "Average Rent","2",list(),
     "Srms","4","Condominium Apartment","2","Structure Size",NA, "Vacancy Rate","1",list(),
@@ -143,7 +143,7 @@ list_cmhc_tables <- function(short=TRUE){
     "Srms","4","Condominium Apartment","2","Structure Size",NA, "Estimated Number of Units Used for Rental","4",list(),
     "Srms","4","Condominium Apartment","2","Structure Size",NA, "Estimated Share of Rental Units","5",list(),
   ) |>
-    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$SeriesBreakdownCode))
+    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
 
   table_list <- bind_rows(
     scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries,seniors
@@ -151,7 +151,7 @@ list_cmhc_tables <- function(short=TRUE){
 
   if (short) {
     table_list <- table_list |>
-      select(.data$SurveyName,.data$SeriesName,.data$DimensionName,.data$SeriesBreakdown,.data$Filters)
+      select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$Filters)
   }
 
   table_list
@@ -167,7 +167,7 @@ list_cmhc_tables <- function(short=TRUE){
 #' @export
 list_cmhc_surveys <- function(){
   list_cmhc_tables() |>
-    select(.data$SurveyName) |>
+    select(.data$Survey) |>
     unique()
 }
 
@@ -182,12 +182,12 @@ list_cmhc_surveys <- function(){
 #' @export
 list_cmhc_series <- function(survey=NULL){
   l <- list_cmhc_tables() |>
-    select(.data$SurveyName,.data$SeriesName) |>
+    select(.data$Survey,.data$Series) |>
     unique()
 
   if (!is.null(survey)) {
     l <- l |>
-      filter(.data$SurveyName==survey) |>
+      filter(.data$Survey==survey) |>
       unique()
   }
 
@@ -206,18 +206,18 @@ list_cmhc_series <- function(survey=NULL){
 #' @export
 list_cmhc_dimensions <- function(survey=NULL,series=NULL){
   l <- list_cmhc_tables() |>
-    select(.data$SurveyName,.data$SeriesName,.data$DimensionName) |>
+    select(.data$Survey,.data$Series,.data$Dimension) |>
     unique()
 
   if (!is.null(survey)) {
     l <- l |>
-      filter(.data$SurveyName==survey) |>
+      filter(.data$Survey==survey) |>
       unique()
   }
 
   if (!is.null(series)) {
     l <- l |>
-      filter(.data$SeriesName==series) |>
+      filter(.data$Series==series) |>
       unique()
   }
 
@@ -239,23 +239,23 @@ list_cmhc_dimensions <- function(survey=NULL,series=NULL){
 #' @export
 list_cmhc_breakdowns <- function(survey=NULL,series=NULL,dimension=NULL){
   l <- list_cmhc_tables() |>
-    select(.data$SurveyName,.data$SeriesName,.data$DimensionName,.data$SeriesBreakdown) |>
+    select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown) |>
     unique()
 
   if (!is.null(survey)) {
     l <- l |>
-      filter(.data$SurveyName==survey) |>
+      filter(.data$Survey==survey) |>
       unique()
   }
 
   if (!is.null(series)) {
     l <- l |>
-      filter(.data$SeriesName==series) |>
+      filter(.data$Series==series) |>
       unique()
   }
   if (!is.null(dimension)) {
     l <- l |>
-      filter(.data$DimensionName==dimension) |>
+      filter(.data$Dimension==dimension) |>
       unique()
   }
 
@@ -277,28 +277,28 @@ list_cmhc_breakdowns <- function(survey=NULL,series=NULL,dimension=NULL){
 #' @export
 list_cmhc_filters <- function(survey=NULL,series=NULL,dimension=NULL, breakdown=NULL){
   l <- list_cmhc_tables() |>
-    select(.data$SurveyName,.data$SeriesName,.data$DimensionName,.data$SeriesBreakdown,.data$Filters) |>
+    select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$Filters) |>
     unique()
 
   if (!is.null(survey)) {
     l <- l |>
-      filter(.data$SurveyName==survey) |>
+      filter(.data$Survey==survey) |>
       unique()
   }
 
   if (!is.null(series)) {
     l <- l |>
-      filter(.data$SeriesName==series) |>
+      filter(.data$Series==series) |>
       unique()
   }
   if (!is.null(dimension)) {
     l <- l |>
-      filter(.data$DimensionName==dimension) |>
+      filter(.data$Dimension==dimension) |>
       unique()
   }
   if (!is.null(breakdown)) {
     l <- l |>
-      filter(.data$SeriesBreakdown==breakdown) |>
+      filter(.data$Breakdown==breakdown) |>
       unique()
   }
 

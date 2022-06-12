@@ -19,9 +19,11 @@ permanent location.
 }
 \examples{
 \dontrun{
+# This sets the cache path for the duration of the current session
 set_cache_path("~/cmhc_cache")
 
-# This will set the cache path permanently until ovewritten again
+# This will set the cache path permanently until overwritten again
 set_cache_path("~/cmhc_cache", install = TRUE)
 }
+
 }

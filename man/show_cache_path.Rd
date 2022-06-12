@@ -7,5 +7,9 @@
 show_cache_path()
 }
 \description{
-View saved cache path'
+View saved cache path
+}
+\examples{
+show_cache_path()
+
 }

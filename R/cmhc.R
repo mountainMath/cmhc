@@ -46,40 +46,40 @@ get_cmhc <- function(survey,series, dimension, breakdown,
     }
   }
   selectedTable<-table_list |>
-    filter(.data$SurveyName==survey,
-           .data$SeriesName==series,
-           .data$SeriesBreakdown==breakdown)
+    filter(.data$Survey==survey,
+           .data$Series==series,
+           .data$Breakdown==breakdown)
   if (!is.na(dimension) && !is.null(dimension)) {
     selectedTable <- selectedTable |>
-      filter(.data$DimensionName==dimension)
+      filter(.data$Dimension==dimension)
   }
 
   if (nrow(selectedTable)!=1) {
     if (nrow(selectedTable)>1) stop("Unexpected error, please file an issue on GitHub with your function call.")
     if (nrow(selectedTable)==0) {
       selectedSurvey<-table_list |>
-        filter(.data$SurveyName==survey)
+        filter(.data$Survey==survey)
       if (nrow(selectedSurvey)==0) {
         stop(paste0("Survey ",survey," does not exist or is not supported. Valid surveys are ",
-                    paste0(unique(list_cmhc_surveys()$SurveyName),collapse = ", "),"."))
+                    paste0(unique(list_cmhc_surveys()$Survey),collapse = ", "),"."))
       }
       selectedSeries<-table_list %>%
-        filter(.data$SurveyName==survey, .data$SeriesName==series)
+        filter(.data$Survey==survey, .data$Series==series)
       if (nrow(selectedSeries)==0) {
         stop(paste0("Series ",series," for survey ",survey,
                     " does not exist or is not supported. Valid series are ",
-                    paste0(unique(selectedSurvey$SeriesName),collapse = ", "),"."))
+                    paste0(unique(selectedSurvey$Series),collapse = ", "),"."))
       }
       selectedDimension <- table_list %>%
-        filter(.data$SurveyName==survey, .data$SeriesName==series, .data$DimensionName==dimension)
+        filter(.data$Survey==survey, .data$Series==series, .data$Dimension==dimension)
       if (nrow(selectedDimension)==0 && !is.na(dimension)) {
         stop(paste0("Dimension ",dimension," for ",series," and survey ",survey,
                     " does not exist or is not supported. Valid dimensions are",
-                    paste0(unique(selectedSeries$DimensionName),collapse = ", "),"."))
+                    paste0(unique(selectedSeries$Dimension),collapse = ", "),"."))
       }
       stop(paste0("Breakdown ",breakdown," for ",series,",survey ",survey," and dimension ",dimension,
                   " does not exist or is not supported. Valid dimensions are ",
-                  paste0(unique(selectedDimension$SeriesBreakdown),collapse = ", "),"."))
+                  paste0(unique(selectedDimension$Breakdown),collapse = ", "),"."))
     }
   } # end validation
 
@@ -190,7 +190,8 @@ get_cmhc <- function(survey,series, dimension, breakdown,
       select(.data$XX,matches("- Quality$")) %>%
       tidyr::pivot_longer(-.data$XX,names_to="Metric",values_to="Quality") %>%
       mutate(Metric=gsub(" - Quality$","",.data$Metric)) %>%
-      mutate(Quality=factor(.data$Quality,levels=names(cmhc_quality_labels)))
+      mutate(Quality=recode(.data$Quality,!!!cmhc_quality_labels)) %>%
+      mutate(Quality=factor(.data$Quality,levels=as.character(cmhc_quality_labels)))
 
     table <- table %>%
       left_join(quality,by=c(names(table)[1],"Metric"))

@@ -39,7 +39,6 @@ vacancy_data <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom T
 ggplot(vacancy_data,aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
   geom_point(aes(shape=Quality), data=~filter(.,!is.na(Value))) +
   geom_line() +
-  scale_shape_discrete(labels=cmhc_quality_labels) +
   scale_y_continuous(labels=scales::percent) +
   labs(title="City of Ottawa rental vacancy rate",
        x=NULL, y="Rental vacancy rate",
@@ -63,13 +62,33 @@ bind_rows(vacancy_data,vacancy_data2) |>
   ggplot(aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
   geom_point(aes(shape=Quality), data=~filter(.,!is.na(Value))) +
   geom_line() +
-  scale_shape_discrete(labels=cmhc_quality_labels) +
   scale_y_continuous(labels=scales::percent) +
   labs(title="City of Ottawa rental vacancy rate",
        x=NULL, y="Rental vacancy rate",
        caption="CMHC Rms")
 ```
 
+Vacancy Rate shows the number of units that are vacant and not rented out at the time. A related metric is the Availability Rate, which measures if a unit is available for rent, including units where a tenant has given notice but has not moved out yet.
+
+```{r}
+availability_rate <- c("April","October") |>
+  lapply(function(season)
+    get_cmhc(survey="Rms",series="Availability Rate",dimension="Bedroom Type",
+             breakdown="Historical Time Periods",  geo_uid="3506008",filters = list("season"=season))) |>
+  bind_rows()
+
+availability_rate |>
+  filter(!is.na(Value)) |>
+  ggplot(aes(x=Date,y=Value/100,colour=`Bedroom Type`)) +
+  geom_point(aes(shape=Quality), data=~filter(.,!is.na(Value))) +
+  geom_line() +
+  scale_y_continuous(labels=scales::percent) +
+  labs(title="City of Ottawa rental availability rate",
+       x=NULL, y="Rental availability rate",
+       caption="CMHC Rms")
+```
+
+As expected, the availability rate is higher than the vacancy rate, unfortunately the collection of availability rates was discontinued. Another related metrics is the turnover rate, but unfortunately this data is not published in the HMIP.
 
 For data that is collected on a monthly basis, like the Survey of Starts and Completions (Scss) data, we can specify the frequency and also get annual or quarterly data. That makes things more efficient if we are just interested in annual data.
 
@@ -95,13 +114,16 @@ under_construction_data <- get_cmhc(survey="Scss",series="Under Construction",di
                                     breakdown="Census Tracts", geo_uid="5915022",
                                     year = 2022, month = 4)
 
-geo_data <- cancensus::get_census("CA16",regions=list(CSD="5915022"),geo_format = 'sf', level="CT")
+geo_data <- cancensus::get_census("CA16",regions=list(CSD="5915022"),geo_format = 'sf', level="CT", quiet=TRUE)
 
 geo_data |>
   left_join(under_construction_data |> 
               filter(`Dwelling Type`=="All"),
             by="GeoUID") |>
-  mutate(value=cut(coalesce(Value,0),c(-Inf,0,10,50,100,500,1000,1500,Inf))) |>
+  mutate(value=cut(coalesce(Value,0),
+                   breaks=c(-Inf,0,10,50,100,500,1000,1500,Inf),
+                   labels=c("0","1 to 10","11 to 50","51 to 100","101 to 500",
+                            "501 to 1000","1001 to 1500","Over 1500"))) |>
   ggplot(aes(fill=value)) +
   geom_sf() +
   scale_fill_viridis_d() +
