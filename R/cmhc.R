@@ -10,8 +10,8 @@
 #' when  `breakdown="Historical Time Series` is specified, does not need year or month parameters, but may have the
 #' frequency parameter set. Filters provide additional ways to filter the tables by sub-categories.
 #'
-#' @param survey The CMHC survey, one of "Scss", "Rms", and "Seniors",  consult `list_cmhc_surveys()` for possible values.
-#'(Other surveys and more data series will be supported in future versions.)
+#' @param survey The CMHC survey, one of "Scss", "Rms", "Srms", and "Seniors",  consult `list_cmhc_surveys()` for possible values.
+#'(Other surveys and more data series may be supported in future versions.)
 #' @param series The CMHC data series of the survey, consult `list_cmhc_series()` for possible values.
 #' @param dimension The dimension to show in the results, consult `list_cmhc_dimensions()` for possible values.
 #' @param breakdown The geographic breakdown, one of "Survey Zones", "Census Subdivision", "Neighbourhoods", "Census Tracts",

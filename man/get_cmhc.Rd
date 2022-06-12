@@ -17,8 +17,8 @@ get_cmhc(
 )
 }
 \arguments{
-\item{survey}{The CMHC survey, one of "Scss", "Rms", and "Seniors",  consult `list_cmhc_surveys()` for possible values.
-(Other surveys and more data series will be supported in future versions.)}
+\item{survey}{The CMHC survey, one of "Scss", "Rms", "Srms", and "Seniors",  consult `list_cmhc_surveys()` for possible values.
+(Other surveys and more data series may be supported in future versions.)}
 
 \item{series}{The CMHC data series of the survey, consult `list_cmhc_series()` for possible values.}
 

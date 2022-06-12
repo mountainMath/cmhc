@@ -116,8 +116,32 @@ list_cmhc_tables <- function(short=TRUE){
 
   seniors <- tibble::tribble(
     ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~SeriesBreakdown,~SeriesBreakdownCode,~Filters,
-    "Seniors","3","Universe and Number of Residents","1",NA,NA, "Snapshot","2",list(),
-    "Seniors","3","Universe and Number of Residents","8",NA,NA, "Historical Time Periods","6",list()
+    "Seniors","3","Rental Housing Vacancy Rates","2","Unit Type",NA, "Snapshot","1",list(),
+    "Seniors","3","Rental Housing Vacancy Rates","8","Unit Type",NA, "Historical Time Periods","1",list(),
+    "Seniors","3","Spaces","3","Unit Type",NA, "Snapshot","1",list(),
+    "Seniors","3","Spaces","3","Unit Type",NA, "Historical Time Periods","2",list(),
+    "Seniors","3","Universe and Number of Residents","1","Spaces and Residents",NA, "Snapshot","2",list(),
+    "Seniors","3","Universe and Number of Residents","8","Spaces and Residents",NA, "Historical Time Periods","6",list(),
+    "Seniors","3","Heavy Care Spaces","4","Vacancy Rate and Average Rent",NA, "Snapshot","1",list(),
+    "Seniors","3","Heavy Care Spaces","8","Vacancy Rate and Average Rent",NA, "Historical Time Periods","3",list(),
+    "Seniors","3","Proportion of Standard Spaces","6","Rent Range",NA, "Snapshot","1",list(),
+    "Seniors","3","Proportion of Standard Spaces","6","Rent Range",NA, "Historical Time Periods","2",list(),
+    "Seniors","3","Bachelor Units and Private Rooms where Meals are included in Rent","7","Rent and Vacancy Rate and Units",NA, "Snapshot","1",list(),
+    "Seniors","3","Bachelor Units and Private Rooms where Meals are included in Rent","7","Rent and Vacancy Rate and Units",NA, "Historical Time Periods","2",list(),
+    "Seniors","3","Bachelor Units and Private Rooms where Meals are included in Rent","8","Rent and Vacancy Rate",NA, "Snapshot","7",list(),
+    "Seniors","3","Bachelor Units and Private Rooms where Meals are included in Rent","8","Rent and Vacancy Rate",NA, "Historical Time Periods","4",list()
+  ) |>
+    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$SeriesBreakdownCode))
+
+  srms <- tibble::tribble(
+    ~SurveyName,~SureveyCode,~SeriesName,~SeriesCode,~DimensionName,~DimensionCode,~SeriesBreakdown,~SeriesBreakdownCode,~Filters,
+    "Srms","4","Other Rental","6","Dwelling Type",NA, "Estimated Number of Households","1",list(),
+    "Srms","4","Other Rental","6","Dwelling Type",NA, "Average Rent","2",list(),
+    "Srms","4","Condominium Apartment","2","Structure Size",NA, "Vacancy Rate","1",list(),
+    "Srms","4","Condominium Apartment","2","Structure Size",NA, "Average Rent","2",list(),
+    "Srms","4","Condominium Apartment","2","Structure Size",NA, "Estimated Number of Units","3",list(),
+    "Srms","4","Condominium Apartment","2","Structure Size",NA, "Estimated Number of Units Used for Rental","4",list(),
+    "Srms","4","Condominium Apartment","2","Structure Size",NA, "Estimated Share of Rental Units","5",list(),
   ) |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$SeriesBreakdownCode))
 
