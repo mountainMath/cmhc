@@ -14,3 +14,5 @@
 ^logo.svg$
 ^pkgdown
 ^pkgdown/*
+^CRAN-SUBMISSION$
+^cran-comments\.md$
