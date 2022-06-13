@@ -6,7 +6,8 @@
 [![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/cmhc)](https://cranlogs.r-pkg.org/badges/cmhc)
 <!-- badges: end -->
 
-<a href="https://mountainmath.github.io/cmhc/index.html"><img src="https://github.com/mountainMath/cmhc/blob/master/logo.png?raw=true" alt="cmhc logo" align="right" width = "25%" height = "25%"/></a>
+<a href="https://mountainmath.github.io/cmhc/index.html"><img src="man/figures/logo.png" align="right" height="139" /></a>
+
 
 API wrapper for extracting CMHC data out of the [CMHC Housing Market Information Portal](https://www.cmhc-schl.gc.ca/hmiportal).
 
