@@ -112,7 +112,7 @@ list_cmhc_tables <- function(short=TRUE){
     mutate(SeriesCode="2") |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$DimensionCode)) |>
     mutate(Breakdown="Historical Time Periods") |>
-    mutate(Filters=lapply(Filters,function(f)append(f,list(season=c("October","April")))))
+    mutate(Filters=lapply(.data$Filters,function(f)append(f,list(season=c("October","April")))))
 
   seniors <- tibble::tribble(
     ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
