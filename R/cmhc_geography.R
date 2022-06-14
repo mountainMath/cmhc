@@ -1,15 +1,20 @@
-cmhc_geography_type_list=list(PR=2,CMA=3, CSD=4, CT=7, ZONE=5,NEIGHBOUHOOD=6)
-
-#' census geography params
+#' Translate census geography to CMHC region parameters suitable for API call
 #' @param GeoUID census region id
+#' @keywords internal
+#' @noRd
+#' @return a list with geographies suitable for API calls
 cmhc_region_params_from_census <- function(GeoUID){
+  cmhc_geography_type_list=list(PR=2,CMA=3, CSD=4, CT=7, ZONE=5,NEIGHBOUHOOD=6)
   list <- list("geography_type_id"=as.character(cmhc_geography_type_list[cmhc_geo_level_for_census(GeoUID)]),
                "geography_id"=census_to_cmhc_geocode(GeoUID))
   return(list)
 }
 
-#' Get cmhc geo level for census geo_uid
+#' Get cmhc geographic level for census geographic identifier
 #' @param GeoUID census region id
+#' @keywords internal
+#' @noRd
+#' @return a character string with the CMHC geographic identifier
 cmhc_geo_level_for_census <- function(GeoUID){
   switch(as.character(nchar(GeoUID)),
          "5" = "CMA",
@@ -18,16 +23,22 @@ cmhc_geo_level_for_census <- function(GeoUID){
          "3" = "CMA")
 }
 
-#' Get cmhc geo level for cmhc geo_uid
-#' @param GeoUID census geographic idenitifier
+#' Get cmhc geographic level for cmhc geographic identifier
+#' @param GeoUID census geographic identifier
+#' @keywords internal
+#' @noRd
+#' @return a character string with the CMHC geographic level
 cmhc_geo_level_for_cmhc <- function(GeoUID){
   switch(as.character(nchar(GeoUID)),
          "7" = ifelse(grepl("\\.",GeoUID),"CT","CSD"),
          "4" = "CMA")
 }
 
-#' translate census to CMHC geocodes
-#' @param GeoUID Census GeoUID for CMA or CSD
+#' translate census to CMHC geographic identifier
+#' @param GeoUID Census geographic identifier for CMA or CSD
+#' @keywords internal
+#' @noRd
+#' @return a character string with the CMHC geographic identifier
 census_to_cmhc_geocode <- function(GeoUID){
   cmhc_name <- list(
     "CT"="CMHCCT_UID",
@@ -53,9 +64,12 @@ census_to_cmhc_geocode <- function(GeoUID){
   result
 }
 
-#' translate CMHC to census geocodes
-#' @param GeoUID CMHC GeoUID for CMA or CSD or CT
+#' translate CMHC to census geographic identifier
+#' @param GeoUID CMHC geographic identifier for CMA or CSD or CT
 #' @param parent_region census geographic identifier to identify CMA if needed
+#' @keywords internal
+#' @noRd
+#' @return a character string with the census geographic identifier
 cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
   cmhc_name <- list(
     "CT"="CMHCCT_UID",
@@ -109,6 +123,9 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
 
 #' download local copy of cmhc geography data
 #' @param base_directory local directory to hold cmhc geography data
+#' @noRd
+#' @keywords internal
+#' @return NULL
 download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
   if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory))
   aws_bucket="mountaimath"
@@ -125,6 +142,7 @@ download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
         aws.s3::save_object(object=key,bucket="mountainmath",file=local_file)
     }
   }
+  NULL
 }
 
 
@@ -138,11 +156,12 @@ download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
 #'
 #' The geographic data is quite large and a local cache directory needs to be provided. By default the
 #' "CMHC_CACHE_PATH" environment variable is used to determine the cache directory, it can be set via the
-#' `set_cache_path` function.
+#' `set_cache_path` function. The geographic data will take up about 55Mb of disk space.
 #'
-#' @param level aggreagtion level for geographic data, one of "CT","ZONE","NBHD","CSD","MET"
-#' @param base_directory local directory to hold cmhc geography data
-#' @return A spatial data fram wtih the geographies for the specified geographic level.
+#' @param level aggregation level for geographic data, one of "CT","ZONE","NBHD","CSD","MET"
+#' @param base_directory local directory to hold CMHC geography data, by default this is inferred from the
+#' CMHC_CACHE_PATH environment variable. To use this function a local data directory has to be set.
+#' @return A spatial data frame with the geographies for the specified geographic level.
 #'
 #' @examples
 #' \dontrun{
@@ -151,7 +170,7 @@ download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
 #'
 #' @export
 get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=Sys.getenv("CMHC_CACHE_PATH")){
-  if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory))
+  if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory,"."))
   paths <- dir(base_directory)
   if (!dir.exists(base_directory)) dir.create(base_directory)
   if (!dir.exists(base_directory)) stop ("Could not create base directory.")

@@ -3,9 +3,15 @@
 \docType{data}
 \name{cmhc_cma_translation_data}
 \alias{cmhc_cma_translation_data}
-\title{A dataset with geo identifiers for CMHC and Census at the CMA level}
+\title{A dataset with geographic identifiers for CMHC and Census at the CMA level}
+\format{
+A tibble with Census and CMHC geographic identifiers
+}
+\source{
+Custom data extract from CMHC
+}
 \description{
-A dataset with geo identifiers for CMHC and Census at the CMA level
+A dataset with geographic identifiers for CMHC and Census at the CMA level
 }
 \author{
 derived from CMHC geographic data

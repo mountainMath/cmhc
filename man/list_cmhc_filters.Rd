@@ -21,7 +21,7 @@ list_cmhc_filters(
 \item{breakdown}{Optional breakdown to filter by}
 }
 \value{
-A data frame wtih survey names
+A data frame with available filters
 }
 \description{
 List available CMHC filters

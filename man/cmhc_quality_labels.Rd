@@ -3,14 +3,16 @@
 \docType{data}
 \name{cmhc_quality_labels}
 \alias{cmhc_quality_labels}
-\title{CMHC quality indicators}
+\title{A list of CMHC quality indicators}
 \format{
-An object of class \code{character} of length 4.
+A named vector to translate internal CMHC quality indicators to plain text.
 }
 \usage{
 cmhc_quality_labels
 }
 \description{
-CMHC quality indicators
+Data obtained via this package will automatically translate internal CMHC quality labels
+using this translation vector, this named vector is useful when working with CMHC data obtained from other
+sources like sporadic excel sheets or data scraped from PDF reports.
 }
 \keyword{datasets}

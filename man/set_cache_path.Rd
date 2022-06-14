@@ -2,7 +2,7 @@
 % Please edit documentation in R/user_settings.R
 \name{set_cache_path}
 \alias{set_cache_path}
-\title{Set persistent cmhc cache location}
+\title{Set persistent cmhc cache location for geographic data}
 \usage{
 set_cache_path(cache_path, overwrite = FALSE, install = FALSE)
 }
@@ -13,9 +13,13 @@ set_cache_path(cache_path, overwrite = FALSE, install = FALSE)
 
 \item{install}{Option to install permanently for use across sessions.}
 }
+\value{
+a character string with the CMHC cache path
+}
 \description{
-cmhc provides access to custom cmhc geographies, these are large files and should be stored in a
-permanent location.
+The cmhc package provides access to custom cmhc geographies, these are large files and should be
+stored in a permanent location. This function sets the CMHC_CACHE_PATH environment variable and optionally
+installs it in the .Renviron file for future use. This is only needed when using the `get_cmhc_geography()` function.
 }
 \examples{
 \dontrun{

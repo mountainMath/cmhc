@@ -1,15 +1,17 @@
 # Functions for managing user settings, cache locations
 
 
-#' Set persistent cmhc cache location
+#' Set persistent cmhc cache location for geographic data
 #'
-#' @description cmhc provides access to custom cmhc geographies, these are large files and should be stored in a
-#' permanent location.
+#' @description The cmhc package provides access to custom cmhc geographies, these are large files and should be
+#' stored in a permanent location. This function sets the CMHC_CACHE_PATH environment variable and optionally
+#' installs it in the .Renviron file for future use. This is only needed when using the `get_cmhc_geography()` function.
 #'
 #' @param cache_path a local directory to use for saving cached data
 #' @param overwrite Option to overwrite any existing cache path already stored locally.
 #' @param install Option to install permanently for use across sessions.
 #'
+#' @return a character string with the CMHC cache path
 #' @examples
 #'\dontrun{
 #' # This sets the cache path for the duration of the current session
@@ -58,6 +60,7 @@ set_cache_path <- function(cache_path, overwrite = FALSE, install = FALSE){
 #'
 #' @description View saved cache path
 #'
+#' @return a character string with the CMHC cache path
 #' @examples
 #' show_cache_path()
 #'

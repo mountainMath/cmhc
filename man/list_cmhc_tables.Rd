@@ -10,7 +10,7 @@ list_cmhc_tables(short = TRUE)
 \item{short}{Logical, determines how much detail is returned. Default is `TRUE`.}
 }
 \value{
-A tibble with the table list
+A tibble listing all available CMHC data tables
 }
 \description{
 List available CMHC tables

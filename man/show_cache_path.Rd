@@ -6,6 +6,9 @@
 \usage{
 show_cache_path()
 }
+\value{
+a character string with the CMHC cache path
+}
 \description{
 View saved cache path
 }

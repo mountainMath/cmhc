@@ -7,7 +7,7 @@
 list_cmhc_surveys()
 }
 \value{
-A data frame with survey names.
+A data frame with available survey names.
 }
 \description{
 List available CMHC surveys

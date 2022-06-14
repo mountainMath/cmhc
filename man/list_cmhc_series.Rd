@@ -10,7 +10,7 @@ list_cmhc_series(survey = NULL)
 \item{survey}{Optional survey to filter by}
 }
 \value{
-A data frame with survey names, and series names.
+A data frame with survey names, and available series names.
 }
 \description{
 List available CMHC series

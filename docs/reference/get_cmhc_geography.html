@@ -6,7 +6,7 @@ and Neighbourhoods have been quite stable, but census geographies change over ti
 data obtained by using the `cancensus` package.
 The geographic data is quite large and a local cache directory needs to be provided. By default the
 &quot;CMHC_CACHE_PATH&quot; environment variable is used to determine the cache directory, it can be set via the
-`set_cache_path` function."><meta property="og:image" content="https://mountainmath.github.io/cmhc/logo.png"><meta property="og:image:alt" content="cmhc"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@vb_jens"><meta name="twitter:site" content="https://mountainmath.github.io/cmhc/"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+`set_cache_path` function. The geographic data will take up about 55Mb of disk space."><meta property="og:image" content="https://mountainmath.github.io/cmhc/logo.png"><meta property="og:image:alt" content="cmhc"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@vb_jens"><meta name="twitter:site" content="https://mountainmath.github.io/cmhc/"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
@@ -73,7 +73,7 @@ and Neighbourhoods have been quite stable, but census geographies change over ti
 data obtained by using the `cancensus` package.</p>
 <p>The geographic data is quite large and a local cache directory needs to be provided. By default the
 "CMHC_CACHE_PATH" environment variable is used to determine the cache directory, it can be set via the
-`set_cache_path` function.</p>
+`set_cache_path` function. The geographic data will take up about 55Mb of disk space.</p>
     </div>
 
     <div id="ref-usage">
@@ -86,13 +86,14 @@ data obtained by using the `cancensus` package.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>level</dt>
-<dd><p>aggreagtion level for geographic data, one of "CT","ZONE","NBHD","CSD","MET"</p></dd>
+<dd><p>aggregation level for geographic data, one of "CT","ZONE","NBHD","CSD","MET"</p></dd>
 <dt>base_directory</dt>
-<dd><p>local directory to hold cmhc geography data</p></dd>
+<dd><p>local directory to hold CMHC geography data, by default this is inferred from the
+CMHC_CACHE_PATH environment variable. To use this function a local data directory has to be set.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A spatial data fram wtih the geographies for the specified geographic level.</p>
+    <p>A spatial data frame with the geographies for the specified geographic level.</p>
     </div>
 
     <div id="ref-examples">

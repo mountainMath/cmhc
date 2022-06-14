@@ -11,7 +11,7 @@ cmhc_bedroom_types <- c("Bachelor","1 Bedroom","2 Bedroom","3 Bedroom +","Total"
 #' List available CMHC tables
 #'
 #' @param short Logical, determines how much detail is returned. Default is `TRUE`.
-#' @return A tibble with the table list
+#' @return A tibble listing all available CMHC data tables
 #'
 #' @examples
 #' list_cmhc_tables()
@@ -159,7 +159,7 @@ list_cmhc_tables <- function(short=TRUE){
 
 #' List available CMHC surveys
 #'
-#' @return A data frame with survey names.
+#' @return A data frame with available survey names.
 #'
 #' @examples
 #' list_cmhc_surveys()
@@ -174,7 +174,7 @@ list_cmhc_surveys <- function(){
 #' List available CMHC series
 #'
 #' @param survey Optional survey to filter by
-#' @return A data frame with survey names, and series names.
+#' @return A data frame with survey names, and available series names.
 #'
 #' @examples
 #' list_cmhc_series("Rms")
@@ -198,7 +198,7 @@ list_cmhc_series <- function(survey=NULL){
 #'
 #' @param survey Optional survey to filter by
 #' @param series Optional series to filter by
-#' @return A data frame with survey names, series names, and dimension names.
+#' @return A data frame with survey names, series names, and available dimension names.
 #'
 #' @examples
 #' list_cmhc_dimensions("Rms","Vacancy Rate")
@@ -231,7 +231,7 @@ list_cmhc_dimensions <- function(survey=NULL,series=NULL){
 #' @param survey Optional survey to filter by
 #' @param series Optional series to filter by
 #' @param dimension Optional dimension to filter by
-#' @return A data frame with survey names, series names, dimension names and series breakdowns.
+#' @return A data frame with survey names, series names, dimension names and available series breakdowns.
 #'
 #' @examples
 #' list_cmhc_breakdowns("Rms","Vacancy Rate","Bedroom Type")
@@ -269,7 +269,7 @@ list_cmhc_breakdowns <- function(survey=NULL,series=NULL,dimension=NULL){
 #' @param series Optional series to filter by
 #' @param dimension Optional dimension to filter by
 #' @param breakdown Optional breakdown to filter by
-#' @return A data frame wtih survey names
+#' @return A data frame with available filters
 #'
 #' @examples
 #' list_cmhc_filters("Rms","Vacancy Rate","Bedroom Type","Historical Time Periods")

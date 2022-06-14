@@ -14,7 +14,7 @@ list_cmhc_breakdowns(survey = NULL, series = NULL, dimension = NULL)
 \item{dimension}{Optional dimension to filter by}
 }
 \value{
-A data frame with survey names, series names, dimension names and series breakdowns.
+A data frame with survey names, series names, dimension names and available series breakdowns.
 }
 \description{
 List available CMHC breakdowns
