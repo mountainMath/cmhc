@@ -18,6 +18,12 @@ Documentation is [available on the GitHub pages](https://mountainmath.github.io/
 The example vignettes contain some [common use cases](https://mountainmath.github.io/cmhc/articles/basic_usage.html).
 
 ## Installation
+The stable version of **cmhc** can be easily installed from CRAN.
+```
+install.packages("cmhc")
+```
+
+Alternatively, the latest development version can be installed from Github.
 ```
 remotes::install_github("mountainmath/cmhc")
 ```
