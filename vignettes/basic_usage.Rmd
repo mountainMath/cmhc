@@ -104,7 +104,7 @@ ggplot(completions_data,aes(x=Date,y=Value,fill=`Dwelling Type`)) +
   scale_y_continuous(labels=scales::comma) +
   labs(title="City of Vancouver housing completions",
        x=NULL, y="Annual completions",
-       caption="CMHC Rms")
+       caption="CMHC Scss")
 ```
 
 To get snapshot data for sub-geographies, we can select the breakdown geography type. This can be linked back with census geographies for plotting.
