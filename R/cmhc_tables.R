@@ -1,6 +1,6 @@
 cmhc_dwelling_types <- c("Single","Semi-detached","Row","Apartment","All")
 cmhc_intended_markets <- c("Homeowner","Rental","Condo","Co-op","All")
-cmhc_type_codes1 <- c("Survey Zones"=8,"Census Subdivision"=9,"Neighbourhoods"=10,"Census Tracts"=11)
+cmhc_type_codes1 <- c("Provinces"=2,"Centres"=3,"Survey Zones"=8,"Census Subdivision"=9,"Neighbourhoods"=10,"Census Tracts"=11)
 cmhc_type_codes2 <- c("Survey Zones"=6,"Census Subdivision"=7,"Neighbourhoods"=8,"Census Tracts"=9)
 cmhc_type_codes3 <- c("Survey Zones"=3,"Census Subdivision"=4,"Neighbourhoods"=5,"Census Tracts"=6)
 cmhc_type_codes4 <- c("Survey Zones"=3,"Census Subdivision"=4)
@@ -144,6 +144,14 @@ list_cmhc_tables <- function(short=TRUE){
     "Srms","4","Condominium Apartment","2","Structure Size",NA, "Estimated Share of Rental Units","5",list(),
   ) |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
+
+  canada_tables <- tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
+    "Scss","5","Starts","7","All areas",NA, "Historical Time Periods","1",list(),
+    "Scss","5","Starts","7","All areas",NA, "Historical Time Periods","1",list(),
+    #"Scss","1","Starts","1","Census Metropolitan Areas, Census Agglomerations, and other, selected municipalities with at least 10,000 people",NA, "Historical Time Periods","1",list(),
+    )
+
 
   table_list <- bind_rows(
     scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries,seniors
