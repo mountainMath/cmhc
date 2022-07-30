@@ -47,7 +47,7 @@ list_cmhc_tables <- function(short=TRUE){
               by="a")
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
-    left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes1))),
+    left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes2))),
                      Breakdown=c(names(cmhc_type_codes1),names(cmhc_type_codes2)),
                      BreakdownCode=as.character(c(cmhc_type_codes1,cmhc_type_codes2))),
               by="GeoCodes") |>
@@ -145,17 +145,56 @@ list_cmhc_tables <- function(short=TRUE){
   ) |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
 
+  scss_filter <- list("dimension-18"=cmhc_intended_markets,"dimension-1"=cmhc_dwelling_types)
   canada_tables <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
-    "Scss","5","Starts","7","All areas",NA, "Historical Time Periods","1",list(),
-    "Scss","5","Starts","7","All areas",NA, "Historical Time Periods","1",list(),
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Scss","5","Starts","7","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.7.2",
+    "Scss","5","Starts","6","Dwelling Type",NA, "Historical Time Periods","2","10k",scss_filter,"5.6.2",
+    "Scss","1","Starts","1","Intended Markets","6", "Historical Time Periods","16","10k",scss_filter,"1.16.1.6",
+    "Scss","1","Starts","1","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.1.5",
+    "Scss","1","Starts","1","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.1.5",
+    "Scss","1","Starts","1","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.1.4",
+    "Scss","1","Starts","1","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.1.4",
+    "Scss","1","Starts","1","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.1.5",
+    "Scss","1","Starts","1","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.1.6",
+    "Scss","1","Starts","1","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.1.5",
+    "Scss","1","Starts","1","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.1.6",
+    "Scss","1","Starts","1","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.1.7",
+
+    "Scss","5","Completions","11","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.11.2",
+    "Scss","5","Completions","10","Dwelling Type",NA, "Historical Time Periods","2","10k",scss_filter,"5.10.2",
+    "Scss","1","Completions","2","Intended Markets","6", "Historical Time Periods","16","10k",scss_filter,"1.16.2.6",
+    "Scss","1","Completions","2","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.2.5",
+    "Scss","1","Completions","2","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.2.5",
+    "Scss","1","Completions","2","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.2.4",
+    "Scss","1","Completions","2","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.2.4",
+    "Scss","1","Completions","2","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.2.5",
+    "Scss","1","Completions","2","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.2.6",
+    "Scss","1","Completions","2","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.2.5",
+    "Scss","1","Completions","2","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.2.6",
+    "Scss","1","Completions","2","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.2.7",
+
+    "Scss","5","Under Construction","13","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.13.2",
+    "Scss","1","Under Construction","3","Dwelling Type","6", "Historical Time Periods","2","10k",scss_filter,"1.2.3.6",
+    "Scss","1","Under Construction","3","Intended Markets","6", "Historical Time Periods","9","10k",scss_filter,"1.9.3.6",
+    "Scss","1","Under Construction","3","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.3.5",
+    "Scss","1","Under Construction","3","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.3.5",
+    "Scss","1","Under Construction","3","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.3.4",
+    "Scss","1","Under Construction","3","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.3.4",
+    "Scss","1","Under Construction","3","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.3.5",
+    "Scss","1","Under Construction","3","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.3.6",
+    "Scss","1","Under Construction","3","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.3.5",
+    "Scss","1","Under Construction","3","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.3.6",
+    "Scss","1","Under Construction","3","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.3.7"
+    #"Scss","5","Starts","7","All areas",NA, "Historical Time Periods","1",list(),
     #"Scss","1","Starts","1","Census Metropolitan Areas, Census Agglomerations, and other, selected municipalities with at least 10,000 people",NA, "Historical Time Periods","1",list(),
     )
 
-
   table_list <- bind_rows(
     scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries,seniors
-  )
+  ) |>
+    mutate(GeoFilter="Default") |>
+    bind_rows(canada_tables)
 
   if (short) {
     table_list <- table_list |>
