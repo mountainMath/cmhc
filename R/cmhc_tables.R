@@ -190,11 +190,38 @@ list_cmhc_tables <- function(short=TRUE){
     #"Scss","1","Starts","1","Census Metropolitan Areas, Census Agglomerations, and other, selected municipalities with at least 10,000 people",NA, "Historical Time Periods","1",list(),
     )
 
+  income_filter <-  list("Tenure"=c("Total","Renters","Owners"))
+
+  income_tables <-  tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Census",NA,"Income","63","Average and Median","7", "Historical Time Periods","2","Default",income_filter,"7.63",
+    "Census",NA,"Income","62","Average and Median","7", "Survey Zones","3","Default",income_filter,"7.62.3",
+    "Census",NA,"Income","62","Average and Median","7", "Neighbourhoods","4","Default",income_filter,"7.62.4",
+    "Census",NA,"Income","62","Average and Median","7", "Census Tracts","5","Default",income_filter,"7.62.5",
+    "Census",NA,"Income","59","Ranges","6", "Historical Time Periods","2","Default",income_filter,"6.60",
+    "Census",NA,"Income","59","Ranges","6", "Survey Zones","3","Default",income_filter,"6.59.3",
+    "Census",NA,"Income","59","Ranges","6", "Neighbourhoods","4","Default",income_filter,"6.59.4",
+    "Census",NA,"Income","59","Ranges","6", "Census Tracts","5","Default",income_filter,"6.59.5")
+
+  dwelling_value_tables <- tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Census",NA,"Dwelling value","6","Average","3", "Historical Time Periods","2","Default",list(),"6.4",
+    "Census",NA,"Dwelling value","6","Average","3", "Survey Zones","3","Default",list(),"6.3.3",
+    "Census",NA,"Dwelling value","6","Average","3", "Neighbourhoods","4","Default",list(),"6.3.4",
+    "Census",NA,"Dwelling value","6","Average","3", "Census Tracts","5","Default",list(),"6.3.5",
+    "Census",NA,"Dwelling value","6","Median","5", "Historical Time Periods","2","Default",list(),"6.6",
+    "Census",NA,"Dwelling value","6","Median","5", "Survey Zones","3","Default",list(),"6.5.3",
+    "Census",NA,"Dwelling value","6","Median","5", "Neighbourhoods","4","Default",list(),"6.5.4",
+    "Census",NA,"Dwelling value","6","Median","5", "Census Tracts","5","Default",list(),"6.5.5",
+  )
+
   table_list <- bind_rows(
     scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries,seniors
   ) |>
     mutate(GeoFilter="Default") |>
-    bind_rows(canada_tables)
+    bind_rows(canada_tables) |>
+    bind_rows(income_tables) |>
+    bind_rows(dwelling_value_tables)
 
   if (short) {
     table_list <- table_list |>

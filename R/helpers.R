@@ -25,8 +25,8 @@ cmhc_quality_labels <- c(a = "Excellent", b = "Very good", c = "Good", d = "Fair
 #' @return a vector of numeric values
 parse_numeric <- function(x){
   xx<-x %>%
-    sub(",", "", ., fixed = TRUE) %>%
-    sub(" %","",.,fixed = TRUE)
+    gsub(",", "", ., fixed = TRUE) %>%
+    gsub(" %","",.,fixed = TRUE)
   xx[xx=="-"]="0"
   xx[xx=="++"]=NA_character_
   xx[xx=="n/a"]=NA_character_
