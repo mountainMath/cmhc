@@ -279,7 +279,7 @@ list_cmhc_tables <- function(short=TRUE){
 
   if (short) {
     table_list <- table_list |>
-      select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$Filters)
+      select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$GeoFilter,.data$Filters)
   }
 
   table_list
