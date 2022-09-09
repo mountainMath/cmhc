@@ -46,7 +46,7 @@ list_cmhc_tables <- function(short=TRUE){
   #                                 "dimension-1"=cmhc_dwelling_types)),
   #             by="a")
   scss_snapshot2 <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,Filters,
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,
     "Scss","1","Share absorbed at completion","6","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")),
     "Scss","1","Unabsorbed Inventory","4","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")))
 
