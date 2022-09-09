@@ -34,17 +34,21 @@ list_cmhc_tables <- function(short=TRUE){
               by="a")
 
 
+  # scss_snapshot2 <- tibble::tribble(
+  #   ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,
+  #   "Scss","1","Share absorbed at completion","6","2",
+  #   "Scss","1","Unabsorbed Inventory","4","2") |>
+  #   mutate(a="1") |>
+  #   left_join(tibble(a="1",
+  #                    Dimension=c("Dwelling Type","Intended Market"),
+  #                    DimensionCode=c("1","4"),
+  #                    Filters=list("dimension-18"=c("Condo","Homeowner","All"),
+  #                                 "dimension-1"=cmhc_dwelling_types)),
+  #             by="a")
   scss_snapshot2 <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,
-    "Scss","1","Share absorbed at completion","6","2",
-    "Scss","1","Unabsorbed Inventory","4","2") |>
-    mutate(a="1") |>
-    left_join(tibble(a="1",
-                     Dimension=c("Dwelling Type","Intended Market"),
-                     DimensionCode=c("1","4"),
-                     Filters=list("dimension-18"=c("Condo","Homeowner","All"),
-                                  "dimension-1"=cmhc_dwelling_types)),
-              by="a")
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,Filters,
+    "Scss","1","Share absorbed at completion","6","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")),
+    "Scss","1","Unabsorbed Inventory","4","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")))
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
     left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes2))),
