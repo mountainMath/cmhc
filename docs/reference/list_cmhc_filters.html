@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cmhc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -63,38 +63,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">list_cmhc_filters</span><span class="op">(</span>
-  survey <span class="op">=</span> <span class="cn">NULL</span>,
-  series <span class="op">=</span> <span class="cn">NULL</span>,
-  dimension <span class="op">=</span> <span class="cn">NULL</span>,
-  breakdown <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">list_cmhc_filters</span><span class="op">(</span></span>
+<span>  survey <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  series <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dimension <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  breakdown <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>survey</dt>
 <dd><p>Optional survey to filter by</p></dd>
+
+
 <dt>series</dt>
 <dd><p>Optional series to filter by</p></dd>
+
+
 <dt>dimension</dt>
 <dd><p>Optional dimension to filter by</p></dd>
+
+
 <dt>breakdown</dt>
 <dd><p>Optional breakdown to filter by</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data frame with available filters</p>
+    
+
+<p>A data frame with available filters</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">list_cmhc_filters</span><span class="op">(</span><span class="st">"Rms"</span>,<span class="st">"Vacancy Rate"</span>,<span class="st">"Bedroom Type"</span>,<span class="st">"Historical Time Periods"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">list_cmhc_filters</span><span class="op">(</span><span class="st">"Rms"</span>,<span class="st">"Vacancy Rate"</span>,<span class="st">"Bedroom Type"</span>,<span class="st">"Historical Time Periods"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Survey Series       Dimension    Breakdown               Filters         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;named list&gt;</span>    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Rms    Vacancy Rate Bedroom Type Historical Time Periods <span style="color: #949494;">&lt;named list [2]&gt;</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -109,7 +118,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

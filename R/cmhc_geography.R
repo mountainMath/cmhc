@@ -4,7 +4,7 @@
 #' @noRd
 #' @return a list with geographies suitable for API calls
 cmhc_region_params_from_census <- function(GeoUID){
-  cmhc_geography_type_list=list(PR=2,CMA=3, CSD=4, CT=7, ZONE=5,NEIGHBOUHOOD=6)
+  cmhc_geography_type_list=list(C=1,PR=2,CMA=3, CSD=4, CT=7, ZONE=5,NEIGHBOUHOOD=6)
   list <- list("geography_type_id"=as.character(cmhc_geography_type_list[cmhc_geo_level_for_census(GeoUID)]),
                "geography_id"=census_to_cmhc_geocode(GeoUID))
   return(list)
@@ -16,11 +16,13 @@ cmhc_region_params_from_census <- function(GeoUID){
 #' @noRd
 #' @return a character string with the CMHC geographic identifier
 cmhc_geo_level_for_census <- function(GeoUID){
+  if (GeoUID=="01") GeoUID="1"
   switch(as.character(nchar(GeoUID)),
          "5" = "CMA",
          "7" = "CSD",
          "2" = "PR",
-         "3" = "CMA")
+         "3" = "CMA",
+         "1" = "C")
 }
 
 #' Get cmhc geographic level for cmhc geographic identifier
@@ -58,7 +60,7 @@ census_to_cmhc_geocode <- function(GeoUID){
     geo_level,
     "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==GeoUID) %>% pull(.data$METCODE),
     "CSD" = cmhc::cmhc_csd_translation_data %>% filter(.data$CSDUID==GeoUID) %>% pull(.data$CMHC_CSDUID),
-    "PR" = GeoUID
+    "PR" = ifelse(GeoUID=="01","1",GeoUID)
   )
 
   result

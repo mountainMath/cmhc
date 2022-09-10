@@ -91,6 +91,12 @@
     <loc>https://mountainmath.github.io/cmhc/index.html/reference/set_cache_path.html</loc>
   </url>
   <url>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/set_cmhc_cache_path.html</loc>
+  </url>
+  <url>
     <loc>https://mountainmath.github.io/cmhc/index.html/reference/show_cache_path.html</loc>
+  </url>
+  <url>
+    <loc>https://mountainmath.github.io/cmhc/index.html/reference/show_cmhc_cache_path.html</loc>
   </url>
 </urlset>

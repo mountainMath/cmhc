@@ -25,8 +25,8 @@ cmhc_quality_labels <- c(a = "Excellent", b = "Very good", c = "Good", d = "Fair
 #' @return a vector of numeric values
 parse_numeric <- function(x){
   xx<-x %>%
-    sub(",", "", ., fixed = TRUE) %>%
-    sub(" %","",.,fixed = TRUE)
+    gsub(",", "", ., fixed = TRUE) %>%
+    gsub(" %","",.,fixed = TRUE)
   xx[xx=="-"]="0"
   xx[xx=="++"]=NA_character_
   xx[xx=="n/a"]=NA_character_
@@ -40,7 +40,7 @@ parse_numeric <- function(x){
 #' @author derived from CMHC geographic data
 #' @source Custom data extract from CMHC
 #' @format A tibble with Census and CMHC geographic identifiers
-#' @keywords data
+#' @keywords data internal
 NULL
 
 #' A dataset with geographic identifiers for CMHC and Census at the CSD level
@@ -49,7 +49,7 @@ NULL
 #' @author derived from CMHC geographic data
 #' @source Custom data extract from CMHC
 #' @format A tibble with Census and CMHC geographic identifiers
-#' @keywords data
+#' @keywords data internal
 NULL
 
 #' A dataset with geographic identifiers for CMHC and Census at the CT level
@@ -58,7 +58,7 @@ NULL
 #' @author derived from CMHC geographic data
 #' @source Custom data extract from CMHC
 #' @format A tibble with Census and CMHC geographic identifiers
-#' @keywords data
+#' @keywords data internal
 NULL
 
 

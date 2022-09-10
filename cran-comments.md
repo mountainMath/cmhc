@@ -1,3 +1,9 @@
+## cmhc v0.2.1
+### Minor changes
+
+* add functionality for additional tables
+* rename functions to set and show cache path to avoid conflicts with other packages
+
 ## cmhc v0.2.0
 
 * This is a new release.

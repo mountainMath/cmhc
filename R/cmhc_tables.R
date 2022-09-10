@@ -1,6 +1,6 @@
 cmhc_dwelling_types <- c("Single","Semi-detached","Row","Apartment","All")
 cmhc_intended_markets <- c("Homeowner","Rental","Condo","Co-op","All")
-cmhc_type_codes1 <- c("Survey Zones"=8,"Census Subdivision"=9,"Neighbourhoods"=10,"Census Tracts"=11)
+cmhc_type_codes1 <- c("Provinces"=2,"Centres"=3,"Survey Zones"=8,"Census Subdivision"=9,"Neighbourhoods"=10,"Census Tracts"=11)
 cmhc_type_codes2 <- c("Survey Zones"=6,"Census Subdivision"=7,"Neighbourhoods"=8,"Census Tracts"=9)
 cmhc_type_codes3 <- c("Survey Zones"=3,"Census Subdivision"=4,"Neighbourhoods"=5,"Census Tracts"=6)
 cmhc_type_codes4 <- c("Survey Zones"=3,"Census Subdivision"=4)
@@ -34,20 +34,24 @@ list_cmhc_tables <- function(short=TRUE){
               by="a")
 
 
+  # scss_snapshot2 <- tibble::tribble(
+  #   ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,
+  #   "Scss","1","Share absorbed at completion","6","2",
+  #   "Scss","1","Unabsorbed Inventory","4","2") |>
+  #   mutate(a="1") |>
+  #   left_join(tibble(a="1",
+  #                    Dimension=c("Dwelling Type","Intended Market"),
+  #                    DimensionCode=c("1","4"),
+  #                    Filters=list("dimension-18"=c("Condo","Homeowner","All"),
+  #                                 "dimension-1"=cmhc_dwelling_types)),
+  #             by="a")
   scss_snapshot2 <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,
-    "Scss","1","Share absorbed at completion","6","2",
-    "Scss","1","Unabsorbed Inventory","4","2") |>
-    mutate(a="1") |>
-    left_join(tibble(a="1",
-                     Dimension=c("Dwelling Type","Intended Market"),
-                     DimensionCode=c("1","4"),
-                     Filters=list("dimension-18"=c("Condo","Homeowner","All"),
-                                  "dimension-1"=cmhc_dwelling_types)),
-              by="a")
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,
+    "Scss","1","Share absorbed at completion","6","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")),
+    "Scss","1","Unabsorbed Inventory","4","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")))
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
-    left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes1))),
+    left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes2))),
                      Breakdown=c(names(cmhc_type_codes1),names(cmhc_type_codes2)),
                      BreakdownCode=as.character(c(cmhc_type_codes1,cmhc_type_codes2))),
               by="GeoCodes") |>
@@ -145,13 +149,141 @@ list_cmhc_tables <- function(short=TRUE){
   ) |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
 
+  scss_filter <- list("dimension-18"=cmhc_intended_markets,"dimension-1"=cmhc_dwelling_types)
+  canada_tables <- tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Scss","5","Starts","7","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.7.2",
+    "Scss","5","Starts","6","Dwelling Type",NA, "Historical Time Periods","2","10k",scss_filter,"5.6.2",
+    "Scss","1","Starts","1","Intended Markets","6", "Historical Time Periods","16","10k",scss_filter,"1.16.1.6",
+    "Scss","1","Starts","1","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.1.5",
+    "Scss","1","Starts","1","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.1.5",
+    "Scss","1","Starts","1","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.1.4",
+    "Scss","1","Starts","1","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.1.4",
+    "Scss","1","Starts","1","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.1.5",
+    "Scss","1","Starts","1","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.1.6",
+    "Scss","1","Starts","1","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.1.5",
+    "Scss","1","Starts","1","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.1.6",
+    "Scss","1","Starts","1","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.1.7",
+
+    "Scss","5","Completions","11","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.11.2",
+    "Scss","5","Completions","10","Dwelling Type",NA, "Historical Time Periods","2","10k",scss_filter,"5.10.2",
+    "Scss","1","Completions","2","Intended Markets","6", "Historical Time Periods","16","10k",scss_filter,"1.16.2.6",
+    "Scss","1","Completions","2","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.2.5",
+    "Scss","1","Completions","2","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.2.5",
+    "Scss","1","Completions","2","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.2.4",
+    "Scss","1","Completions","2","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.2.4",
+    "Scss","1","Completions","2","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.2.5",
+    "Scss","1","Completions","2","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.2.6",
+    "Scss","1","Completions","2","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.2.5",
+    "Scss","1","Completions","2","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.2.6",
+    "Scss","1","Completions","2","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.2.7",
+
+    "Scss","5","Under Construction","13","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.13.2",
+    "Scss","1","Under Construction","3","Dwelling Type","6", "Historical Time Periods","2","10k",scss_filter,"1.2.3.6",
+    "Scss","1","Under Construction","3","Intended Markets","6", "Historical Time Periods","9","10k",scss_filter,"1.9.3.6",
+    "Scss","1","Under Construction","3","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.3.5",
+    "Scss","1","Under Construction","3","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.3.5",
+    "Scss","1","Under Construction","3","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.3.4",
+    "Scss","1","Under Construction","3","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.3.4",
+    "Scss","1","Under Construction","3","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.3.5",
+    "Scss","1","Under Construction","3","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.3.6",
+    "Scss","1","Under Construction","3","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.3.5",
+    "Scss","1","Under Construction","3","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.3.6",
+    "Scss","1","Under Construction","3","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.3.7"
+    #"Scss","5","Starts","7","All areas",NA, "Historical Time Periods","1",list(),
+    #"Scss","1","Starts","1","Census Metropolitan Areas, Census Agglomerations, and other, selected municipalities with at least 10,000 people",NA, "Historical Time Periods","1",list(),
+    )
+
+  tenure_filter <-  list("Tenure"=c("Total","Renters","Owners"))
+
+  income_tables <-  tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Census",NA,"Income","63","Average and Median","7", "Historical Time Periods","2","Default",tenure_filter,"7.63",
+    "Census",NA,"Income","62","Average and Median","7", "Survey Zones","3","Default",tenure_filter,"7.62.3",
+    "Census",NA,"Income","62","Average and Median","7", "Neighbourhoods","4","Default",tenure_filter,"7.62.4",
+    "Census",NA,"Income","62","Average and Median","7", "Census Tracts","5","Default",tenure_filter,"7.62.5",
+    "Census",NA,"Income","59","Ranges","6", "Historical Time Periods","2","Default",tenure_filter,"6.60",
+    "Census",NA,"Income","59","Ranges","6", "Survey Zones","3","Default",tenure_filter,"6.59.3",
+    "Census",NA,"Income","59","Ranges","6", "Neighbourhoods","4","Default",tenure_filter,"6.59.4",
+    "Census",NA,"Income","59","Ranges","6", "Census Tracts","5","Default",tenure_filter,"6.59.5")
+
+  dwelling_value_tables <- tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Census",NA,"Dwelling value","6","Average","3", "Historical Time Periods","2","Default",list(),"6.4",
+    "Census",NA,"Dwelling value","6","Average","3", "Survey Zones","3","Default",list(),"6.3.3",
+    "Census",NA,"Dwelling value","6","Average","3", "Neighbourhoods","4","Default",list(),"6.3.4",
+    "Census",NA,"Dwelling value","6","Average","3", "Census Tracts","5","Default",list(),"6.3.5",
+    "Census",NA,"Dwelling value","6","Median","5", "Historical Time Periods","2","Default",list(),"6.6",
+    "Census",NA,"Dwelling value","6","Median","5", "Survey Zones","3","Default",list(),"6.5.3",
+    "Census",NA,"Dwelling value","6","Median","5", "Neighbourhoods","4","Default",list(),"6.5.4",
+    "Census",NA,"Dwelling value","6","Median","5", "Census Tracts","5","Default",list(),"6.5.5"
+  )
+
+  hm_tables <- tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Census",NA,"All Households","6","Age of Primary Household Maintainer","12", "Historical Time Periods","2","Default",tenure_filter,"6.12",
+    "Census",NA,"All Households","6","Age of Primary Household Maintainer","11", "Survey Zones","3","Default",tenure_filter,"6.11.3",
+    "Census",NA,"All Households","6","Age of Primary Household Maintainer","11", "Neighbourhoods","4","Default",tenure_filter,"6.11.4",
+    "Census",NA,"All Households","6","Age of Primary Household Maintainer","11", "Census Tracts","5","Default",tenure_filter,"6.11.5",
+    "Census",NA,"65 and over","7","Age of Primary Household Maintainer","3", "Historical Time Periods","2","Default",tenure_filter,"7.3",
+    "Census",NA,"65 and over","7","Age of Primary Household Maintainer","2", "Survey Zones","3","Default",tenure_filter,"7.2.3",
+    "Census",NA,"65 and over","7","Age of Primary Household Maintainer","2", "Neighbourhoods","4","Default",tenure_filter,"7.2.4",
+    "Census",NA,"65 and over","7","Age of Primary Household Maintainer","2", "Census Tracts","5","Default",tenure_filter,"7.2.5"
+  )
+  hmm_tables <- tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Census",NA,"Mobility 5 of All Households","6","Age of Primary Household Maintainer","16", "Historical Time Periods","2","Default",tenure_filter,"6.16",
+    "Census",NA,"Mobility 5 of All Households","6","Age of Primary Household Maintainer","15", "Survey Zones","3","Default",tenure_filter,"6.15.3",
+    "Census",NA,"Mobility 5 of All Households","6","Age of Primary Household Maintainer","15", "Neighbourhoods","4","Default",tenure_filter,"6.15.4",
+    "Census",NA,"Mobility 5 of All Households","6","Age of Primary Household Maintainer","15", "Census Tracts","5","Default",tenure_filter,"6.15.5",
+    "Census",NA,"Mobility 5 of 65 and over","7","Age of Primary Household Maintainer","7", "Historical Time Periods","2","Default",tenure_filter,"7.7",
+    "Census",NA,"Mobility 5 of 65 and over","7","Age of Primary Household Maintainer","6", "Survey Zones","3","Default",tenure_filter,"7.6.3",
+    "Census",NA,"Mobility 5 of 65 and over","7","Age of Primary Household Maintainer","6", "Neighbourhoods","4","Default",tenure_filter,"7.6.4",
+    "Census",NA,"Mobility 5 of 65 and over","7","Age of Primary Household Maintainer","6", "Census Tracts","5","Default",tenure_filter,"7.6.5",
+    "Census",NA,"Mobility 1 of All Households","6","Age of Primary Household Maintainer","20", "Historical Time Periods","2","Default",tenure_filter,"6.20",
+    "Census",NA,"Mobility 1 of All Households","6","Age of Primary Household Maintainer","19", "Survey Zones","3","Default",tenure_filter,"6.19.3",
+    "Census",NA,"Mobility 1 of All Households","6","Age of Primary Household Maintainer","19", "Neighbourhoods","4","Default",tenure_filter,"6.19.4",
+    "Census",NA,"Mobility 1 of All Households","6","Age of Primary Household Maintainer","19", "Census Tracts","5","Default",tenure_filter,"6.19.5",
+    "Census",NA,"Mobility 1 of 65 and over","7","Age of Primary Household Maintainer","10", "Historical Time Periods","2","Default",tenure_filter,"7.11",
+    "Census",NA,"Mobility 1 of 65 and over","7","Age of Primary Household Maintainer","10", "Survey Zones","3","Default",tenure_filter,"7.10.3",
+    "Census",NA,"Mobility 1 of 65 and over","7","Age of Primary Household Maintainer","10", "Neighbourhoods","4","Default",tenure_filter,"7.10.4",
+    "Census",NA,"Mobility 1 of 65 and over","7","Age of Primary Household Maintainer","10", "Census Tracts","5","Default",tenure_filter,"7.10.5"
+  )
+
+  # hmmp_tables <- tibble::tribble(
+  #   ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+  #   "Census",NA,"All Households","6","Mobility 5 of Primary Household Maintainer %","18", "Historical Time Periods","2","Default",tenure_filter,"6.18",
+  #   "Census",NA,"All Households","6","Mobility 5 of Primary Household Maintainer %","17", "Survey Zones","3","Default",tenure_filter,"6.17.3",
+  #   "Census",NA,"All Households","6","Mobility 5 of Primary Household Maintainer %","17", "Neighbourhoods","4","Default",tenure_filter,"6.17.4",
+  #   "Census",NA,"All Households","6","Mobility 5 of Primary Household Maintainer %","17", "Census Tracts","5","Default",tenure_filter,"6.17.5",
+  #   "Census",NA,"65 and over","7","Mobility 5 of Primary Household Maintainer %","9", "Historical Time Periods","2","Default",tenure_filter,"7.9",
+  #   "Census",NA,"65 and over","7","Mobility 5 of Primary Household Maintainer %","8", "Survey Zones","3","Default",tenure_filter,"7.8.3",
+  #   "Census",NA,"65 and over","7","Mobility 5 of Primary Household Maintainer %","8", "Neighbourhoods","4","Default",tenure_filter,"7.8.4",
+  #   "Census",NA,"65 and over","7","Mobility 5 of Primary Household Maintainer %","8", "Census Tracts","5","Default",tenure_filter,"7.8.5",
+  #   "Census",NA,"All Households","6","Mobility 1 of Primary Household Maintainer %","20", "Historical Time Periods","2","Default",tenure_filter,"6.22",
+  #   "Census",NA,"All Households","6","Mobility 1 of Primary Household Maintainer %","21", "Survey Zones","3","Default",tenure_filter,"6.21.3",
+  #   "Census",NA,"All Households","6","Mobility 1 of Primary Household Maintainer %","21", "Neighbourhoods","4","Default",tenure_filter,"6.21.4",
+  #   "Census",NA,"All Households","6","Mobility 1 of Primary Household Maintainer %","21", "Census Tracts","5","Default",tenure_filter,"6.21.5",
+  #   "Census",NA,"65 and over","7","Mobility 1 of Primary Household Maintainer %","13", "Historical Time Periods","2","Default",tenure_filter,"7.13",
+  #   "Census",NA,"65 and over","7","Mobility 1 of Primary Household Maintainer %","12", "Survey Zones","3","Default",tenure_filter,"7.12.3",
+  #   "Census",NA,"65 and over","7","Mobility 1 of Primary Household Maintainer %","12", "Neighbourhoods","4","Default",tenure_filter,"7.12.4",
+  #   "Census",NA,"65 and over","7","Mobility 1 of Primary Household Maintainer %","12", "Census Tracts","5","Default",tenure_filter,"7.12.5"
+  # )
+
+
+
   table_list <- bind_rows(
     scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries,seniors
-  )
+  ) |>
+    mutate(GeoFilter="Default") |>
+    bind_rows(canada_tables) |>
+    bind_rows(income_tables) |>
+    bind_rows(dwelling_value_tables) |>
+    bind_rows(hm_tables,hmm_tables)
 
   if (short) {
     table_list <- table_list |>
-      select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$Filters)
+      select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$GeoFilter,.data$Filters)
   }
 
   table_list

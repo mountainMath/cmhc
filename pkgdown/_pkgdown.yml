@@ -25,8 +25,8 @@ reference:
     - cmhc_quality_labels
   - title: User settings
   - contents:
-    - set_cache_path
-    - show_cache_path
+    - set_cmhc_cache_path
+    - show_cmhc_cache_path
 articles:
     - title: Basic usage
       navbar: ~
