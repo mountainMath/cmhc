@@ -1,3 +1,9 @@
+## cmhc v0.2.2
+### Minor changes
+
+* fix table sanfu for Scss by intended market
+* add vignette for rental universe
+
 ## cmhc v0.2.1
 ### Minor changes
 

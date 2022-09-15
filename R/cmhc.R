@@ -83,7 +83,7 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
         filter(.data$Survey==survey, .data$Series==series, .data$Dimension==dimension)
       if (nrow(selectedDimension)==0 && !is.na(dimension)) {
         stop(paste0("Dimension ",dimension," for ",series," and survey ",survey,
-                    " does not exist or is not supported. Valid dimensions are",
+                    " does not exist or is not supported. Valid dimensions are ",
                     paste0(unique(selectedSeries$Dimension),collapse = ", "),"."))
       }
       stop(paste0("Breakdown ",breakdown," for ",series,",survey ",survey," and dimension ",dimension,

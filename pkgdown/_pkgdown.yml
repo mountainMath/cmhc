@@ -32,6 +32,7 @@ articles:
       navbar: ~
       contents:
       - basic_usage
+      - rental_universe
 
 authors:
   Jens von Bergmann:
