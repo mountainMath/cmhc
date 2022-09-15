@@ -1,7 +1,7 @@
 Package: cmhc
 Type: Package
 Title: Access, Retrieve, and Work with CMHC Data
-Version: 0.2.1
+Version: 0.2.2
 Author: Jens von Bergmann
 Maintainer: Jens von Bergmann <jens@mountainmath.ca>
 Description: Wrapper around the Canadian Mortgage and Housing Corporation (CMHC) web interface. It enables programmatic and reproducible access to a wide variety of housing data from CMHC.

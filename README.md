@@ -49,7 +49,7 @@ vacancy_data <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom T
 If you wish to cite cmhc:
 
   von Bergmann, J. cmhc: R package to
-  access, retrieve, and work with CMHC data. v0.2.1.
+  access, retrieve, and work with CMHC data. v0.2.2.
 
 
 A BibTeX entry for LaTeX users is
@@ -58,7 +58,7 @@ A BibTeX entry for LaTeX users is
     author = {Jens {von Bergmann}},
     title = {cmhc: R package to access, retrieve, and work with CMHC data},
     year = {2022},
-    note = {R package version 0.2.1},
+    note = {R package version 0.2.2},
     url = {https://mountainmath.github.io/cmhc/},
   }
 ```
