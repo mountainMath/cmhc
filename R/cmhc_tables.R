@@ -31,7 +31,8 @@ list_cmhc_tables <- function(short=TRUE){
                      DimensionCode=c("1","4"),
                      Filters=list("dimension-18"=cmhc_intended_markets,
                                     "dimension-1"=cmhc_dwelling_types)),
-              by="a")
+              by="a") |>
+    mutate(h="16")
 
 
   # scss_snapshot2 <- tibble::tribble(
@@ -48,7 +49,8 @@ list_cmhc_tables <- function(short=TRUE){
   scss_snapshot2 <- tibble::tribble(
     ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,
     "Scss","1","Share absorbed at completion","6","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")),
-    "Scss","1","Unabsorbed Inventory","4","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")))
+    "Scss","1","Unabsorbed Inventory","4","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All"))) |>
+    mutate(h="9")
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
     left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes2))),
@@ -63,9 +65,12 @@ list_cmhc_tables <- function(short=TRUE){
   scss_timeseries <- scss_snapshot |>
     select(-.data$TableCode,-.data$Breakdown,-.data$BreakdownCode) |>
     unique() %>%
-    mutate(DimensionCode=recode(.data$DimensionCode,"1"="2","4"="9")) |>
+    mutate(DimensionCode=.data$h) |>
     mutate(TableCode=paste0(.data$SureveyCode,".",.data$DimensionCode,".",.data$SeriesCode)) |>
-    mutate(Breakdown="Historical Time Periods")
+    mutate(Breakdown="Historical Time Periods") |>
+    select(-.data$h)
+
+  scss_snapshot <- scss_snapshot |> select(-.data$h)
 
   scss_snapshot3 <- tibble::tribble(
     ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Filters,
