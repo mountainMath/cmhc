@@ -224,6 +224,17 @@ list_cmhc_tables <- function(short=TRUE){
     "Census",NA,"Dwelling value","6","Median","5", "Census Tracts","5","Default",list(),"6.5.5"
   )
 
+  age_tables <- tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Census",NA,"All Households","6","Age of Population","12", "Historical Time Periods","2","Default",list(),"6.8",
+    "Census",NA,"All Households","6","Age of Population","11", "Survey Zones","3","Default",list(),"6.7.3",
+    "Census",NA,"All Households","6","Age of Population","11", "Neighbourhoods","4","Default",list(),"6.7.4",
+    "Census",NA,"All Households","6","Age of Population","11", "Census Tracts","5","Default",list(),"6.7.5",
+    "Census",NA,"65 and over","7","Age of Population","3", "Historical Time Periods","2","Default",list(),"6.98",
+    "Census",NA,"65 and over","7","Age of Population","2", "Survey Zones","3","Default",list(),"6.97.3",
+    "Census",NA,"65 and over","7","Age of Population","2", "Neighbourhoods","4","Default",list(),"6.97.4",
+    "Census",NA,"65 and over","7","Age of Population","2", "Census Tracts","5","Default",list(),"6.97.5"
+  )
   hm_tables <- tibble::tribble(
     ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
     "Census",NA,"All Households","6","Age of Primary Household Maintainer","12", "Historical Time Periods","2","Default",tenure_filter,"6.12",
@@ -255,6 +266,13 @@ list_cmhc_tables <- function(short=TRUE){
     "Census",NA,"Mobility 1 of 65 and over","7","Age of Primary Household Maintainer","10", "Census Tracts","5","Default",tenure_filter,"7.10.5"
   )
 
+  core_housing_tables <- tibble::tribble(
+    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Core Housing Need",NA,"Housing Standards","7","% of Households in Core Housing Need","17", "Historical Time Periods",NA,"Default",tenure_filter,"7.17",
+    "Core Housing Need",NA,"Housing Standards","7","Households in Core Housing Need","17", "Historical Time Periods",NA,"Default",tenure_filter,"7.15",
+    "Core Housing Need",NA,"Housing Standards","6","Households Tested For Core Housing Need","69", "Historical Time Periods","3","Default",tenure_filter,"6.96",
+  )
+
   # hmmp_tables <- tibble::tribble(
   #   ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
   #   "Census",NA,"All Households","6","Mobility 5 of Primary Household Maintainer %","18", "Historical Time Periods","2","Default",tenure_filter,"6.18",
@@ -284,7 +302,9 @@ list_cmhc_tables <- function(short=TRUE){
     bind_rows(canada_tables) |>
     bind_rows(income_tables) |>
     bind_rows(dwelling_value_tables) |>
-    bind_rows(hm_tables,hmm_tables)
+    bind_rows(age_tables) |>
+    bind_rows(hm_tables,hmm_tables) |>
+    bind_rows(core_housing_tables)
 
   if (short) {
     table_list <- table_list |>
@@ -441,6 +461,85 @@ list_cmhc_filters <- function(survey=NULL,series=NULL,dimension=NULL, breakdown=
 
   l
 
+}
+
+#` @internal`
+get_input_for <- function(tables,column,allow_empty=FALSE) {
+  selection <- tables |>
+    select(!!as.name(column)) |>
+    unique() |>
+    mutate(n=row_number()) |>
+    mutate(selection=paste0(!!as.name(column),": ",n))
+  if (nrow(selection)==1) {
+    filtered_selection=selection
+  } else {
+    user_prompt <- paste0("Select ",column,": \n",paste0(selection$selection,collapse="\n"),"\n")
+    if (allow_empty) user_prompt <- paste0(user_prompt,"Press enter to skip\n")
+    user_imput <- readline(prompt=user_prompt)
+    filtered_selection <- selection|>filter(n==user_imput|!!as.name(column)==user_imput)
+    if (nrow(filtered_selection)!=1 & !(nrow(filtered_selection)==0& allow_empty) ) stop("Invalid selection")
+  }
+  if (nrow(filtered_selection)==1) cat(paste0(column," ",pull(filtered_selection,column)," selected\n"))
+  filtered_selection
+}
+
+
+
+#' Interactive table selector
+#'
+#' @return A string containing the function call to access the selected table
+#'
+#' @examples
+#' \dontrun{
+#' select_cmhc_table()
+#' }
+#' @export
+select_cmhc_table <- function(){
+  tables <- list_cmhc_tables()
+  selection <- get_input_for(tables,"Survey")
+  tables <- tables |>
+    filter(Survey==selection$Survey)
+
+  selection <- get_input_for(tables,"Series")
+  tables <- tables |>
+    filter(Series==selection$Series)
+
+  selection <- get_input_for(tables,"Dimension")
+  tables <- tables |>
+    filter(Dimension==selection$Dimension)
+
+  selection <- get_input_for(tables,"Breakdown")
+  tables <- tables |>
+    filter(Breakdown==selection$Breakdown)
+
+  use_geofilters <- FALSE
+  if (nrow(selection)>1) {
+    use_geofilters=TRUE
+    selection <- get_input_for(tables,"GeoFilter")
+    tables <- tables |>
+      filter(Breakdown==selection$Breakdown)
+  }
+
+  if (nrow(tables)!=1) {
+    stop("Selecting table unsuccessful")
+  }
+
+  vars <- c("Survey","Series","Dimension","Breakdown")
+  if (use_geofilters) vars <- c(vars,"GeoFilter")
+
+  arguments <- lapply(vars,function(v){
+    paste0(tolower(v),' = "',pull(tables,v),'"')
+  }) |>
+    unlist() |>
+    paste0(collapse = ", ")
+
+  function_call <- paste0("get_cmhc(",arguments,", ","geo_uid = <Census UID>",")")
+
+  cat("To access the CMHC data for the selected table use\n",
+      function_call,"\n")
+
+
+  result <- function_call
 }
 
 
