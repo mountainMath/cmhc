@@ -498,26 +498,26 @@ select_cmhc_table <- function(){
   tables <- list_cmhc_tables()
   selection <- get_input_for(tables,"Survey")
   tables <- tables |>
-    filter(Survey==selection$Survey)
+    filter(.data$Survey==selection$Survey)
 
   selection <- get_input_for(tables,"Series")
   tables <- tables |>
-    filter(Series==selection$Series)
+    filter(.data$Series==selection$Series)
 
   selection <- get_input_for(tables,"Dimension")
   tables <- tables |>
-    filter(Dimension==selection$Dimension)
+    filter(.data$Dimension==selection$Dimension)
 
   selection <- get_input_for(tables,"Breakdown")
   tables <- tables |>
-    filter(Breakdown==selection$Breakdown)
+    filter(.data$Breakdown==selection$Breakdown)
 
   use_geofilters <- FALSE
-  if (nrow(selection)>1) {
+  if (nrow(tables)>1) {
     use_geofilters=TRUE
     selection <- get_input_for(tables,"GeoFilter")
     tables <- tables |>
-      filter(Breakdown==selection$Breakdown)
+      filter(.data$GeoFilter==selection$GeoFilter)
   }
 
   if (nrow(tables)!=1) {
