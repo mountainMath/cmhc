@@ -130,19 +130,25 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
 #' @return NULL
 download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
   if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory))
-  aws_bucket="mountaimath"
-  aws_path="cmhc"
+  aws_bucket="cmhc"
+  #aws_path=NULL
   if (!file.exists(base_directory)) dir.create(base_directory)
   message("Downloading geographies, this may take a minute...")
   for (d in paste0("RMS2017_",seq(1,3),".gdb")) {
     if (dir.exists(file.path(base_directory,d))) unlink(file.path(base_directory,d),recursive=TRUE)
     dir.create(file.path(base_directory,d))
-    for (f in aws.s3::get_bucket(bucket="mountainmath",prefix = file.path(aws_path,d))) {
+    for (f in aws.s3::get_bucket(bucket=aws_bucket,
+                                 prefix = d,#file.path(aws_path,d),
+                                 region = 'us-west-2')) {
       key=f$Key
-      local_path=gsub(paste0("cmhc/",d,"/"),"",key)
-      local_file <- file.path(base_directory,d,local_path)
+      #local_path=gsub(paste0("cmhc/",d,"/"),"",key)
+      #local_file <- file.path(base_directory,d,local_path)
+      local_file <- file.path(base_directory,key)
       if (!file.exists(local_file))
-        aws.s3::save_object(object=key,bucket="mountainmath",file=local_file)
+        aws.s3::save_object(object=key,
+                            bucket=aws_bucket,
+                            region='us-west-2',
+                            file=local_file)
     }
   }
   NULL
