@@ -11,3 +11,9 @@
 
 * fix table sanfu for Scss by intended market
 * add vignette for rental universe
+
+# cmhc v0.2.3
+
+* fix more table sanfu for Scss by intended market
+* add query builder helper function
+* add access to census and core housing need tables

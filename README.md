@@ -39,6 +39,8 @@ vacancy_data <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom T
 
 ```
 
+Starting with version v.0.3.2 the package has an interactive query builder helper function `select_cmhc_table()` that interactively walks through the available data and builds parameters for `get_cmhc()` like the example above. This makes it easy to discover data and build function calls to CMHC tables.
+
 ## Contributing
 
 * We encourage contributions to improve this project. The best way is through issues and pull requests.

@@ -94,7 +94,9 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
 
   if (length(filters)>0) {
     availableFilters <- selectedTable$Filters
-    if (length(availableFilters)==1 && names(availableFilters)=="") availableFilters <- unlist(availableFilters,recursive = FALSE)
+    if (length(availableFilters)==1 && (is.null(names(availableFilters)) || names(availableFilters)=="")) {
+      availableFilters <- unlist(availableFilters,recursive = FALSE)
+    }
     unmatchedFilters <- names(filters)[!(names(filters) %in% names(availableFilters))]
     if (length(unmatchedFilters)>0) {
       stop("Filter ",paste0(unmatchedFilters,collapse = ", ")," not available for ",series,",survey ",survey," and dimension ",dimension,".")

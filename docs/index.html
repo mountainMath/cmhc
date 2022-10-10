@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">cmhc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -120,6 +120,7 @@
 <pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mountainMath/cmhc" class="external-link">cmhc</a></span><span class="op">)</span></span>
 <span><span class="va">vacancy_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_cmhc.html">get_cmhc</a></span><span class="op">(</span>survey<span class="op">=</span><span class="st">"Rms"</span>,series<span class="op">=</span><span class="st">"Vacancy Rate"</span>,dimension<span class="op">=</span><span class="st">"Bedroom Type"</span>,</span>
 <span>                         breakdown<span class="op">=</span><span class="st">"Historical Time Periods"</span>,  geo_uid<span class="op">=</span><span class="st">"59933"</span><span class="op">)</span></span></code></pre>
+<p>Starting with version v.0.3.2 the package has an interactive query builder helper function <code><a href="reference/select_cmhc_table.html">select_cmhc_table()</a></code> that interactively walks through the available data and builds parameters for <code><a href="reference/get_cmhc.html">get_cmhc()</a></code> like the example above. This makes it easy to discover data and build function calls to CMHC tables.</p>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
@@ -134,13 +135,13 @@
 <a class="anchor" aria-label="anchor" href="#cite-cmhc"></a>
 </h2>
 <p>If you wish to cite cmhc:</p>
-<p>von Bergmann, J. cmhc: R package to access, retrieve, and work with CMHC data. v0.2.2.</p>
+<p>von Bergmann, J. cmhc: R package to access, retrieve, and work with CMHC data. v0.2.3.</p>
 <p>A BibTeX entry for LaTeX users is</p>
 <pre><code>  @Manual{,
     author = {Jens {von Bergmann}},
     title = {cmhc: R package to access, retrieve, and work with CMHC data},
     year = {2022},
-    note = {R package version 0.2.2},
+    note = {R package version 0.2.3},
     url = {https://mountainmath.github.io/cmhc/},
   }</code></pre>
 </div>
