@@ -14,6 +14,7 @@ reference:
     #- get_census_geometry # deprecated function, removed from online docs
   - title: Data discovery
   - contents:
+    - select_cmhc_table
     - list_cmhc_tables
     - list_cmhc_surveys
     - list_cmhc_series
@@ -32,6 +33,7 @@ articles:
       navbar: ~
       contents:
       - basic_usage
+      - rental_universe
 
 authors:
   Jens von Bergmann:

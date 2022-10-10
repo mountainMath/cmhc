@@ -28,7 +28,7 @@ list_cmhc_tables() |>
   knitr::kable()
 ```
 
-It lists all possible tables by survey, series, dimension and breakdown, as well as the possible filters that can be applied.
+It lists all possible tables by survey, series, dimension and breakdown, as well as the possible filters that can be applied. It is often convenient to run the `select_cmhc_table()` interactive query builder in the console to iteratively walk through building the parameters for the `get_cmhc()` data query.
 
 To access a time series for a region with census geographic identifier `geo_uid` we use `breakdown="Historical Time Periods"`.
 

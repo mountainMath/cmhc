@@ -18,24 +18,77 @@ cmhc_bedroom_types <- c("Bachelor","1 Bedroom","2 Bedroom","3 Bedroom +","Total"
 #'
 #' @export
 list_cmhc_tables <- function(short=TRUE){
-  scss_snapshot1 <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,
-    "Scss","1","Starts","1","1",
-    "Scss","1","Completions","2","1",
-    "Scss","1","Under Construction","3","1",
-    "Scss","1","Length of Construction","7","2",
-    "Scss","1","Absorbed Units","5","2") |>
-  mutate(a="1") |>
-    left_join(tibble(a="1",
-                     Dimension=c("Dwelling Type","Intended Market"),
-                     DimensionCode=c("1","4"),
-                     Filters=list("dimension-18"=cmhc_intended_markets,
-                                    "dimension-1"=cmhc_dwelling_types)),
-              by="a")
 
+  scss_filters <- list("dimension-18"=cmhc_intended_markets,
+                       "dimension-1"=cmhc_dwelling_types)
+
+  scss_snapshot_all <- tibble::tribble(
+    ~Survey,~Series,~Dimension,~Breakdown,~Filters,~Table,
+    "Scss","Starts","Dwelling Type","Provinces",scss_filters,"1.1.1.2",
+    "Scss","Starts","Dwelling Type","Centres",scss_filters,"1.1.1.3",
+    "Scss","Starts","Dwelling Type","Survey Zones",scss_filters,"1.1.1.8",
+    "Scss","Starts","Dwelling Type","Census Subdivision",scss_filters,"1.1.1.9",
+    "Scss","Starts","Dwelling Type","Neighbourhoods",scss_filters,"1.1.1.10",
+    "Scss","Starts","Dwelling Type","Census Tracts",scss_filters,"1.1.1.11",
+    "Scss","Starts","Intended Market","Provinces",scss_filters,"1.4.1.2",
+    "Scss","Starts","Intended Market","Centres",scss_filters,"1.4.1.3",
+    "Scss","Starts","Intended Market","Survey Zones",scss_filters,"1.4.1.8",
+    "Scss","Starts","Intended Market","Census Subdivision",scss_filters,"1.4.1.9",
+    "Scss","Starts","Intended Market","Neighbourhoods",scss_filters,"1.4.1.10",
+    "Scss","Starts","Intended Market","Census Tracts",scss_filters,"1.4.1.11",
+    "Scss","Completions","Dwelling Type","Provinces",scss_filters,"1.1.2.2",
+    "Scss","Completions","Dwelling Type","Centres",scss_filters,"1.1.2.3",
+    "Scss","Completions","Dwelling Type","Survey Zones",scss_filters,"1.1.2.8",
+    "Scss","Completions","Dwelling Type","Census Subdivision",scss_filters,"1.1.2.9",
+    "Scss","Completions","Dwelling Type","Neighbourhoods",scss_filters,"1.1.2.10",
+    "Scss","Completions","Dwelling Type","Census Tracts",scss_filters,"1.1.2.11",
+    "Scss","Completions","Intended Market","Provinces",scss_filters,"1.4.2.2",
+    "Scss","Completions","Intended Market","Centres",scss_filters,"1.4.2.3",
+    "Scss","Completions","Intended Market","Survey Zones",scss_filters,"1.4.2.8",
+    "Scss","Completions","Intended Market","Census Subdivision",scss_filters,"1.4.2.9",
+    "Scss","Completions","Intended Market","Neighbourhoods",scss_filters,"1.4.2.10",
+    "Scss","Completions","Intended Market","Census Tracts",scss_filters,"1.4.2.11",
+  )
+
+  scss_timeseries_all <- tibble::tribble(
+    ~Survey,~Series,~Dimension,~Breakdown,~Filters,~Table,~GeoFilter,
+    "Scss","Starts","Dwelling Type","Historical Time Periods",scss_filters,"1.2.1","Default",
+    "Scss","Starts","Intended Market","Historical Time Periods",scss_filters,"1.16.1","Default",
+    "Scss","Starts","Dwelling Type","Historical Time Periods",scss_filters,"5.7.2","All",
+    #"Scss","Starts","Intended Market","Historical Time Periods",scss_filters,"1.16.1","All",
+    "Scss","Starts","Dwelling Type","Historical Time Periods",scss_filters,"5.6.2","10k",
+    "Scss","Starts","Intended Market","Historical Time Periods",scss_filters,"1.16.1.6","10k",
+    "Scss","Starts","Dwelling Type","Historical Time Periods",scss_filters,"1.2.1.5","50k",
+    "Scss","Starts","Intended Market","Historical Time Periods",scss_filters,"1.16.1.5","50k",
+    "Scss","Starts","Dwelling Type","Historical Time Periods",scss_filters,"1.2.1.4","Metro",
+    "Scss","Starts","Intended Market","Historical Time Periods",scss_filters,"1.16.1.4","Metro",
+    "Scss","Completions","Dwelling Type","Historical Time Periods",scss_filters,"1.2.2","Default",
+    "Scss","Completions","Intended Market","Historical Time Periods",scss_filters,"1.16.2","Default",
+    "Scss","Completions","Dwelling Type","Historical Time Periods",scss_filters,"5.11.2","All",
+    #"Scss","Completions","Intended Market","Historical Time Periods",scss_filters,"1.16.2","All",
+    "Scss","Completions","Dwelling Type","Historical Time Periods",scss_filters,"5.10.2","10k",
+    "Scss","Completions","Intended Market","Historical Time Periods",scss_filters,"1.16.2.6","10k",
+    "Scss","Completions","Dwelling Type","Historical Time Periods",scss_filters,"1.2.2.5","50k",
+    "Scss","Completions","Intended Market","Historical Time Periods",scss_filters,"1.16.2.5","50k",
+    "Scss","Completions","Dwelling Type","Historical Time Periods",scss_filters,"1.2.2.4","Metro",
+    "Scss","Completions","Intended Market","Historical Time Periods",scss_filters,"1.16.2.4","Metro",
+  )
+
+  scss_snapshot1 <- tibble::tribble(
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,~h,
+    "Scss","1","Starts","1","1","Dwelling Type","1",scss_filters,"2",
+    "Scss","1","Starts","1","1","Intended Market","4",scss_filters,"16",
+    "Scss","1","Completions","2","1","Dwelling Type","1",scss_filters,"2",
+    "Scss","1","Completions","2","1","Intended Market","4",scss_filters,"16",
+    "Scss","1","Under Construction","3","1","Dwelling Type","1",scss_filters,"2",
+    "Scss","1","Under Construction","3","1","Intended Market","4",scss_filters,"9",
+    "Scss","1","Length of Construction","7","2","Dwelling Type","1",scss_filters,"2",
+    "Scss","1","Length of Construction","7","2","Intended Market","4",scss_filters,"16",
+    "Scss","1","Absorbed Units","5","2","Dwelling Type","1",scss_filters,"16",
+    "Scss","1","Absorbed Units","5","2","Intended Market","4",scss_filters,"16")
 
   # scss_snapshot2 <- tibble::tribble(
-  #   ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,
+  #   ~Survey,~SurveyCode,~Series,~SeriesCode,~GeoCodes,
   #   "Scss","1","Share absorbed at completion","6","2",
   #   "Scss","1","Unabsorbed Inventory","4","2") |>
   #   mutate(a="1") |>
@@ -46,35 +99,43 @@ list_cmhc_tables <- function(short=TRUE){
   #                                 "dimension-1"=cmhc_dwelling_types)),
   #             by="a")
   scss_snapshot2 <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,
-    "Scss","1","Share absorbed at completion","6","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")),
-    "Scss","1","Unabsorbed Inventory","4","2",c("Dwelling Type"),"1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")))
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,
+    "Scss","1","Share absorbed at completion","6","2","Dwelling Type","1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")),
+    "Scss","1","Unabsorbed Inventory","4","2","Dwelling Type","1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All"))) |>
+    mutate(h="9")
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
     left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes2))),
                      Breakdown=c(names(cmhc_type_codes1),names(cmhc_type_codes2)),
                      BreakdownCode=as.character(c(cmhc_type_codes1,cmhc_type_codes2))),
               by="GeoCodes") |>
-    select(-.data$a,-.data$GeoCodes) |>
-    mutate(TableCode=paste0(.data$SureveyCode,".",.data$DimensionCode,".",
+    select(-.data$GeoCodes) |>
+    mutate(TableCode=paste0(.data$SurveyCode,".",.data$DimensionCode,".",
                             .data$SeriesCode,".",.data$BreakdownCode))
 
 
   scss_timeseries <- scss_snapshot |>
     select(-.data$TableCode,-.data$Breakdown,-.data$BreakdownCode) |>
     unique() %>%
-    mutate(DimensionCode=recode(.data$DimensionCode,"1"="2","4"="9")) |>
-    mutate(TableCode=paste0(.data$SureveyCode,".",.data$DimensionCode,".",.data$SeriesCode)) |>
-    mutate(Breakdown="Historical Time Periods")
+    mutate(DimensionCode=.data$h) |>
+    mutate(TableCode=paste0(.data$SurveyCode,".",.data$DimensionCode,".",.data$SeriesCode)) |>
+    mutate(Breakdown="Historical Time Periods") |>
+    select(-.data$h) |>
+    mutate(TableCode=ifelse(.data$Series=="Length of Construction" & .data$Dimension=="Intended Market",
+                            "1.2.8",.data$TableCode)) |>
+    mutate(TableCode=ifelse(.data$Series=="Share absorbed at completion" & .data$Dimension=="Dwelling Type",
+                            "1.2.6",.data$TableCode))
+
+  scss_snapshot <- scss_snapshot |> select(-.data$h)
 
   scss_snapshot3 <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Filters,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Filters,
     "Scss","1","Absorbed Prices","1","Dwelling Type","9",list("dwelling_type_desc_en"=c("Single / Semi-detached","Single", "Semi-detached")),
     "Scss","1","Unabsorbed Prices","2","Dwelling Type","9",list("dwelling_type_desc_en"=c("Single / Semi-detached","Single", "Semi-detached")))
 
 
   rms_snapshot <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~GeoCodes,~Filters,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~GeoCodes,~Filters,
     "Rms","2","Vacancy Rate","1", "Bedroom Type","1","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment")),
     "Rms","2","Vacancy Rate","1", "Year of Construction","2","3",list(dwelling_type_desc_en=c("Row / Apartment","Row","Apartment"),
                                                                       bedroom_count_type_desc_en=cmhc_bedroom_types),
@@ -107,19 +168,19 @@ list_cmhc_tables <- function(short=TRUE){
                      BreakdownCode=as.character(c(cmhc_type_codes3,cmhc_type_codes4))),
               by="GeoCodes") |>
     select(-.data$GeoCodes) |>
-    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",
+    mutate(TableCode=paste0(.data$SurveyCode,".",.data$SeriesCode,".",
                             .data$DimensionCode,".",.data$BreakdownCode))
 
   rms_timeseries <- rms_snapshot |>
     select(-.data$TableCode,-.data$Breakdown,-.data$BreakdownCode) |>
     unique() %>%
     mutate(SeriesCode="2") |>
-    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$DimensionCode)) |>
+    mutate(TableCode=paste0(.data$SurveyCode,".",.data$SeriesCode,".",.data$DimensionCode)) |>
     mutate(Breakdown="Historical Time Periods") |>
     mutate(Filters=lapply(.data$Filters,function(f)append(f,list(season=c("October","April")))))
 
   seniors <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
     "Seniors","3","Rental Housing Vacancy Rates","2","Unit Type",NA, "Snapshot","1",list(),
     "Seniors","3","Rental Housing Vacancy Rates","8","Unit Type",NA, "Historical Time Periods","1",list(),
     "Seniors","3","Spaces","3","Unit Type",NA, "Snapshot","1",list(),
@@ -135,10 +196,10 @@ list_cmhc_tables <- function(short=TRUE){
     "Seniors","3","Bachelor Units and Private Rooms where Meals are included in Rent","8","Rent and Vacancy Rate",NA, "Snapshot","7",list(),
     "Seniors","3","Bachelor Units and Private Rooms where Meals are included in Rent","8","Rent and Vacancy Rate",NA, "Historical Time Periods","4",list()
   ) |>
-    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
+    mutate(TableCode=paste0(.data$SurveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
 
   srms <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~Filters,
     "Srms","4","Other Rental","6","Dwelling Type",NA, "Estimated Number of Households","1",list(),
     "Srms","4","Other Rental","6","Dwelling Type",NA, "Average Rent","2",list(),
     "Srms","4","Condominium Apartment","2","Structure Size",NA, "Vacancy Rate","1",list(),
@@ -147,49 +208,49 @@ list_cmhc_tables <- function(short=TRUE){
     "Srms","4","Condominium Apartment","2","Structure Size",NA, "Estimated Number of Units Used for Rental","4",list(),
     "Srms","4","Condominium Apartment","2","Structure Size",NA, "Estimated Share of Rental Units","5",list(),
   ) |>
-    mutate(TableCode=paste0(.data$SureveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
+    mutate(TableCode=paste0(.data$SurveyCode,".",.data$SeriesCode,".",.data$BreakdownCode))
 
   scss_filter <- list("dimension-18"=cmhc_intended_markets,"dimension-1"=cmhc_dwelling_types)
   canada_tables <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
     "Scss","5","Starts","7","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.7.2",
     "Scss","5","Starts","6","Dwelling Type",NA, "Historical Time Periods","2","10k",scss_filter,"5.6.2",
-    "Scss","1","Starts","1","Intended Markets","6", "Historical Time Periods","16","10k",scss_filter,"1.16.1.6",
+    "Scss","1","Starts","1","Intended Market","6", "Historical Time Periods","16","10k",scss_filter,"1.16.1.6",
     "Scss","1","Starts","1","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.1.5",
-    "Scss","1","Starts","1","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.1.5",
+    "Scss","1","Starts","1","Intended Market","5", "Historical Time Periods","16","50k",scss_filter,"1.16.1.5",
     "Scss","1","Starts","1","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.1.4",
-    "Scss","1","Starts","1","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.1.4",
+    "Scss","1","Starts","1","Intended Market","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.1.4",
     "Scss","1","Starts","1","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.1.5",
     "Scss","1","Starts","1","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.1.6",
-    "Scss","1","Starts","1","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.1.5",
-    "Scss","1","Starts","1","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.1.6",
-    "Scss","1","Starts","1","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.1.7",
+    "Scss","1","Starts","1","Intended Market","5", "Centres","6","Metro",scss_filter,"1.4.1.5",
+    "Scss","1","Starts","1","Intended Market","6", "Centres","6","50k",scss_filter,"1.4.1.6",
+    "Scss","1","Starts","1","Intended Market","7", "Centres","4","10k",scss_filter,"1.4.1.7",
 
     "Scss","5","Completions","11","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.11.2",
     "Scss","5","Completions","10","Dwelling Type",NA, "Historical Time Periods","2","10k",scss_filter,"5.10.2",
-    "Scss","1","Completions","2","Intended Markets","6", "Historical Time Periods","16","10k",scss_filter,"1.16.2.6",
+    "Scss","1","Completions","2","Intended Market","6", "Historical Time Periods","16","10k",scss_filter,"1.16.2.6",
     "Scss","1","Completions","2","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.2.5",
-    "Scss","1","Completions","2","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.2.5",
+    "Scss","1","Completions","2","Intended Market","5", "Historical Time Periods","16","50k",scss_filter,"1.16.2.5",
     "Scss","1","Completions","2","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.2.4",
-    "Scss","1","Completions","2","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.2.4",
+    "Scss","1","Completions","2","Intended Market","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.2.4",
     "Scss","1","Completions","2","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.2.5",
     "Scss","1","Completions","2","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.2.6",
-    "Scss","1","Completions","2","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.2.5",
-    "Scss","1","Completions","2","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.2.6",
-    "Scss","1","Completions","2","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.2.7",
+    "Scss","1","Completions","2","Intended Market","5", "Centres","6","Metro",scss_filter,"1.4.2.5",
+    "Scss","1","Completions","2","Intended Market","6", "Centres","6","50k",scss_filter,"1.4.2.6",
+    "Scss","1","Completions","2","Intended Market","7", "Centres","4","10k",scss_filter,"1.4.2.7",
 
     "Scss","5","Under Construction","13","Dwelling Type",NA, "Historical Time Periods","2","All",scss_filter,"5.13.2",
     "Scss","1","Under Construction","3","Dwelling Type","6", "Historical Time Periods","2","10k",scss_filter,"1.2.3.6",
-    "Scss","1","Under Construction","3","Intended Markets","6", "Historical Time Periods","9","10k",scss_filter,"1.9.3.6",
+    "Scss","1","Under Construction","3","Intended Market","6", "Historical Time Periods","9","10k",scss_filter,"1.9.3.6",
     "Scss","1","Under Construction","3","Dwelling Type","5", "Historical Time Periods","2","50k",scss_filter,"1.2.3.5",
-    "Scss","1","Under Construction","3","Intended Markets","5", "Historical Time Periods","16","50k",scss_filter,"1.16.3.5",
+    "Scss","1","Under Construction","3","Intended Market","5", "Historical Time Periods","16","50k",scss_filter,"1.16.3.5",
     "Scss","1","Under Construction","3","Dwelling Type","4", "Historical Time Periods","2","Metro",scss_filter,"1.2.3.4",
-    "Scss","1","Under Construction","3","Intended Markets","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.3.4",
+    "Scss","1","Under Construction","3","Intended Market","4", "Historical Time Periods","16","Metro",scss_filter,"1.16.3.4",
     "Scss","1","Under Construction","3","Dwelling Type","5", "Centres","1","Metro",scss_filter,"1.1.3.5",
     "Scss","1","Under Construction","3","Dwelling Type","1", "Centres","6","50k",scss_filter,"1.1.3.6",
-    "Scss","1","Under Construction","3","Intended Markets","5", "Centres","6","Metro",scss_filter,"1.4.3.5",
-    "Scss","1","Under Construction","3","Intended Markets","6", "Centres","6","50k",scss_filter,"1.4.3.6",
-    "Scss","1","Under Construction","3","Intended Markets","7", "Centres","4","10k",scss_filter,"1.4.3.7"
+    "Scss","1","Under Construction","3","Intended Market","5", "Centres","6","Metro",scss_filter,"1.4.3.5",
+    "Scss","1","Under Construction","3","Intended Market","6", "Centres","6","50k",scss_filter,"1.4.3.6",
+    "Scss","1","Under Construction","3","Intended Market","7", "Centres","4","10k",scss_filter,"1.4.3.7"
     #"Scss","5","Starts","7","All areas",NA, "Historical Time Periods","1",list(),
     #"Scss","1","Starts","1","Census Metropolitan Areas, Census Agglomerations, and other, selected municipalities with at least 10,000 people",NA, "Historical Time Periods","1",list(),
     )
@@ -197,7 +258,7 @@ list_cmhc_tables <- function(short=TRUE){
   tenure_filter <-  list("Tenure"=c("Total","Renters","Owners"))
 
   income_tables <-  tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
     "Census",NA,"Income","63","Average and Median","7", "Historical Time Periods","2","Default",tenure_filter,"7.63",
     "Census",NA,"Income","62","Average and Median","7", "Survey Zones","3","Default",tenure_filter,"7.62.3",
     "Census",NA,"Income","62","Average and Median","7", "Neighbourhoods","4","Default",tenure_filter,"7.62.4",
@@ -208,7 +269,7 @@ list_cmhc_tables <- function(short=TRUE){
     "Census",NA,"Income","59","Ranges","6", "Census Tracts","5","Default",tenure_filter,"6.59.5")
 
   dwelling_value_tables <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
     "Census",NA,"Dwelling value","6","Average","3", "Historical Time Periods","2","Default",list(),"6.4",
     "Census",NA,"Dwelling value","6","Average","3", "Survey Zones","3","Default",list(),"6.3.3",
     "Census",NA,"Dwelling value","6","Average","3", "Neighbourhoods","4","Default",list(),"6.3.4",
@@ -219,8 +280,19 @@ list_cmhc_tables <- function(short=TRUE){
     "Census",NA,"Dwelling value","6","Median","5", "Census Tracts","5","Default",list(),"6.5.5"
   )
 
+  age_tables <- tibble::tribble(
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Census",NA,"All Households","6","Age of Population","12", "Historical Time Periods","2","Default",list(),"6.8",
+    "Census",NA,"All Households","6","Age of Population","11", "Survey Zones","3","Default",list(),"6.7.3",
+    "Census",NA,"All Households","6","Age of Population","11", "Neighbourhoods","4","Default",list(),"6.7.4",
+    "Census",NA,"All Households","6","Age of Population","11", "Census Tracts","5","Default",list(),"6.7.5",
+    "Census",NA,"65 and over","7","Age of Population","3", "Historical Time Periods","2","Default",list(),"6.98",
+    "Census",NA,"65 and over","7","Age of Population","2", "Survey Zones","3","Default",list(),"6.97.3",
+    "Census",NA,"65 and over","7","Age of Population","2", "Neighbourhoods","4","Default",list(),"6.97.4",
+    "Census",NA,"65 and over","7","Age of Population","2", "Census Tracts","5","Default",list(),"6.97.5"
+  )
   hm_tables <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
     "Census",NA,"All Households","6","Age of Primary Household Maintainer","12", "Historical Time Periods","2","Default",tenure_filter,"6.12",
     "Census",NA,"All Households","6","Age of Primary Household Maintainer","11", "Survey Zones","3","Default",tenure_filter,"6.11.3",
     "Census",NA,"All Households","6","Age of Primary Household Maintainer","11", "Neighbourhoods","4","Default",tenure_filter,"6.11.4",
@@ -231,7 +303,7 @@ list_cmhc_tables <- function(short=TRUE){
     "Census",NA,"65 and over","7","Age of Primary Household Maintainer","2", "Census Tracts","5","Default",tenure_filter,"7.2.5"
   )
   hmm_tables <- tibble::tribble(
-    ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
     "Census",NA,"Mobility 5 of All Households","6","Age of Primary Household Maintainer","16", "Historical Time Periods","2","Default",tenure_filter,"6.16",
     "Census",NA,"Mobility 5 of All Households","6","Age of Primary Household Maintainer","15", "Survey Zones","3","Default",tenure_filter,"6.15.3",
     "Census",NA,"Mobility 5 of All Households","6","Age of Primary Household Maintainer","15", "Neighbourhoods","4","Default",tenure_filter,"6.15.4",
@@ -250,8 +322,15 @@ list_cmhc_tables <- function(short=TRUE){
     "Census",NA,"Mobility 1 of 65 and over","7","Age of Primary Household Maintainer","10", "Census Tracts","5","Default",tenure_filter,"7.10.5"
   )
 
+  core_housing_tables <- tibble::tribble(
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Core Housing Need",NA,"Housing Standards","7","% of Households in Core Housing Need","17", "Historical Time Periods",NA,"Default",tenure_filter,"7.17",
+    "Core Housing Need",NA,"Housing Standards","7","Households in Core Housing Need","17", "Historical Time Periods",NA,"Default",tenure_filter,"7.15",
+    "Core Housing Need",NA,"Housing Standards","6","Households Tested For Core Housing Need","69", "Historical Time Periods","3","Default",tenure_filter,"6.96",
+  )
+
   # hmmp_tables <- tibble::tribble(
-  #   ~Survey,~SureveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+  #   ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
   #   "Census",NA,"All Households","6","Mobility 5 of Primary Household Maintainer %","18", "Historical Time Periods","2","Default",tenure_filter,"6.18",
   #   "Census",NA,"All Households","6","Mobility 5 of Primary Household Maintainer %","17", "Survey Zones","3","Default",tenure_filter,"6.17.3",
   #   "Census",NA,"All Households","6","Mobility 5 of Primary Household Maintainer %","17", "Neighbourhoods","4","Default",tenure_filter,"6.17.4",
@@ -279,7 +358,18 @@ list_cmhc_tables <- function(short=TRUE){
     bind_rows(canada_tables) |>
     bind_rows(income_tables) |>
     bind_rows(dwelling_value_tables) |>
-    bind_rows(hm_tables,hmm_tables)
+    bind_rows(age_tables) |>
+    bind_rows(hm_tables,hmm_tables) |>
+    bind_rows(core_housing_tables)
+
+
+  # Sanity check
+  d<-table_list |>
+    select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$Filters,.data$TableCode,.data$GeoFilter) |>
+    full_join(bind_rows(scss_snapshot_all |> mutate(GeoFilter="Default"),
+                        scss_timeseries_all),
+              by = c("Survey", "Series", "Dimension", "Breakdown", "Filters", "GeoFilter"))
+  stopifnot(d |> filter(!is.na(.data$Table) & .data$Table != .data$TableCode) |> nrow()==0)
 
   if (short) {
     table_list <- table_list |>
@@ -436,6 +526,85 @@ list_cmhc_filters <- function(survey=NULL,series=NULL,dimension=NULL, breakdown=
 
   l
 
+}
+
+#` @internal`
+get_input_for <- function(tables,column,allow_empty=FALSE) {
+  selection <- tables |>
+    select(!!as.name(column)) |>
+    unique() |>
+    mutate(n=row_number()) |>
+    mutate(selection=paste0(!!as.name(column),": ",n))
+  if (nrow(selection)==1) {
+    filtered_selection=selection
+  } else {
+    user_prompt <- paste0("Select ",column,": \n",paste0(selection$selection,collapse="\n"),"\n")
+    if (allow_empty) user_prompt <- paste0(user_prompt,"Press enter to skip\n")
+    user_imput <- readline(prompt=user_prompt)
+    filtered_selection <- selection|>filter(n==user_imput|!!as.name(column)==user_imput)
+    if (nrow(filtered_selection)!=1 & !(nrow(filtered_selection)==0& allow_empty) ) stop("Invalid selection")
+  }
+  if (nrow(filtered_selection)==1) cat(paste0(column," ",pull(filtered_selection,column)," selected\n"))
+  filtered_selection
+}
+
+
+
+#' Interactive table selector
+#'
+#' @return A string containing the function call to access the selected table
+#'
+#' @examples
+#' \dontrun{
+#' select_cmhc_table()
+#' }
+#' @export
+select_cmhc_table <- function(){
+  tables <- list_cmhc_tables()
+  selection <- get_input_for(tables,"Survey")
+  tables <- tables |>
+    filter(.data$Survey==selection$Survey)
+
+  selection <- get_input_for(tables,"Series")
+  tables <- tables |>
+    filter(.data$Series==selection$Series)
+
+  selection <- get_input_for(tables,"Dimension")
+  tables <- tables |>
+    filter(.data$Dimension==selection$Dimension)
+
+  selection <- get_input_for(tables,"Breakdown")
+  tables <- tables |>
+    filter(.data$Breakdown==selection$Breakdown)
+
+  use_geofilters <- FALSE
+  if (nrow(tables)>1) {
+    use_geofilters=TRUE
+    selection <- get_input_for(tables,"GeoFilter")
+    tables <- tables |>
+      filter(.data$GeoFilter==selection$GeoFilter)
+  }
+
+  if (nrow(tables)!=1) {
+    stop("Selecting table unsuccessful")
+  }
+
+  vars <- c("Survey","Series","Dimension","Breakdown")
+  if (use_geofilters) vars <- c(vars,"GeoFilter")
+
+  arguments <- lapply(vars,function(v){
+    paste0(tolower(v),' = "',pull(tables,v),'"')
+  }) |>
+    unlist() |>
+    paste0(collapse = ", ")
+
+  function_call <- paste0("get_cmhc(",arguments,", ","geo_uid = <Census UID>",")")
+
+  cat("To access the CMHC data for the selected table use\n",
+      function_call,"\n")
+
+
+  result <- function_call
 }
 
 
