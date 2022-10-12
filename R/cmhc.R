@@ -164,7 +164,11 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
     range[2]=last_row
   }
 
-  header=tibble(raw=dat[range[1]] %>% strsplit(",") %>% lapply(trimws) %>% unlist()) |>
+  header <-
+    tibble(raw=dat[range[1]] %>% stringr::str_replace_all("(?<=\\$\\d),(?=\\d{3})", ".") %>%
+             stringr::str_remove_all('\"') %>% strsplit(",") %>%
+             lapply(\(x) stringr::str_replace_all(x, "(?<=\\$\\d)\\.(?=\\d{3})", ",")) %>%
+             lapply(trimws) %>% unlist()) |>
     mutate(clean=ifelse(raw==""&lag(raw)!="",paste0(lag(raw)," - ","Quality"),raw)) |>
     mutate(clean=na_if(.data$clean,""))
   if (is.na(header$clean[1])) header$clean[1]="XX"
