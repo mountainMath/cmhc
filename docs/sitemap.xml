@@ -28,9 +28,6 @@
     <loc>https://mountainmath.github.io/cmhc/news/index.html</loc>
   </url>
   <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/census_to_cmhc_geocode.html</loc>
-  </url>
-  <url>
     <loc>https://mountainmath.github.io/cmhc/reference/cmhc_cma_translation_data.html</loc>
   </url>
   <url>
@@ -40,25 +37,7 @@
     <loc>https://mountainmath.github.io/cmhc/reference/cmhc_ct_translation_data.html</loc>
   </url>
   <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_geo_level_for_census.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_geo_level_for_cmhc.html</loc>
-  </url>
-  <url>
     <loc>https://mountainmath.github.io/cmhc/reference/cmhc_quality_labels.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_region_params_from_census.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_to_census_geocode.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/date_from_cmhc_year_month.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/download_geographies.html</loc>
   </url>
   <url>
     <loc>https://mountainmath.github.io/cmhc/reference/get_cmhc.html</loc>
@@ -88,19 +67,10 @@
     <loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_tables.html</loc>
   </url>
   <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/parse_numeric.html</loc>
-  </url>
-  <url>
     <loc>https://mountainmath.github.io/cmhc/reference/select_cmhc_table.html</loc>
   </url>
   <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/set_cache_path.html</loc>
-  </url>
-  <url>
     <loc>https://mountainmath.github.io/cmhc/reference/set_cmhc_cache_path.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/show_cache_path.html</loc>
   </url>
   <url>
     <loc>https://mountainmath.github.io/cmhc/reference/show_cmhc_cache_path.html</loc>
