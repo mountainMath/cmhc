@@ -56,7 +56,7 @@ If you wish to cite cmhc:
 
 A BibTeX entry for LaTeX users is
 ```
-  @Manual{,
+  @Manual{cmhc,
     author = {Jens {von Bergmann}},
     title = {cmhc: R package to access, retrieve, and work with CMHC data},
     year = {2022},

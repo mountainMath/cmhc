@@ -1,3 +1,8 @@
+## cmhc v0.2.4
+### Minor changes
+
+* fixes an issue with "Rent Ranges" dimension not properly parsing
+
 ## cmhc v0.2.3
 ### Minor changes
 
