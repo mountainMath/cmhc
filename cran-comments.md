@@ -2,6 +2,7 @@
 ### Minor changes
 
 * fixes an issue with "Rent Ranges" dimension not properly parsing
+* add access to secondary market tables
 
 ## cmhc v0.2.3
 ### Minor changes

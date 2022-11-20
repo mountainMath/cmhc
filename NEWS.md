@@ -19,4 +19,6 @@
 * add access to census and core housing need tables
 
 # cmhc v0.2.4
+
 * fixes an issue with "Rent Ranges" dimension not properly parsing (Thanks Maxime Bélanger De Blois!)
+* add access to secondary market tables
