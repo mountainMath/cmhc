@@ -17,3 +17,7 @@
 * fix more table sanfu for Scss by intended market
 * add query builder helper function
 * add access to census and core housing need tables
+
+# cmhc v0.2.4
+
+* add access to seconddary market tables

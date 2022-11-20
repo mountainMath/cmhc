@@ -1,3 +1,8 @@
+## cmhc v0.2.4
+### Minor changes
+
+* add access to seconddary market tables
+
 ## cmhc v0.2.3
 ### Minor changes
 
