@@ -9,7 +9,7 @@
 
 # cmhc v0.2.2
 
-* fix table sanfu for Scss by intended market
+* fix table snafu for Scss by intended market
 * add vignette for rental universe
 
 # cmhc v0.2.3
@@ -22,3 +22,4 @@
 
 * fixes an issue with "Rent Ranges" dimension not properly parsing (Thanks Maxime Bélanger De Blois!)
 * add access to secondary market tables
+* fix table codes for absorbed units

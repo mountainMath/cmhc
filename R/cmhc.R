@@ -103,7 +103,13 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
     }
   }
 
+
   region_params <- cmhc_region_params_from_census(geo_uid)
+
+  if (region_params$geography_type_id=="1") {
+    if (selectedTable$TableCode=="5.11.2") selectedTable$TableCode="5.11.1"
+    if (selectedTable$TableCode=="5.7.2") selectedTable$TableCode="5.7.1"
+  }
 
   query_params <- list(
     TableId=selectedTable$TableCode,

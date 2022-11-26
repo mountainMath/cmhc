@@ -3,11 +3,12 @@
 
 * fixes an issue with "Rent Ranges" dimension not properly parsing
 * add access to secondary market tables
+* fix table codes for absorbed units
 
 ## cmhc v0.2.3
 ### Minor changes
 
-* fix more table sanfu for Scss by intended market
+* fix more table snafu for Scss by intended market
 * add query builder helper function
 * add access to census and core housing need tables
 

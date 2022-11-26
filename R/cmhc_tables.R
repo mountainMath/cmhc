@@ -84,7 +84,7 @@ list_cmhc_tables <- function(short=TRUE){
     "Scss","1","Under Construction","3","1","Intended Market","4",scss_filters,"9",
     "Scss","1","Length of Construction","7","2","Dwelling Type","1",scss_filters,"2",
     "Scss","1","Length of Construction","7","2","Intended Market","4",scss_filters,"16",
-    "Scss","1","Absorbed Units","5","2","Dwelling Type","1",scss_filters,"16",
+    "Scss","1","Absorbed Units","5","2","Dwelling Type","1",scss_filters,"2",
     "Scss","1","Absorbed Units","5","2","Intended Market","4",scss_filters,"16")
 
   # scss_snapshot2 <- tibble::tribble(
