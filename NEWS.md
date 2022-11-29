@@ -23,3 +23,4 @@
 * fixes an issue with "Rent Ranges" dimension not properly parsing (Thanks Maxime Bélanger De Blois!)
 * add access to secondary market tables
 * fix table codes for absorbed units
+* improved query builder tool

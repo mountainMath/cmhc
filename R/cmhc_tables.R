@@ -543,16 +543,17 @@ get_input_for <- function(tables,column,allow_empty=FALSE) {
   selection <- tables |>
     select(!!as.name(column)) |>
     unique() |>
-    mutate(n=row_number()) |>
-    mutate(selection=paste0(!!as.name(column),": ",n))
+    mutate(selection=!!as.name(column))
   if (nrow(selection)==1) {
     filtered_selection=selection
   } else {
-    user_prompt <- paste0("Select ",column,": \n",paste0(selection$selection,collapse="\n"),"\n")
-    if (allow_empty) user_prompt <- paste0(user_prompt,"Press enter to skip\n")
-    user_imput <- readline(prompt=user_prompt)
-    filtered_selection <- selection|>filter(n==user_imput|!!as.name(column)==user_imput)
-    if (nrow(filtered_selection)!=1 & !(nrow(filtered_selection)==0& allow_empty) ) stop("Invalid selection")
+    title <- paste0("Select ",column,":")
+    selections <- selection$selection
+    if (allow_empty) selections <- c(selections,"Skip")
+    user_imput <- utils::menu(selection$selection)
+    selected_item <- selections[user_imput]
+    filtered_selection <- selection|>filter(.data$selection==selected_item)
+    if ((nrow(filtered_selection)!=1) && (selection!="Skip")) stop("Invalid selection")
   }
   if (nrow(filtered_selection)==1) cat(paste0(column," ",pull(filtered_selection,column)," selected\n"))
   filtered_selection
