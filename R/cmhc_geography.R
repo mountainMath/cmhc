@@ -93,6 +93,9 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
     "CSD" = lapply(GeoUID,function(g) cmhc::cmhc_csd_translation_data %>% filter(.data$CMHC_CSDUID==g) %>% pull(.data$CSDUID)) %>% unlist,
     "CT" = {
       if (!is.null(parent_region)) {
+        if (length(names(parent_region))>1) {
+          parent_region <- parent_region[!names(parent_region) %in% c("Neighbourhood","Zone","Survey Zone","Hood")]
+        }
         parent_geo_level <- cmhc_geo_level_for_census(parent_region)
         if (parent_geo_level=="CMA") {
           CMA_GEOUID <- parent_region
