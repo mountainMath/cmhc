@@ -604,7 +604,8 @@ select_cmhc_table <- function(){
   if (use_geofilters) vars <- c(vars,"GeoFilter")
 
   arguments <- lapply(vars,function(v){
-    paste0(tolower(v),' = "',pull(tables,v),'"')
+    vn<-paste0(tolower(substr(v,1,1)),substr(v,2,1000))
+    paste0(vn,' = "',pull(tables,v),'"')
   }) |>
     unlist() |>
     paste0(collapse = ", ")

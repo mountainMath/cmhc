@@ -16,3 +16,5 @@
 ^pkgdown/*
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
+^data_raw/
+^data_raw/*

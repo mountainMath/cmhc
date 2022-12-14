@@ -79,7 +79,7 @@ frequency parameter set. Filters provide additional ways to filter the tables by
 <span>  <span class="va">series</span>,</span>
 <span>  <span class="va">dimension</span>,</span>
 <span>  <span class="va">breakdown</span>,</span>
-<span>  geo_filter <span class="op">=</span> <span class="st">"Default"</span>,</span>
+<span>  geoFilter <span class="op">=</span> <span class="st">"Default"</span>,</span>
 <span>  <span class="va">geo_uid</span>,</span>
 <span>  year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  month <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -109,7 +109,7 @@ if querying data for a snapshot in time or "Historical Time Periods" if querying
 returns data frame with CMHC data, tile and subtitle are set as attributes.  Consult `list_cmhc_breakdowns()` for possible values.</p></dd>
 
 
-<dt>geo_filter</dt>
+<dt>geoFilter</dt>
 <dd><p>optional geographic type, only relevaent for provincial and Canada-wide tables. Options are "Default" (the default)
 which considers accesses the default tables which should be used for data at the metro area or finer geographies. The other designaters
 are only useful when used in conjunction with `geo_uid`s for provinces or all of Canada. Specifying "All"  will
