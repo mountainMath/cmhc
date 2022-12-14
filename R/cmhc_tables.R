@@ -539,7 +539,7 @@ list_cmhc_filters <- function(survey=NULL,series=NULL,dimension=NULL, breakdown=
 }
 
 #` @internal`
-get_input_for <- function(tables,column,allow_empty=FALSE) {
+get_input_for <- function(tables,column,allow_empty=FALSE,title_suffix=NULL,skip_prompt="Skip") {
   selection <- tables |>
     select(!!as.name(column)) |>
     unique() |>
@@ -548,12 +548,13 @@ get_input_for <- function(tables,column,allow_empty=FALSE) {
     filtered_selection=selection
   } else {
     title <- paste0("Select ",column,":")
+    if (!is.null(title_suffix)) title <- paste0(title," ",title_suffix)
     selections <- selection$selection
-    if (allow_empty) selections <- c(selections,"Skip")
-    user_imput <- utils::menu(selection$selection)
+    if (allow_empty) selections <- c(skip_prompt,selections)
+    user_imput <- utils::menu(selections, title=title)
     selected_item <- selections[user_imput]
-    filtered_selection <- selection|>filter(.data$selection==selected_item)
-    if ((nrow(filtered_selection)!=1) && (selection!="Skip")) stop("Invalid selection")
+    filtered_selection <- selection |> filter(.data$selection==selected_item)
+    if ((nrow(filtered_selection)!=1) && (selected_item!=skip_prompt)) stop("Invalid selection")
   }
   if (nrow(filtered_selection)==1) cat(paste0(column," ",pull(filtered_selection,column)," selected\n"))
   filtered_selection
@@ -591,9 +592,16 @@ select_cmhc_table <- function(){
   use_geofilters <- FALSE
   if (nrow(tables)>1) {
     use_geofilters=TRUE
-    selection <- get_input_for(tables,"GeoFilter")
+    selection <- get_input_for(tables,"GeoFilter",allow_empty = TRUE,
+                               title_suffix = "(Only needed for provinical or Canada wide data query)")
+    if (nrow(selection)==1) {
+      gf <- selection$GeoFilter
+    } else {
+      gf <- "Default"
+      use_geofilters <- FALSE
+    }
     tables <- tables |>
-      filter(.data$GeoFilter==selection$GeoFilter)
+      filter(.data$GeoFilter==gf)
   }
 
   if (nrow(tables)!=1) {
