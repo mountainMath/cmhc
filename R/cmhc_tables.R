@@ -102,7 +102,7 @@ list_cmhc_tables <- function(short=TRUE){
     ~Survey,~SurveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,
     "Scss","1","Share absorbed at completion","6","2","Dwelling Type","1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")),
     "Scss","1","Unabsorbed Inventory","4","2","Dwelling Type","1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All"))) |>
-    mutate(h="9")
+    mutate(h="2")
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
     left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes2))),
