@@ -171,7 +171,7 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
     )
     if (response$status_code != 200) {
       if (file.exists(data_file)) file.remove(data_file)
-      warning(paste0("Invalid repsonse, status ",response$status_code,"."))
+      warning(paste0("Invalid response, status ",response$status_code,"."))
       return(NULL)
     }
   }
