@@ -184,7 +184,7 @@ download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
 #'
 #' @export
 get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=Sys.getenv("CMHC_CACHE_PATH")){
-  if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory,"."))
+  if (is.null(base_directory)||base_directory==""||!dir.exists(base_directory)) stop(paste0("Not a valid base directory: ",base_directory,"."))
   paths <- dir(base_directory)
   if (!dir.exists(base_directory)) dir.create(base_directory)
   if (!dir.exists(base_directory)) stop ("Could not create base directory.")
