@@ -17,7 +17,7 @@
 #' @param breakdown The geographic breakdown, one of "Survey Zones", "Census Subdivision", "Neighbourhoods", "Census Tracts",
 #' if querying data for a snapshot in time or "Historical Time Periods" if querying time series data. Not all geographic breakdowns are available for all series.
 #' returns data frame with CMHC data, tile and subtitle are set as attributes.  Consult `list_cmhc_breakdowns()` for possible values.
-#' @param geo_filter optional geographic type, only relevaent for provincial and Canada-wide tables. Options are "Default" (the default)
+#' @param geoFilter optional geographic type, only relevaent for provincial and Canada-wide tables. Options are "Default" (the default)
 #' which considers accesses the default tables which should be used for data at the metro area or finer geographies. The other designaters
 #' are only useful when used in conjunction with `geo_uid`s for provinces or all of Canada. Specifying "All"  will
 #' give data for all sub-regions, "Metro", which only considers data in metro areas, "50k" and "10k", which only considers data from metro areas and agglomerations with at least
@@ -38,7 +38,7 @@
 #' \dontrun{
 #' data <- get_cmhc("Rms","Vacancy Rate","Bedroom Type","Historical Time Periods","5915022")
 #' }
-get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
+get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
                      geo_uid,
                      year=NULL, month=NULL, frequency = NULL,
                      filters=list()){
@@ -50,14 +50,14 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
       stop(paste0("Frequency has to be one of ",paste0(allowed_frequencies,collapse=", ")))
     }
   }
-  valid_geo_filters <- c("Default","All","Metro","50k","10k")
-  if (!(geo_filter %in% valid_geo_filters)) stop(paste0("Parameter geo_filter needs to be one of ",
-                                                        paste0(valid_geo_filters,collapse = ", ")))
+  valid_geoFilters <- c("Default","All","Metro","50k","10k")
+  if (!(geoFilter %in% valid_geoFilters)) stop(paste0("Parameter geoFilter needs to be one of ",
+                                                        paste0(valid_geoFilters,collapse = ", ")))
   selectedTable<-table_list |>
     filter(.data$Survey==survey,
            .data$Series==series,
            .data$Breakdown==breakdown,
-           .data$GeoFilter == geo_filter)
+           .data$GeoFilter == geoFilter)
   if (!is.na(dimension) && !is.null(dimension)) {
     selectedTable <- selectedTable |>
       filter(.data$Dimension==dimension)
@@ -103,7 +103,30 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
     }
   }
 
+  geo_names <- names(geo_uid)
+  if (is.null(geo_names)) {
   region_params <- cmhc_region_params_from_census(geo_uid)
+  } else {
+    if (c("Neighbourhood") %in% geo_names|c("Hood") %in% geo_names) {
+      nid <- geo_uid["Neighbourhood"] |> as.character()
+      if (length(nid)==0) nid <- geo_uid["Hood"] |> as.character()
+      region_params <- cmhc_region_params_from_census(as.character(geo_uid["CMA"]))
+      hood <- cmhc::cmhc_ct_translation_data |> select(.data$NBHDCODE,.data$METNBHD,.data$NBHDNAME_EN,.data$METCODE) |>
+        unique() |>
+        filter(.data$METCODE==region_params$geography_id) |>
+        filter(.data$NBHDCODE==nid|.data$NBHDNAME_EN==nid)
+      if (nrow(hood)!=1) {
+        stop("Could not find neighbourhood ",nid," in metro area ",geo_uid["CMA"],".")
+      }
+      region_params$geography_type_id="6"
+      region_params$geography_id=hood$METNBHD
+    }
+  }
+
+  if (region_params$geography_type_id=="1") {
+    if (selectedTable$TableCode=="5.11.2") selectedTable$TableCode="5.11.1"
+    if (selectedTable$TableCode=="5.7.2") selectedTable$TableCode="5.7.1"
+  }
 
   query_params <- list(
     TableId=selectedTable$TableCode,
@@ -217,10 +240,15 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
   if (!is.na(dimension) && !is.null(dimension)) table <- table |> rename(!!dimension:=.data$Metric)
 
   if (breakdown=="Historical Time Periods") {
+    if (length(names(geo_uid))>0) {
+      geo_identifier <- region_params$geography_id
+    } else {
+      geo_identifier <- geo_uid
+    }
     table <- table |>
       rename(DateString=.data$XX) |>
       mutate(Date=.data$DateString) |>
-      mutate(GeoUID=geo_uid) |>
+      mutate(GeoUID=geo_identifier) |>
       relocate(.data$GeoUID,.data$Date,.data$DateString)
     date <- table$Date %>% na.omit() %>% first
     if (grepl("^\\d{4} .+$",date)) {
@@ -278,15 +306,6 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
       mutate(Month=month)
   }
 
-  if (!is.null(year)) {
-    if (!is.null(month)) {
-      table <- table |>
-        mutate(Date=month)
-    } else {
-
-    }
-  }
-
   table <- table |>
     mutate(Survey=survey,Series=series)
 
@@ -300,9 +319,9 @@ get_cmhc <- function(survey,series, dimension, breakdown,geo_filter="Default",
       mutate(Filters=ff)
   }
 
-  if (geo_filter!="Default") {
+  if (geoFilter!="Default") {
     table <- table |>
-      mutate(GeoFilter=geo_filter)
+      mutate(GeoFilter=geoFilter)
   }
 
   return(table)

@@ -9,7 +9,7 @@ get_cmhc(
   series,
   dimension,
   breakdown,
-  geo_filter = "Default",
+  geoFilter = "Default",
   geo_uid,
   year = NULL,
   month = NULL,
@@ -29,7 +29,7 @@ get_cmhc(
 if querying data for a snapshot in time or "Historical Time Periods" if querying time series data. Not all geographic breakdowns are available for all series.
 returns data frame with CMHC data, tile and subtitle are set as attributes.  Consult `list_cmhc_breakdowns()` for possible values.}
 
-\item{geo_filter}{optional geographic type, only relevaent for provincial and Canada-wide tables. Options are "Default" (the default)
+\item{geoFilter}{optional geographic type, only relevaent for provincial and Canada-wide tables. Options are "Default" (the default)
 which considers accesses the default tables which should be used for data at the metro area or finer geographies. The other designaters
 are only useful when used in conjunction with `geo_uid`s for provinces or all of Canada. Specifying "All"  will
 give data for all sub-regions, "Metro", which only considers data in metro areas, "50k" and "10k", which only considers data from metro areas and agglomerations with at least

@@ -84,7 +84,7 @@ list_cmhc_tables <- function(short=TRUE){
     "Scss","1","Under Construction","3","1","Intended Market","4",scss_filters,"9",
     "Scss","1","Length of Construction","7","2","Dwelling Type","1",scss_filters,"2",
     "Scss","1","Length of Construction","7","2","Intended Market","4",scss_filters,"16",
-    "Scss","1","Absorbed Units","5","2","Dwelling Type","1",scss_filters,"16",
+    "Scss","1","Absorbed Units","5","2","Dwelling Type","1",scss_filters,"2",
     "Scss","1","Absorbed Units","5","2","Intended Market","4",scss_filters,"16")
 
   # scss_snapshot2 <- tibble::tribble(
@@ -102,7 +102,7 @@ list_cmhc_tables <- function(short=TRUE){
     ~Survey,~SurveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,
     "Scss","1","Share absorbed at completion","6","2","Dwelling Type","1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All")),
     "Scss","1","Unabsorbed Inventory","4","2","Dwelling Type","1",list("dimension-1"=cmhc_dwelling_types,"dimension-18"=c("Condo","Homeowner","All"))) |>
-    mutate(h="9")
+    mutate(h="2")
 
   scss_snapshot <- bind_rows(scss_snapshot1,scss_snapshot2) |>
     left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes2))),
@@ -350,9 +350,19 @@ list_cmhc_tables <- function(short=TRUE){
   # )
 
 
+  srms_tables <- tibble::tribble(
+    ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
+    "Srms","4","Condo Vacancy Rate","3","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.1",
+    "Srms","4","Condo Average Rent","3","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.2",
+    "Srms","4","Condo Universe","3","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.3",
+    "Srms","4","Rental Condo Universe","4","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.4",
+    "Srms","4","Percentage Condo used as Rental","5","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.5",
+    "Srms","4","Other Seconary Rental Universe","1","Dwelling Type","6", "Historical Time Periods",NA,"Default",list(),"4.6.1",
+    "Srms","4","Other Seconary Rental Average Rent","1","Dwelling Type","6", "Historical Time Periods",NA,"Default",list(),"4.6.2"
+  )
 
   table_list <- bind_rows(
-    scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries,seniors
+    scss_snapshot,scss_timeseries,rms_snapshot,rms_timeseries,srms_tables,seniors
   ) |>
     mutate(GeoFilter="Default") |>
     bind_rows(canada_tables) |>
@@ -529,20 +539,22 @@ list_cmhc_filters <- function(survey=NULL,series=NULL,dimension=NULL, breakdown=
 }
 
 #` @internal`
-get_input_for <- function(tables,column,allow_empty=FALSE) {
+get_input_for <- function(tables,column,allow_empty=FALSE,title_suffix=NULL,skip_prompt="Skip") {
   selection <- tables |>
     select(!!as.name(column)) |>
     unique() |>
-    mutate(n=row_number()) |>
-    mutate(selection=paste0(!!as.name(column),": ",n))
+    mutate(selection=!!as.name(column))
   if (nrow(selection)==1) {
     filtered_selection=selection
   } else {
-    user_prompt <- paste0("Select ",column,": \n",paste0(selection$selection,collapse="\n"),"\n")
-    if (allow_empty) user_prompt <- paste0(user_prompt,"Press enter to skip\n")
-    user_imput <- readline(prompt=user_prompt)
-    filtered_selection <- selection|>filter(n==user_imput|!!as.name(column)==user_imput)
-    if (nrow(filtered_selection)!=1 & !(nrow(filtered_selection)==0& allow_empty) ) stop("Invalid selection")
+    title <- paste0("Select ",column,":")
+    if (!is.null(title_suffix)) title <- paste0(title," ",title_suffix)
+    selections <- selection$selection
+    if (allow_empty) selections <- c(skip_prompt,selections)
+    user_imput <- utils::menu(selections, title=title)
+    selected_item <- selections[user_imput]
+    filtered_selection <- selection |> filter(.data$selection==selected_item)
+    if ((nrow(filtered_selection)!=1) && (selected_item!=skip_prompt)) stop("Invalid selection")
   }
   if (nrow(filtered_selection)==1) cat(paste0(column," ",pull(filtered_selection,column)," selected\n"))
   filtered_selection
@@ -580,9 +592,16 @@ select_cmhc_table <- function(){
   use_geofilters <- FALSE
   if (nrow(tables)>1) {
     use_geofilters=TRUE
-    selection <- get_input_for(tables,"GeoFilter")
+    selection <- get_input_for(tables,"GeoFilter",allow_empty = TRUE,
+                               title_suffix = "(Only needed for provinical or Canada wide data query)")
+    if (nrow(selection)==1) {
+      gf <- selection$GeoFilter
+    } else {
+      gf <- "Default"
+      use_geofilters <- FALSE
+    }
     tables <- tables |>
-      filter(.data$GeoFilter==selection$GeoFilter)
+      filter(.data$GeoFilter==gf)
   }
 
   if (nrow(tables)!=1) {
@@ -593,7 +612,8 @@ select_cmhc_table <- function(){
   if (use_geofilters) vars <- c(vars,"GeoFilter")
 
   arguments <- lapply(vars,function(v){
-    paste0(tolower(v),' = "',pull(tables,v),'"')
+    vn<-paste0(tolower(substr(v,1,1)),substr(v,2,1000))
+    paste0(vn,' = "',pull(tables,v),'"')
   }) |>
     unlist() |>
     paste0(collapse = ", ")

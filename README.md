@@ -12,6 +12,7 @@
 API wrapper for extracting CMHC data out of the [CMHC Housing Market Information Portal](https://www.cmhc-schl.gc.ca/hmiportal).
 
 
+
 ## Reference
 Documentation is [available on the GitHub pages](https://mountainmath.github.io/cmhc/).
 
@@ -51,16 +52,16 @@ Starting with version v.0.3.2 the package has an interactive query builder helpe
 If you wish to cite cmhc:
 
   von Bergmann, J. cmhc: R package to
-  access, retrieve, and work with CMHC data. v0.2.3.
+  access, retrieve, and work with CMHC data. v0.2.4.
 
 
 A BibTeX entry for LaTeX users is
 ```
-  @Manual{,
+  @Manual{cmhc,
     author = {Jens {von Bergmann}},
     title = {cmhc: R package to access, retrieve, and work with CMHC data},
     year = {2022},
-    note = {R package version 0.2.3},
+    note = {R package version 0.2.4},
     url = {https://mountainmath.github.io/cmhc/},
   }
 ```
@@ -68,3 +69,21 @@ A BibTeX entry for LaTeX users is
 ## Related packages
 
 The cmhc package is designed to work well with the [**cancensus** package](https://mountainmath.github.io/cancensus/) working with Canadian Census data the [**cansim** package](https://mountainmath.github.io/cansim/) for regular StatCan tables, and matches the census geographies via a `GeoUID` column that is shared across these packages. The [**tongfen** package](https://mountainmath.github.io/tongfen/) facilitates making geographies from different census years that CMHC reports on comparable over time.
+
+## CMHC Attribution
+
+Subject to the [CMHC Data License Agreement](https://www.cmhc-schl.gc.ca/en/about-us/terms-conditions/hmip-terms-conditions), licensed products using CMHC data should employ the following acknowledgement of source:
+
+
+### Acknowledgment of Source
+
+a. You shall include the following notice on all reproductions of the Information:
+
+>    Source: Canada Mortgage and Housing Corporation (CMHC), name of product or information, reference date. This information is reproduced and distributed on an “as is” basis with the permission of CMHC.
+
+b. Where any Information is contained within a Value-added Product, you shall include on such Value-added Product the following notice:
+
+>    Adapted from Canada Mortgage and Housing Corporation, name of product or information, reference date. This does not constitute an endorsement by Canada Mortgage and Housing Corporation of this product.
+or any other notice approved in advance in writing by CMHC.
+
+

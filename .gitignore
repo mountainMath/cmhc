@@ -11,3 +11,5 @@ helpers
 /Meta/
 .DS_Store
 CRAN-SUBMISSION
+data_raw
+data_raw/*

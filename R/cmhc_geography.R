@@ -20,6 +20,7 @@ cmhc_geo_level_for_census <- function(GeoUID){
   switch(as.character(nchar(GeoUID)),
          "5" = "CMA",
          "7" = "CSD",
+         "10"= "CT",
          "2" = "PR",
          "3" = "CMA",
          "1" = "C")
@@ -59,6 +60,7 @@ census_to_cmhc_geocode <- function(GeoUID){
   result <- switch(
     geo_level,
     "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==GeoUID) %>% pull(.data$METCODE),
+    "CT" = cmhc::cmhc_ct_translation_data %>% filter(.data$CTUID==GeoUID) %>% mutate(id=paste0(.data$METCODE,.data$NBHDCODE,.data$CMHC_CT)) %>% pull(.data$id),
     "CSD" = cmhc::cmhc_csd_translation_data %>% filter(.data$CSDUID==GeoUID) %>% pull(.data$CMHC_CSDUID),
     "PR" = ifelse(GeoUID=="01","1",GeoUID)
   )
@@ -93,6 +95,9 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
     "CSD" = lapply(GeoUID,function(g) cmhc::cmhc_csd_translation_data %>% filter(.data$CMHC_CSDUID==g) %>% pull(.data$CSDUID)) %>% unlist,
     "CT" = {
       if (!is.null(parent_region)) {
+        if (length(names(parent_region))>1) {
+          parent_region <- parent_region[!names(parent_region) %in% c("Neighbourhood","Zone","Survey Zone","Hood")]
+        }
         parent_geo_level <- cmhc_geo_level_for_census(parent_region)
         if (parent_geo_level=="CMA") {
           CMA_GEOUID <- parent_region
@@ -179,7 +184,7 @@ download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
 #'
 #' @export
 get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=Sys.getenv("CMHC_CACHE_PATH")){
-  if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory,"."))
+  if (is.null(base_directory)||base_directory==""||!dir.exists(base_directory)) stop(paste0("Not a valid base directory: ",base_directory,"."))
   paths <- dir(base_directory)
   if (!dir.exists(base_directory)) dir.create(base_directory)
   if (!dir.exists(base_directory)) stop ("Could not create base directory.")
