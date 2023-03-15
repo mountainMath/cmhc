@@ -135,4 +135,5 @@ rental_data %>%
        fill="Bedroom Type",
        caption="CMHC Rms")
 ```
+
 There are no radical shifts in bedroom types, most municipalities that overall lost rental units lost units of all bedroom types, and municipalities that added rental units added units of all types. On net Vancouver gained mostly 1 and 2 bedroom units, Burnaby lost units of all bedroom types.
