@@ -1,3 +1,8 @@
+## cmhc v0.2.5
+### Minor changes
+
+* conditional check of vignettes to account for CMHC server issues
+
 ## cmhc v0.2.4
 ### Minor changes
 

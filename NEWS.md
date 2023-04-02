@@ -24,3 +24,7 @@
 * add access to secondary market tables
 * fix table codes for absorbed units
 * improved query builder tool
+
+# cmhc v0.2.5
+
+* conditional check of vignettes to account for CMHC server issues

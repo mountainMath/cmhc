@@ -52,7 +52,7 @@ Starting with version v.0.3.2 the package has an interactive query builder helpe
 If you wish to cite cmhc:
 
   von Bergmann, J. cmhc: R package to
-  access, retrieve, and work with CMHC data. v0.2.4.
+  access, retrieve, and work with CMHC data. v0.2.5.
 
 
 A BibTeX entry for LaTeX users is
@@ -61,7 +61,7 @@ A BibTeX entry for LaTeX users is
     author = {Jens {von Bergmann}},
     title = {cmhc: R package to access, retrieve, and work with CMHC data},
     year = {2022},
-    note = {R package version 0.2.4},
+    note = {R package version 0.2.5},
     url = {https://mountainmath.github.io/cmhc/},
   }
 ```
