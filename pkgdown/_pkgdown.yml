@@ -44,7 +44,7 @@ template:
     bootswatch: simplex
   opengraph:
     image:
-      src: 'https://mountainmath.github.io/cmhc/logo.png'
+      src: 'https://github.com/mountainMath/cmhc/raw/master/logo.png'
       alt: "cmhc"
     twitter:
       creator: "@vb_jens"
