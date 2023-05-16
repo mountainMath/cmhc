@@ -1,3 +1,8 @@
+## cmhc v0.2.6
+### Minor changes
+
+* add tables
+
 ## cmhc v0.2.5
 ### Minor changes
 
