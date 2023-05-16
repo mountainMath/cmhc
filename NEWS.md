@@ -28,3 +28,8 @@
 # cmhc v0.2.5
 
 * conditional check of vignettes to account for CMHC server issues
+
+# cmhc v0.2.6
+
+* add tables
+

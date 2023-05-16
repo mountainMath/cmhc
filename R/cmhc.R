@@ -105,7 +105,7 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
 
   geo_names <- names(geo_uid)
   if (is.null(geo_names)) {
-  region_params <- cmhc_region_params_from_census(geo_uid)
+    region_params <- cmhc_region_params_from_census(geo_uid)
   } else {
     if (c("Neighbourhood") %in% geo_names|c("Hood") %in% geo_names) {
       nid <- geo_uid["Neighbourhood"] |> as.character()
@@ -120,6 +120,8 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
       }
       region_params$geography_type_id="6"
       region_params$geography_id=hood$METNBHD
+    } else {
+      stop(paste0("Unknown regions: ",region_params))
     }
   }
 
