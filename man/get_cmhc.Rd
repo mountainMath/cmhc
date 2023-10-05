@@ -14,7 +14,8 @@ get_cmhc(
   year = NULL,
   month = NULL,
   frequency = NULL,
-  filters = list()
+  filters = list(),
+  refresh = FALSE
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ or census metropolitan area.}
 \item{frequency}{optional, only needed when querying time series data, one of "Monthly", "Quarterly" or "Annual".}
 
 \item{filters}{optional list of filters, consult `list_cmhc_filters()` for possible values.}
+
+\item{refresh}{optional, refresh the temporary local cache of the CMHC tables. Defaults to `FALSE`.}
 }
 \value{
 A tibble with the data in long form.

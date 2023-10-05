@@ -7,6 +7,8 @@ cmhc_region_params_from_census <- function(GeoUID){
   cmhc_geography_type_list=list(C=1,PR=2,CMA=3, CSD=4, CT=7, ZONE=5,NEIGHBOUHOOD=6)
   list <- list("geography_type_id"=as.character(cmhc_geography_type_list[cmhc_geo_level_for_census(GeoUID)]),
                "geography_id"=census_to_cmhc_geocode(GeoUID))
+  metid <- cmhc_met_id_for_census(GeoUID)
+  if (!is.na(metid)) list$MetId <- metid
   return(list)
 }
 
@@ -63,6 +65,41 @@ census_to_cmhc_geocode <- function(GeoUID){
     "CT" = cmhc::cmhc_ct_translation_data %>% filter(.data$CTUID==GeoUID) %>% mutate(id=paste0(.data$METCODE,.data$NBHDCODE,.data$CMHC_CT)) %>% pull(.data$id),
     "CSD" = cmhc::cmhc_csd_translation_data %>% filter(.data$CSDUID==GeoUID) %>% pull(.data$CMHC_CSDUID),
     "PR" = ifelse(GeoUID=="01","1",GeoUID)
+  )
+
+  result
+}
+
+#' translate census to CMHC met id, if applicable
+#' @param GeoUID Census geographic identifier for CMA or CSD
+#' @keywords internal
+#' @noRd
+#' @return a character string with the CMHC MetId
+cmhc_met_id_for_census <- function(GeoUID) {
+  cmhc_name <- list(
+    "CT"="CMHCCT_UID",
+    "CSD"="CMHC_CSDUID",
+    "CMA"="METCODE"
+  )
+  census_name <- list(
+    "CT"="CTUID",
+    "CSD"="CSDUID",
+    "CMA"="CMAUID"
+  )
+  geo_level = cmhc_geo_level_for_census(GeoUID)
+
+  if (is.null(geo_level)) stop("Could not recognize GeoUID.")
+
+  if (geo_level=="CSD") {
+    cma_id <- cancensus::list_census_regions("2021") |> dplyr::filter(region==GeoUID) |> dplyr:: pull(CMA_UID)
+  }
+
+  result <- switch(
+    geo_level,
+    "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==GeoUID) %>% pull(.data$METCODE),
+    "CT" = cmhc::cmhc_ct_translation_data %>% filter(.data$CTUID==GeoUID) %>% pull(.data$METCODE) %>% unique(),
+    "CSD" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(cma_id)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==cma_id) %>% pull(.data$METCODE),
+    "PR" = NA_character_
   )
 
   result
