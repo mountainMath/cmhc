@@ -33,4 +33,5 @@
 
 * add tables
 * adjust to changes with CMHC portal that require MetId to be specified (only partial fix at this point)
+* fix link to CMHC terms of use that moved
 

@@ -72,7 +72,7 @@ The cmhc package is designed to work well with the [**cancensus** package](https
 
 ## CMHC Attribution
 
-Subject to the [CMHC Data License Agreement](https://www.cmhc-schl.gc.ca/en/about-us/terms-conditions/hmip-terms-conditions), licensed products using CMHC data should employ the following acknowledgement of source:
+Subject to the [CMHC Data License Agreement](https://www.cmhc-schl.gc.ca/about-us/terms-conditions/hmip-terms-conditions), licensed products using CMHC data should employ the following acknowledgement of source:
 
 
 ### Acknowledgment of Source
