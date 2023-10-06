@@ -28,6 +28,7 @@
 #' @param month optional, only needed when querying data for a snapshot in time.
 #' @param frequency optional, only needed when querying time series data, one of "Monthly", "Quarterly" or "Annual".
 #' @param filters optional list of filters, consult `list_cmhc_filters()` for possible values.
+#' @param refresh optional, refresh the temporary local cache of the CMHC tables. Defaults to `FALSE`.
 #'
 #' @return A tibble with the data in long form.
 #'
@@ -41,7 +42,8 @@
 get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
                      geo_uid,
                      year=NULL, month=NULL, frequency = NULL,
-                     filters=list()){
+                     filters=list(),
+                     refresh=FALSE){
   table_list <- list_cmhc_tables(short=FALSE)
   if (!is.null(frequency)) {
     frequency <- stringr::str_to_title(frequency)
@@ -105,7 +107,7 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
 
   geo_names <- names(geo_uid)
   if (is.null(geo_names)) {
-  region_params <- cmhc_region_params_from_census(geo_uid)
+    region_params <- cmhc_region_params_from_census(geo_uid)
   } else {
     if (c("Neighbourhood") %in% geo_names|c("Hood") %in% geo_names) {
       nid <- geo_uid["Neighbourhood"] |> as.character()
@@ -120,6 +122,8 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
       }
       region_params$geography_type_id="6"
       region_params$geography_id=hood$METNBHD
+    } else {
+      stop(paste0("Unknown regions: ",region_params))
     }
   }
 
@@ -136,6 +140,9 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
     #ForTimePeriod.Year=year,
     exportType="csv"
   )
+  if (!is.null(region_params$MetId)) {
+    query_params$MetId=region_params$MetId
+  }
   if (!is.null(year)) {
     query_params$ForTimePeriod.Year=year
   }
@@ -156,7 +163,7 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
 
   filehash <- digest::digest(query_params)
   data_file=file.path(tempdir(),paste0("cmhc_",filehash,".csv"))
-  if (!file.exists(data_file)) {
+  if (refresh||!file.exists(data_file)) {
     url="https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/ExportTable"
     cookie='ORDERDESKSID=jFINZMyDxkcEQBY3IJL4p2tWB0kFbPOXLJC7Fv4uVCdYBCNcqIUgi7N53swo1Qty; WT_FPC=id=66.183.109.243-320627712.30508028:lv=1466113349996:ss=1466113349996; BIGipServerpool-HMIP-PROD=rd22o00000000000000000000ffff0a009815o80; _ga=GA1.3.64898709.1458624685; DoNotShowIntro=true; _ga=GA1.4.64898709.1458624685; ORDERDESKSID=cCfzb1jZknrSTdfE1Db8rxWifrIuRL9BGT4ae8kd5xDATcXjkfkVDDDuTn6Fxhgl; LUI=; AUTOLOGINTOKEN='
     share_token="L2htaXAtcGltaC9lbi9UYWJsZU1hcENoYXJ0L1RhYmxlP1RhYmxlSWQ9MS4xLjIuOSZHZW9ncmFwaHlJZD0yNDEwJkdlb2dyYXBoeVR5cGVJZD0zJkJyZWFrZG93bkdlb2dyYXBoeVR5cGVJZD00JkRpc3BsYXlBcz1UYWJsZSZHZW9ncmFnaHlOYW1lPVZhbmNvdXZlciZZdGQ9RmFsc2UmRGVmYXVsdERhdGFGaWVsZD1tZWFzdXJlLTExJlN1cnZleT1TY3NzJkZvclRpbWVQZXJpb2QuWWVhcj0yMDE2JkZvclRpbWVQZXJpb2QuUXVhcnRlcj0zJkZvclRpbWVQZXJpb2QuTW9udGg9OA%253D%253D"

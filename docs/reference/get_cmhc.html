@@ -21,7 +21,7 @@ frequency parameter set. Filters provide additional ways to filter the tables by
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cmhc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.6</span>
       </span>
     </div>
 
@@ -84,7 +84,8 @@ frequency parameter set. Filters provide additional ways to filter the tables by
 <span>  year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  month <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  frequency <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  filters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  filters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  refresh <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -136,6 +137,10 @@ or census metropolitan area.</p></dd>
 
 <dt>filters</dt>
 <dd><p>optional list of filters, consult `list_cmhc_filters()` for possible values.</p></dd>
+
+
+<dt>refresh</dt>
+<dd><p>optional, refresh the temporary local cache of the CMHC tables. Defaults to `FALSE`.</p></dd>
 
 </dl></div>
     <div id="value">

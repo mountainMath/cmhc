@@ -28,3 +28,10 @@
 # cmhc v0.2.5
 
 * conditional check of vignettes to account for CMHC server issues
+
+# cmhc v0.2.6
+
+* add tables
+* adjust to changes with CMHC portal that require MetId to be specified (only partial fix at this point)
+* fix link to CMHC terms of use that moved
+
