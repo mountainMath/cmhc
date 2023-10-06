@@ -91,14 +91,23 @@ cmhc_met_id_for_census <- function(GeoUID) {
   if (is.null(geo_level)) stop("Could not recognize GeoUID.")
 
   if (geo_level=="CSD") {
-    cma_id <- cancensus::list_census_regions("2021") |> dplyr::filter(region==GeoUID) |> dplyr:: pull(CMA_UID)
+    cma_id <- cancensus::list_census_regions("2021") %>%
+      dplyr::filter(.data$region==GeoUID) %>%
+      dplyr:: pull(.data$CMA_UID)
+    if (nchar(cma_id)==3) {
+      pr_uid <- substr(GeoUID,1,2)
+      cma_id <- paste0(pr_uid,cma_id)
+    }
+    cmhc_cma_id <- cmhc::cmhc_cma_translation_data %>%
+      filter(.data$CMA_UID==cma_id) %>%
+      pull(.data$METCODE)
   }
 
   result <- switch(
     geo_level,
     "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==GeoUID) %>% pull(.data$METCODE),
     "CT" = cmhc::cmhc_ct_translation_data %>% filter(.data$CTUID==GeoUID) %>% pull(.data$METCODE) %>% unique(),
-    "CSD" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(cma_id)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==cma_id) %>% pull(.data$METCODE),
+    "CSD" = cmhc_cma_id,
     "PR" = NA_character_
   )
 
@@ -139,8 +148,8 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
         if (parent_geo_level=="CMA") {
           CMA_GEOUID <- parent_region
         } else if (parent_geo_level=="CSD"){
-          link <- cmhc::cmhc_ct_translation_data |>
-            filter(.data$CSDUID==parent_region) |>
+          link <- cmhc::cmhc_ct_translation_data %>%
+            filter(.data$CSDUID==parent_region) %>%
             select(.data$CTUID,.data$CMHC_CT) %>%
             mutate(CMA_UID=substr(.data$CTUID,1,3))
           CMA_GEOUID <- unique(link$CMA_UID)

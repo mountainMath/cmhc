@@ -2,6 +2,7 @@
 ### Minor changes
 
 * add tables
+* adjust to changes with CMHC portal that require MetId to be specified (only partial fix at this point)
 
 ## cmhc v0.2.5
 ### Minor changes
