@@ -63,7 +63,7 @@ census_to_cmhc_geocode <- function(GeoUID){
     geo_level,
     "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==GeoUID) %>% pull(.data$METCODE),
     "CT" = cmhc::cmhc_ct_translation_data %>% filter(.data$CTUID==GeoUID) %>% mutate(id=paste0(.data$METCODE,.data$NBHDCODE,.data$CMHC_CT)) %>% pull(.data$id),
-    "CSD" = cmhc::cmhc_csd_translation_data %>% filter(.data$CSDUID==GeoUID) %>% pull(.data$CMHC_CSDUID),
+    "CSD" = GeoUID, #cmhc::cmhc_csd_translation_data %>% filter(.data$CSDUID==GeoUID) %>% pull(.data$CMHC_CSDUID),
     "PR" = ifelse(GeoUID=="01","1",GeoUID)
   )
 
@@ -91,15 +91,10 @@ cmhc_met_id_for_census <- function(GeoUID) {
   if (is.null(geo_level)) stop("Could not recognize GeoUID.")
 
   if (geo_level=="CSD") {
-    cma_id <- cancensus::list_census_regions("2021") %>%
-      dplyr::filter(.data$region==GeoUID) %>%
-      dplyr:: pull(.data$CMA_UID)
-    if (nchar(cma_id)==3) {
-      pr_uid <- substr(GeoUID,1,2)
-      cma_id <- paste0(pr_uid,cma_id)
-    }
-    cmhc_cma_id <- cmhc::cmhc_cma_translation_data %>%
-      filter(.data$CMA_UID==cma_id) %>%
+    met_lookup <- cmhc_csd_translation_data_2023
+
+    cmhc_cma_id <- met_lookup |>
+      filter(.data$GeoUID==!!GeoUID) |>
       pull(.data$METCODE)
   }
 
@@ -108,7 +103,8 @@ cmhc_met_id_for_census <- function(GeoUID) {
     "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==GeoUID) %>% pull(.data$METCODE),
     "CT" = cmhc::cmhc_ct_translation_data %>% filter(.data$CTUID==GeoUID) %>% pull(.data$METCODE) %>% unique(),
     "CSD" = cmhc_cma_id,
-    "PR" = NA_character_
+    "PR" = GeoUID,
+    "C" = 1
   )
 
   result
@@ -138,7 +134,7 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
 
   result <- switch(geo_level,
     "CMA" = lapply(GeoUID,function(g) cmhc::cmhc_cma_translation_data %>% filter(.data$METCODE==g) %>% pull(.data$CMA_UID)) %>% unlist,
-    "CSD" = lapply(GeoUID,function(g) cmhc::cmhc_csd_translation_data %>% filter(.data$CMHC_CSDUID==g) %>% pull(.data$CSDUID)) %>% unlist,
+    "CSD" = GeoUID, #lapply(GeoUID,function(g) cmhc::cmhc_csd_translation_data %>% filter(.data$CMHC_CSDUID==g) %>% pull(.data$CSDUID)) %>% unlist,
     "CT" = {
       if (!is.null(parent_region)) {
         if (length(names(parent_region))>1) {
