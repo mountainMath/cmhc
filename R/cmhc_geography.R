@@ -8,7 +8,7 @@ cmhc_region_params_from_census <- function(GeoUID){
   list <- list("geography_type_id"=as.character(cmhc_geography_type_list[cmhc_geo_level_for_census(GeoUID)]),
                "geography_id"=census_to_cmhc_geocode(GeoUID))
   metid <- cmhc_met_id_for_census(GeoUID)
-  if (!is.na(metid)) list$MetId <- metid
+  if (length(metid)>0&&!is.na(metid)) list$MetId <- metid
   return(list)
 }
 
@@ -91,7 +91,7 @@ cmhc_met_id_for_census <- function(GeoUID) {
   if (is.null(geo_level)) stop("Could not recognize GeoUID.")
 
   if (geo_level=="CSD") {
-    met_lookup <- cmhc_csd_translation_data_2023
+    met_lookup <- cmhc::cmhc_csd_translation_data_2023
 
     cmhc_cma_id <- met_lookup |>
       filter(.data$GeoUID==!!GeoUID) |>
