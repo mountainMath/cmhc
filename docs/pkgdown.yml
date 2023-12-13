@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   basic_usage: basic_usage.html
   rental_universe: rental_universe.html
-last_built: 2023-10-06T20:19Z
+last_built: 2023-12-13T18:51Z
 urls:
   reference: https://mountainmath.github.io/cmhc/reference
   article: https://mountainmath.github.io/cmhc/articles
