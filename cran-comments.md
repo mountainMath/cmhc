@@ -1,3 +1,9 @@
+## cmhc v0.2.7
+### Minor changes
+
+* add CMHC lookup table for met codes
+
+
 ## cmhc v0.2.6
 ### Minor changes
 

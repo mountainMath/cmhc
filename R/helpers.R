@@ -52,6 +52,15 @@ NULL
 #' @keywords data internal
 NULL
 
+#' A dataset with geographic identifiers for CMHC and Census at the CSD level for 2023 data portal version
+#' @name cmhc_csd_translation_data_2023
+#' @docType data
+#' @author derived from CMHC data
+#' @source Custom data extract from CMHC
+#' @format A tibble with Census CSD and CMHC METID geographic identifiers
+#' @keywords data internal
+NULL
+
 #' A dataset with geographic identifiers for CMHC and Census at the CT level
 #' @name cmhc_ct_translation_data
 #' @docType data
