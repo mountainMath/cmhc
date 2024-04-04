@@ -1,3 +1,8 @@
+## cmhc v0.2.8
+### Minor changes
+
+* expand tables
+
 ## cmhc v0.2.7
 ### Minor changes
 

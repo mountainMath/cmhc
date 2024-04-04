@@ -39,3 +39,7 @@
 
 * add CMHC lookup table for met codes
 
+## cmhc v0.2.8
+
+* expand tables
+
