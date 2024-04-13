@@ -64,7 +64,8 @@ census_to_cmhc_geocode <- function(GeoUID){
     "CMA" = cmhc::cmhc_cma_translation_data %>% mutate(CMA_UID=ifelse(nchar(GeoUID)==3 & nchar(.data$CMA_UID)==5,substr(.data$CMA_UID,3,5),.data$CMA_UID)) %>% filter(.data$CMA_UID==GeoUID) %>% pull(.data$METCODE),
     "CT" = cmhc::cmhc_ct_translation_data %>% filter(.data$CTUID==GeoUID) %>% mutate(id=paste0(.data$METCODE,.data$NBHDCODE,.data$CMHC_CT)) %>% pull(.data$id),
     "CSD" = GeoUID, #cmhc::cmhc_csd_translation_data %>% filter(.data$CSDUID==GeoUID) %>% pull(.data$CMHC_CSDUID),
-    "PR" = ifelse(GeoUID=="01","1",GeoUID)
+    "PR" = ifelse(GeoUID=="01","1",GeoUID),
+    "C" = "1"
   )
 
   result
