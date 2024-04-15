@@ -42,4 +42,5 @@
 ## cmhc v0.2.8
 
 * expand tables
+* improve handling for national level data
 
