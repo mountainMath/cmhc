@@ -127,10 +127,9 @@ list_cmhc_tables <- function(short=TRUE){
     mutate(TableCode=paste0(.data$SurveyCode,".",.data$DimensionCode,".",.data$SeriesCode)) |>
     mutate(Breakdown="Historical Time Periods") |>
     select(-.data$h) |>
-    mutate(TableCode=ifelse(.data$Series=="Length of Construction" & .data$Dimension=="Intended Market",
-                            "1.2.8",.data$TableCode)) |>
-    mutate(TableCode=ifelse(.data$Series=="Share absorbed at completion" & .data$Dimension=="Dwelling Type",
-                            "1.2.6",.data$TableCode))
+    mutate(TableCode=case_when(.data$Series=="Length of Construction" & .data$Dimension=="Intended Market" ~ "1.2.8",
+                               .data$Series=="Share absorbed at completion" & .data$Dimension=="Dwelling Type" ~ "1.2.6",
+                               TRUE ~ .data$TableCode))
 
   scss_snapshot <- scss_snapshot |> select(-.data$h)
 
