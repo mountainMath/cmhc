@@ -32,4 +32,4 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://github.com/mountainMath/cmhc, https://mountainmath.github.io/cmhc/, https://www03.cmhc-schl.gc.ca/hmip-pimh/en
 BugReports: https://github.com/mountainMath/cmhc/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

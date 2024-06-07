@@ -378,7 +378,11 @@ list_cmhc_tables <- function(short=TRUE){
     bind_rows(core_housing_tables)
 
   table_list <- table_list |>
-    bind_rows(table_list |> filter(Series=="Starts",Dimension=="Dwelling Type",Breakdown=="Provinces")  |> mutate(TableCode="5.5.1",GeoFilter="All"))
+    bind_rows(table_list |>
+                filter(.data$Series=="Starts",
+                       .data$Dimension=="Dwelling Type",
+                       .data$Breakdown=="Provinces")  |>
+                mutate(TableCode="5.5.1",GeoFilter="All"))
 
   # Sanity check
   d<-table_list |>
