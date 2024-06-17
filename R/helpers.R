@@ -36,8 +36,8 @@ parse_numeric <- function(x){
 
 
 get_cmhc_cma_translation_data <- function() {
-  cmhc::cmhc_cma_translation_data %>%
-    mutate(METCODE=ifelse(.data$CMA_UID=="59938","1100",.data$METCODE))
+  cmhc::cmhc_cma_translation_data # %>%
+    #mutate(METCODE=ifelse(.data$CMA_UID=="59938","1100",.data$METCODE))
 }
 
 
