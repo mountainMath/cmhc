@@ -12,6 +12,7 @@ get_cmhc(
   geoFilter = "Default",
   geo_uid,
   year = NULL,
+  quarter = NULL,
   month = NULL,
   frequency = NULL,
   filters = list(),
@@ -40,6 +41,8 @@ give data for all sub-regions, "Metro", which only considers data in metro areas
 or census metropolitan area.}
 
 \item{year}{optional, only needed when querying data for a snapshot in time.}
+
+\item{quarter}{optional, only needed when querying data for a snapshot in time querying quarterly data.}
 
 \item{month}{optional, only needed when querying data for a snapshot in time.}
 

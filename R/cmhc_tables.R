@@ -50,6 +50,12 @@ list_cmhc_tables <- function(short=TRUE){
     "Scss","Completions","Intended Market","Census Tracts",scss_filters,"1.4.2.11",
   )
 
+  scss_snapshot_all_geofilter <- tibble::tribble(
+    ~Survey,~Series,~Dimension,~Breakdown,~Filters,~Table,~GeoFilter,
+    "Scss","Starts","Dwelling Type","Provinces",list(),"5.5.1","All",
+  )
+
+
   scss_timeseries_all <- tibble::tribble(
     ~Survey,~Series,~Dimension,~Breakdown,~Filters,~Table,~GeoFilter,
     "Scss","Starts","Dwelling Type","Historical Time Periods",scss_filters,"1.2.1","Default",
@@ -121,10 +127,9 @@ list_cmhc_tables <- function(short=TRUE){
     mutate(TableCode=paste0(.data$SurveyCode,".",.data$DimensionCode,".",.data$SeriesCode)) |>
     mutate(Breakdown="Historical Time Periods") |>
     select(-.data$h) |>
-    mutate(TableCode=ifelse(.data$Series=="Length of Construction" & .data$Dimension=="Intended Market",
-                            "1.2.8",.data$TableCode)) |>
-    mutate(TableCode=ifelse(.data$Series=="Share absorbed at completion" & .data$Dimension=="Dwelling Type",
-                            "1.2.6",.data$TableCode))
+    mutate(TableCode=case_when(.data$Series=="Length of Construction" & .data$Dimension=="Intended Market" ~ "1.2.8",
+                               .data$Series=="Share absorbed at completion" & .data$Dimension=="Dwelling Type" ~ "1.2.6",
+                               TRUE ~ .data$TableCode))
 
   scss_snapshot <- scss_snapshot |> select(-.data$h)
 
@@ -372,6 +377,12 @@ list_cmhc_tables <- function(short=TRUE){
     bind_rows(hm_tables,hmm_tables) |>
     bind_rows(core_housing_tables)
 
+  table_list <- table_list |>
+    bind_rows(table_list |>
+                filter(.data$Series=="Starts",
+                       .data$Dimension=="Dwelling Type",
+                       .data$Breakdown=="Provinces")  |>
+                mutate(TableCode="5.5.1",GeoFilter="All"))
 
   # Sanity check
   d<-table_list |>

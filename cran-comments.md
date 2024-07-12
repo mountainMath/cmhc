@@ -1,3 +1,10 @@
+## cmhc v0.2.8
+### Minor changes
+
+* expand tables
+* improve handling for national level data
+* update to new CMHC internal METCODES
+
 ## cmhc v0.2.7
 ### Minor changes
 

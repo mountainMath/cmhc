@@ -39,3 +39,9 @@
 
 * add CMHC lookup table for met codes
 
+## cmhc v0.2.8
+
+* expand tables
+* improve handling for national level data
+* update to new CMHC internal METCODES
+

@@ -25,6 +25,7 @@
 #' @param geo_uid Census geographic identifier for which to query the data. Can be a census tract, census subdivision,
 #' or census metropolitan area.
 #' @param year optional, only needed when querying data for a snapshot in time.
+#' @param quarter optional, only needed when querying data for a snapshot in time querying quarterly data.
 #' @param month optional, only needed when querying data for a snapshot in time.
 #' @param frequency optional, only needed when querying time series data, one of "Monthly", "Quarterly" or "Annual".
 #' @param filters optional list of filters, consult `list_cmhc_filters()` for possible values.
@@ -41,7 +42,7 @@
 #' }
 get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
                      geo_uid,
-                     year=NULL, month=NULL, frequency = NULL,
+                     year=NULL, quarter=NULL, month=NULL, frequency = NULL,
                      filters=list(),
                      refresh=FALSE){
   table_list <- list_cmhc_tables(short=FALSE)
@@ -148,6 +149,9 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
   }
   if (!is.null(month)) {
     query_params$ForTimePeriod.Month=month
+  }
+  if (!is.null(quarter)) {
+    query_params$ForTimePeriod.Quarter=quarter
   }
 
   if (!is.null(frequency)) {
@@ -301,6 +305,8 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
   if (!is.null(year)) {
     if (!is.null(month)) {
       date <- as.Date(paste0(year,"-",month,"-01"))
+    } else if (!is.null(quarter)) {
+      date <- as.Date(paste0(year,"-",stringr::str_pad((quarter-1)*3+1,width=2,pad="0"),"-01"))
     } else {
       date <- as.Date(paste0(year,"-07-01"))
     }
@@ -311,6 +317,10 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
   if (!is.null(month)) {
     table <- table |>
       mutate(Month=month)
+  }
+  if (!is.null(quarter)) {
+    table <- table |>
+      mutate(Quarter=quarter)
   }
 
   table <- table |>
