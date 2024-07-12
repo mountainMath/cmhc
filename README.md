@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/mountainMath/cmhc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mountainMath/cmhc/actions/workflows/R-CMD-check.yaml)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/cmhc)](https://cran.r-project.org/package=cmhc)
+[![CRAN status](https://www.r-pkg.org/badges/version/cmhc)](https://CRAN.R-project.org/package=cmhc)
 [![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/cmhc)](https://cranlogs.r-pkg.org/badges/cmhc)
 <!-- badges: end -->
 
