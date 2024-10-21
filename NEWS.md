@@ -49,5 +49,5 @@
 ### Minor changes
 
 * adapt to changes to CMHC interface
-
+* intelligent guessing of frequencies for data series retrieval based on temporal arguments supplied
 
