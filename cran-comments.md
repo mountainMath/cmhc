@@ -1,3 +1,8 @@
+## cmhc v0.2.9
+### Minor changes
+
+* adapt to changes to CMHC interface
+
 ## cmhc v0.2.8
 ### Minor changes
 

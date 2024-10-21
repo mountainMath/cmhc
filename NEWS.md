@@ -45,3 +45,9 @@
 * improve handling for national level data
 * update to new CMHC internal METCODES
 
+## cmhc v0.2.9
+### Minor changes
+
+* adapt to changes to CMHC interface
+
+
