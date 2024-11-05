@@ -146,12 +146,21 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
   }
   if (!is.null(year)) {
     query_params$ForTimePeriod.Year=year
+    if (is.null(frequency)) {
+      query_params$Frequency="Annual"
+    }
   }
   if (!is.null(month)) {
     query_params$ForTimePeriod.Month=month
+    if (is.null(frequency)) {
+      query_params$Frequency="Monthly"
+    }
   }
   if (!is.null(quarter)) {
     query_params$ForTimePeriod.Quarter=quarter
+    if (is.null(frequency)) {
+      query_params$Frequency="Quarterly"
+    }
   }
 
   if (!is.null(frequency)) {
