@@ -358,7 +358,8 @@ list_cmhc_tables <- function(short=TRUE){
   srms_tables <- tibble::tribble(
     ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Breakdown,~BreakdownCode,~GeoFilter,~Filters,~TableCode,
     "Srms","4","Condo Vacancy Rate","3","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.1",
-    "Srms","4","Condo Average Rent","3","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.2",
+    #"Srms","4","Condo Average Rent","3","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.2",
+    "Srms","4","Condo Average Rent","3","Bedroom Type","4", "Historical Time Periods",NA,"Default",list(),"4.4.2",
     "Srms","4","Condo Universe","3","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.3",
     "Srms","4","Rental Condo Universe","4","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.4",
     "Srms","4","Percentage Condo used as Rental","5","Structure Size","2", "Historical Time Periods",NA,"Default",list(),"4.2.5",
