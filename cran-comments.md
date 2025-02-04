@@ -3,6 +3,7 @@
 
 * adapt to changes to CMHC interface
 * intelligent guessing of frequencies for data series retrieval based on temporal arguments supplied
+* enable data access to more tables
 
 ## cmhc v0.2.8
 ### Minor changes
