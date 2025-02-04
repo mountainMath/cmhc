@@ -50,5 +50,9 @@
 
 * adapt to changes to CMHC interface
 * intelligent guessing of frequencies for data series retrieval based on temporal arguments supplied
+
+## cmhc v0.2.10
+### Minor changes
+
 * enable data access to more tables
 
