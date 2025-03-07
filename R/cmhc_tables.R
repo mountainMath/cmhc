@@ -383,7 +383,9 @@ list_cmhc_tables <- function(short=TRUE){
                 filter(.data$Series=="Starts",
                        .data$Dimension=="Dwelling Type",
                        .data$Breakdown=="Provinces")  |>
-                mutate(TableCode="5.5.1",GeoFilter="All"))
+                mutate(TableCode="5.5.1",GeoFilter="All")) |>
+    bind_rows(tibble::tibble(Survey="Scss",Series="Starts (SAAR)",Breakdown="Historical Time Periods",
+                     GeoFilter="Default",TableCode="5.3.3"))
 
   # Sanity check
   d<-table_list |>

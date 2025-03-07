@@ -83,8 +83,8 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
                     paste0(unique(selectedSurvey$Series),collapse = ", "),"."))
       }
       selectedDimension <- table_list %>%
-        filter(.data$Survey==survey, .data$Series==series, .data$Dimension==dimension)
-      if (nrow(selectedDimension)==0 && !is.na(dimension)) {
+        filter(.data$Survey==survey, .data$Series==series, is.null(dimension)||is.na(dimension)||.data$Dimension==dimension)
+      if (nrow(selectedDimension)==0 && !(is.null(dimension)||is.na(dimension))) {
         stop(paste0("Dimension ",dimension," for ",series," and survey ",survey,
                     " does not exist or is not supported. Valid dimensions are ",
                     paste0(unique(selectedSeries$Dimension),collapse = ", "),"."))
@@ -198,6 +198,14 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
   dat=readLines(data_file, encoding="latin1") # yes, CMHC does not use UTF-8...
   last_row=match("",dat)
   range=grep("^,.+$",dat)
+  have_saar_table = FALSE
+  if (length(range)==0) {
+    range=grep("^ — Starts \\(SAAR\\)",dat)
+    if (length(range)==1) {
+      range[1]=range[1] + 1
+      have_saar_table=TRUE
+    }
+  }
   if (length(range)==0) {
     warning("Problem reading response.")
     warning(paste0(dat,collapse = "\n"))
@@ -215,6 +223,9 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
     mutate(clean=ifelse(raw==""&lag(raw)!="",paste0(lag(raw)," - ","Quality"),raw)) |>
     mutate(clean=na_if(.data$clean,""))
   if (is.na(header$clean[1])) header$clean[1]="XX"
+  if (nrow(header)==1&&have_saar_table) {
+    header <- tibble::tibble(clean=c("XX","Starts (SAAR)"))
+  }
 
   result=readr::read_csv(data_file,skip = range[1],n_max=range[2]-range[1],
                                           locale = readr::locale(encoding = "latin1"),
