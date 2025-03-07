@@ -200,7 +200,7 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
   range=grep("^,.+$",dat)
   have_saar_table = FALSE
   if (length(range)==0) {
-    range=grep("^ — Starts \\(SAAR\\)",dat)
+    range=grep("^ \u2014 Starts \\(SAAR\\)",dat)
     if (length(range)==1) {
       range[1]=range[1] + 1
       have_saar_table=TRUE
@@ -268,7 +268,14 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
 
   table <- table |>
     mutate(Metric=factor(.data$Metric, levels= regular_vars))
-  if (!is.na(dimension) && !is.null(dimension)) table <- table |> rename(!!dimension:=.data$Metric)
+
+
+  if (!(is.null(dimension) || is.na(dimension))) table <- table |> rename(!!dimension:=.data$Metric)
+
+  if (have_saar_table) {
+    table <- table |> select(-"Metric")
+  }
+
 
   if (breakdown=="Historical Time Periods") {
     if (length(names(geo_uid))>0) {
