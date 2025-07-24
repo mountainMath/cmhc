@@ -133,6 +133,24 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
     if (selectedTable$TableCode=="5.7.2") selectedTable$TableCode="5.7.1"
   }
 
+  if (selectedTable$Series=="Starts (SAAR)") {
+    codes <- selectedTable$TableCode |> strsplit("\\.") |>
+      unlist()
+    if (!(region_params$geography_type_id %in% c("1","2","3"))) {
+      stop("SAAR tables are only available for Canada, Provinces and CMAs.")
+    }
+    if (region_params$geography_type_id %in% c("1","2") && selectedTable$GeoFilter == "Default") {
+      warning("SAAR tables for Canada and the Provinces are only available for All or 10k geographies, changing to 10k.")
+      codes[2]="1"
+    }
+    if (region_params$geography_type_id %in% c("3") && selectedTable$GeoFilter != "Default") {
+      warning("SAAR tables for Metro Areas are only available for Default geographies, changing to Default")
+      codes[2]="3"
+    }
+    codes[3]=region_params$geography_type_id
+    selectedTable$TableCode=paste0(codes,collapse = ".")
+  }
+
   query_params <- list(
     TableId=selectedTable$TableCode,
     GeographyId=region_params$geography_id,
@@ -191,7 +209,8 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
     )
     if (response$status_code != 200) {
       if (file.exists(data_file)) file.remove(data_file)
-      warning(paste0("Invalid response, status ",response$status_code,"."))
+      warning(paste0("Invalid response, status ",response$status_code,".","\n",
+                     "This can happen when CMHC HMIP does not have data for the given geography ",geo_uid,"."))
       return(NULL)
     }
   }
@@ -273,7 +292,8 @@ get_cmhc <- function(survey,series, dimension, breakdown,geoFilter="Default",
   if (!(is.null(dimension) || is.na(dimension))) table <- table |> rename(!!dimension:=.data$Metric)
 
   if (have_saar_table) {
-    table <- table |> select(-"Metric")
+    table <- table |> mutate(`Dwelling Type`="Total")
+    #table <- table |> select(-"Dwelling Type")
   }
 
 

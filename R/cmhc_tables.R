@@ -78,7 +78,13 @@ list_cmhc_tables <- function(short=TRUE){
     "Scss","Completions","Intended Market","Historical Time Periods",scss_filters,"1.16.2.5","50k",
     "Scss","Completions","Dwelling Type","Historical Time Periods",scss_filters,"1.2.2.4","Metro",
     "Scss","Completions","Intended Market","Historical Time Periods",scss_filters,"1.16.2.4","Metro",
+    # "Scss","Starts (SAAR)","Dwelling Type","Distorical Time Periods",list(),"5.1.2", "PR 10k",
+    # "Scss","Starts (SAAR)","Dwelling Type","Distorical Time Periods",list(),"5.2.2", "PR All",
+    # "Scss","Starts (SAAR)","Dwelling Type","Distorical Time Periods",list(),"5.3.3", "Metro Default",
+    # "Scss","Starts (SAAR)","Dwelling Type","Distorical Time Periods",list(),"5.1.1", "Canada 10k",
+    # "Scss","Starts (SAAR)","Dwelling Type","Distorical Time Periods",list(),"5.2.1", "Canada All",
   )
+
 
   scss_snapshot1 <- tibble::tribble(
     ~Survey,~SurveyCode,~Series,~SeriesCode,~GeoCodes,~Dimension,~DimensionCode,~Filters,~h,
@@ -114,24 +120,23 @@ list_cmhc_tables <- function(short=TRUE){
     left_join(tibble(GeoCodes=c(rep("1",length(cmhc_type_codes1)),rep("2",length(cmhc_type_codes2))),
                      Breakdown=c(names(cmhc_type_codes1),names(cmhc_type_codes2)),
                      BreakdownCode=as.character(c(cmhc_type_codes1,cmhc_type_codes2))),
-              by="GeoCodes") |>
-    select(-.data$GeoCodes) |>
+              by="GeoCodes", relationship="many-to-many") |>
+    select(-"GeoCodes") |>
     mutate(TableCode=paste0(.data$SurveyCode,".",.data$DimensionCode,".",
                             .data$SeriesCode,".",.data$BreakdownCode))
 
-
   scss_timeseries <- scss_snapshot |>
-    select(-.data$TableCode,-.data$Breakdown,-.data$BreakdownCode) |>
+    select(-"TableCode",-"Breakdown",-"BreakdownCode") |>
     unique() %>%
     mutate(DimensionCode=.data$h) |>
     mutate(TableCode=paste0(.data$SurveyCode,".",.data$DimensionCode,".",.data$SeriesCode)) |>
     mutate(Breakdown="Historical Time Periods") |>
-    select(-.data$h) |>
+    select(-"h") |>
     mutate(TableCode=case_when(.data$Series=="Length of Construction" & .data$Dimension=="Intended Market" ~ "1.2.8",
                                .data$Series=="Share absorbed at completion" & .data$Dimension=="Dwelling Type" ~ "1.2.6",
                                TRUE ~ .data$TableCode))
 
-  scss_snapshot <- scss_snapshot |> select(-.data$h)
+  scss_snapshot <- scss_snapshot |> select(-"h")
 
   scss_snapshot3 <- tibble::tribble(
     ~Survey,~SurveyCode,~Series,~SeriesCode,~Dimension,~DimensionCode,~Filters,
@@ -172,12 +177,12 @@ list_cmhc_tables <- function(short=TRUE){
                      Breakdown=c(names(cmhc_type_codes3),names(cmhc_type_codes4)),
                      BreakdownCode=as.character(c(cmhc_type_codes3,cmhc_type_codes4))),
               by="GeoCodes") |>
-    select(-.data$GeoCodes) |>
+    select(-"GeoCodes") |>
     mutate(TableCode=paste0(.data$SurveyCode,".",.data$SeriesCode,".",
                             .data$DimensionCode,".",.data$BreakdownCode))
 
   rms_timeseries <- rms_snapshot |>
-    select(-.data$TableCode,-.data$Breakdown,-.data$BreakdownCode) |>
+    select(-"TableCode",-"Breakdown",-"BreakdownCode") |>
     unique() %>%
     mutate(SeriesCode="2") |>
     mutate(TableCode=paste0(.data$SurveyCode,".",.data$SeriesCode,".",.data$DimensionCode)) |>
@@ -384,12 +389,12 @@ list_cmhc_tables <- function(short=TRUE){
                        .data$Dimension=="Dwelling Type",
                        .data$Breakdown=="Provinces")  |>
                 mutate(TableCode="5.5.1",GeoFilter="All")) |>
-    bind_rows(tibble::tibble(Survey="Scss",Series="Starts (SAAR)",Breakdown="Historical Time Periods",
-                     GeoFilter="Default",TableCode="5.3.3"))
+    bind_rows(tibble::tibble(Survey="Scss",Series="Starts (SAAR)",Dimension="Dwelling Type",Breakdown="Historical Time Periods",
+                     GeoFilter=c("Default","10k","All"),TableCode=c("5.3.3","5.1.3","5.2.3")))
 
   # Sanity check
   d<-table_list |>
-    select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$Filters,.data$TableCode,.data$GeoFilter) |>
+    select("Survey","Series","Dimension","Breakdown","Filters","TableCode","GeoFilter") |>
     full_join(bind_rows(scss_snapshot_all |> mutate(GeoFilter="Default"),
                         scss_timeseries_all),
               by = c("Survey", "Series", "Dimension", "Breakdown", "Filters", "GeoFilter"))
@@ -397,7 +402,7 @@ list_cmhc_tables <- function(short=TRUE){
 
   if (short) {
     table_list <- table_list |>
-      select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$GeoFilter,.data$Filters)
+      select("Survey","Series","Dimension","Breakdown","GeoFilter","Filters")
   }
 
   table_list
@@ -413,7 +418,7 @@ list_cmhc_tables <- function(short=TRUE){
 #' @export
 list_cmhc_surveys <- function(){
   list_cmhc_tables() |>
-    select(.data$Survey) |>
+    select("Survey") |>
     unique()
 }
 
@@ -428,7 +433,7 @@ list_cmhc_surveys <- function(){
 #' @export
 list_cmhc_series <- function(survey=NULL){
   l <- list_cmhc_tables() |>
-    select(.data$Survey,.data$Series) |>
+    select("Survey","Series") |>
     unique()
 
   if (!is.null(survey)) {
@@ -452,7 +457,7 @@ list_cmhc_series <- function(survey=NULL){
 #' @export
 list_cmhc_dimensions <- function(survey=NULL,series=NULL){
   l <- list_cmhc_tables() |>
-    select(.data$Survey,.data$Series,.data$Dimension) |>
+    select("Survey","Series","Dimension") |>
     unique()
 
   if (!is.null(survey)) {
@@ -485,7 +490,7 @@ list_cmhc_dimensions <- function(survey=NULL,series=NULL){
 #' @export
 list_cmhc_breakdowns <- function(survey=NULL,series=NULL,dimension=NULL){
   l <- list_cmhc_tables() |>
-    select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown) |>
+    select("Survey","Series","Dimension","Breakdown") |>
     unique()
 
   if (!is.null(survey)) {
@@ -523,7 +528,7 @@ list_cmhc_breakdowns <- function(survey=NULL,series=NULL,dimension=NULL){
 #' @export
 list_cmhc_filters <- function(survey=NULL,series=NULL,dimension=NULL, breakdown=NULL){
   l <- list_cmhc_tables() |>
-    select(.data$Survey,.data$Series,.data$Dimension,.data$Breakdown,.data$Filters) |>
+    select("Survey","Series","Dimension","Breakdown","Filters") |>
     unique()
 
   if (!is.null(survey)) {
