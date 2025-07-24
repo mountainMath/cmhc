@@ -1,3 +1,10 @@
+## cmhc v0.2.11
+### Minor changes
+
+* enable data access to SAAR tables
+* more informative error messages when data is not available
+* code cleaning to adhere to tidyselect updates
+
 ## cmhc v0.2.10
 ### Minor changes
 

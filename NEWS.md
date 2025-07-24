@@ -56,3 +56,10 @@
 
 * enable data access to more tables
 
+## cmhc v0.2.11
+### Minor changes
+
+* enable data access to SAAR tables
+* more informative error messages when data is not available
+* code cleaning to adhere to tidyselect updates
+
