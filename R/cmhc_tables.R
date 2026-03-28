@@ -4,6 +4,7 @@ cmhc_type_codes1 <- c("Provinces"=2,"Centres"=3,"Survey Zones"=8,"Census Subdivi
 cmhc_type_codes2 <- c("Survey Zones"=6,"Census Subdivision"=7,"Neighbourhoods"=8,"Census Tracts"=9)
 cmhc_type_codes3 <- c("Provinces"=1,"Centres"=2,"Survey Zones"=3,"Census Subdivision"=4,"Neighbourhoods"=5,"Census Tracts"=6)
 cmhc_type_codes4 <- c("Survey Zones"=3,"Census Subdivision"=4)
+cmhc_type_codes5 <- c("Provinces"=0,"Centres"=3,"Survey Zones"=5,"Census Subdivision"=4,"Neighbourhoods"=6,"Census Tracts"=7,"Snapshot"=0)
 cmhc_series_dimension_codes1 <- c("Dwelling Type"=1,"Intended Market"=4)
 cmhc_bedroom_types <- c("Bachelor","1 Bedroom","2 Bedroom","3 Bedroom +","Total")
 
@@ -646,4 +647,93 @@ select_cmhc_table <- function(){
   result <- function_call
 }
 
+#' List available time periods for a CMHC table
+#'
+#' @description Queries the CMHC web interface to determine which time periods
+#' are available for a given table. This reveals periods that may not appear in
+#' the "Historical Time Periods" breakdown (e.g., April Rms surveys 2007-2015).
+#'
+#' @param survey The CMHC survey, consult `list_cmhc_surveys()` for possible values.
+#' @param series The CMHC data series, consult `list_cmhc_series()` for possible values.
+#' @param dimension The dimension, consult `list_cmhc_dimensions()` for possible values.
+#' @param breakdown The geographic breakdown, consult `list_cmhc_breakdowns()` for possible values.
+#' @param geo_uid Optional Census geographic identifier (e.g., CSD "5907047").
+#'   If NULL (default), uses a default probe geography (Vancouver CMA for
+#'   CMA-level breakdowns, Canada for national-level). Available periods can
+#'   vary by geography — smaller or newer CSDs may have fewer periods.
+#' @return A tibble listing available time periods with Year, Month, Quarter,
+#'   Season, and Caption columns.
+#'
+#' @examples
+#' \dontrun{
+#' # Primary Rental Market
+#' list_cmhc_periods("Rms", "Vacancy Rate", "Bedroom Type", "Census Subdivision")
+#' list_cmhc_periods("Rms", "Average Rent", "Bedroom Type", "Provinces")
+#'
+#' # Starts and Completions Survey
+#' list_cmhc_periods("Scss", "Starts", "Dwelling Type", "Centres")
+#' list_cmhc_periods("Scss", "Completions", "Intended Market", "Provinces")
+#'
+#' # Seniors Housing Survey
+#' list_cmhc_periods("Seniors", "Rental Housing Vacancy Rates", "Unit Type", "Snapshot")
+#'
+#' # Census-based tables
+#' list_cmhc_periods("Census", "Income", "Average and Median", "Survey Zones")
+#'
+#' # Periods for a specific geography (may differ from the default)
+#' list_cmhc_periods("Rms", "Vacancy Rate", "Bedroom Type", "Census Subdivision",
+#'                   geo_uid = "5907047")
+#' }
+#'
+#' @export
+list_cmhc_periods <- function(survey, series, dimension, breakdown, geo_uid = NULL) {
+  table_list <- list_cmhc_tables(short = FALSE)
 
+  selected <- table_list |>
+    filter(.data$Survey == survey,
+           .data$Series == series,
+           .data$Dimension == dimension,
+           .data$Breakdown == breakdown)
+
+  if (nrow(selected) == 0) stop("No matching CMHC table found.")
+  selected <- selected[1, ]
+
+  breakdown_type <- cmhc_type_codes5[[breakdown]]
+  if (is.null(breakdown_type)) stop("Unsupported breakdown: ", breakdown)
+
+  if (!is.null(geo_uid)) {
+    region_params <- cmhc_region_params_from_census(geo_uid)
+    geo_id <- region_params$geography_id
+    geo_type <- region_params$geography_type_id
+  } else if (breakdown %in% c("Provinces", "Centres", "Snapshot")) {
+    geo_id <- "1"
+    geo_type <- "1"
+  } else {
+    geo_id <- "2410"
+    geo_type <- "3"
+  }
+
+  url <- paste0(
+    "https://www03.cmhc-schl.gc.ca/hmip-pimh/en/TableMapChart/Table",
+    "?TableId=", selected$TableCode,
+    "&GeographyId=", geo_id,
+    "&GeographyTypeId=", geo_type,
+    "&BreakdownGeographyTypeId=", breakdown_type,
+    "&DisplayAs=Table"
+  )
+
+  response <- httr::GET(url)
+  if (httr::status_code(response) != 200) {
+    stop("Failed to fetch table page. HTTP status: ", httr::status_code(response))
+  }
+
+  html_text <- httr::content(response, as = "text", encoding = "UTF-8")
+  json_match <- stringr::str_extract(html_text, '(?<=data-table-model=")[^"]*')
+  if (is.na(json_match)) stop("Could not find table model data in the response.")
+
+  json_str <- gsub("&quot;", '"', json_match)
+  json_str <- gsub("&amp;", '&', json_str)
+
+  model <- jsonlite::fromJSON(json_str)
+  tibble::as_tibble(model$AvailableTimePeriods)
+}
