@@ -4,6 +4,7 @@
 * enable data access to SAAR tables
 * more informative error messages when data is not available
 * code cleaning to adhere to tidyselect updates
+* conveninence function to probe for available time periods for tables
 
 ## cmhc v0.2.10
 ### Minor changes
