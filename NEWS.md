@@ -1,3 +1,15 @@
+## cmhc v0.2.12
+### Minor changes
+
+* remove dependency on the `aws.s3` package, geographic data is now downloaded directly over HTTPS
+* remove a stale hardcoded session cookie from data requests
+* fix a broken error message for invalid named `geo_uid` values
+* clarify the `refresh` argument documentation in `get_cmhc()`
+* silence a spurious many-to-many join warning when building the table list
+* memoize the (static) table registry so it is only assembled once per session
+* add timeouts to all requests to the CMHC and geography servers
+* add a `testthat` test suite covering the parsing and geography helpers
+
 # cmhc v0.2.0
 
 * Initial CRAN release, reworked workflows for a simpler way to access CMHC data tables.

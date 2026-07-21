@@ -8,6 +8,10 @@ cmhc_type_codes5 <- c("Provinces"=0,"Centres"=3,"Survey Zones"=5,"Census Subdivi
 cmhc_series_dimension_codes1 <- c("Dwelling Type"=1,"Intended Market"=4)
 cmhc_bedroom_types <- c("Bachelor","1 Bedroom","2 Bedroom","3 Bedroom +","Total")
 
+# The table registry is hardcoded and static, so it only needs to be assembled once per
+# session. This environment memoizes the result of `list_cmhc_tables()` for each `short` value.
+.cmhc_table_cache <- new.env(parent = emptyenv())
+
 
 #' List available CMHC tables
 #'
@@ -19,6 +23,8 @@ cmhc_bedroom_types <- c("Bachelor","1 Bedroom","2 Bedroom","3 Bedroom +","Total"
 #'
 #' @export
 list_cmhc_tables <- function(short=TRUE){
+  cache_key <- if (isTRUE(short)) "short" else "full"
+  if (!is.null(.cmhc_table_cache[[cache_key]])) return(.cmhc_table_cache[[cache_key]])
 
   scss_filters <- list("dimension-18"=cmhc_intended_markets,
                        "dimension-1"=cmhc_dwelling_types)
@@ -177,7 +183,7 @@ list_cmhc_tables <- function(short=TRUE){
     left_join(tibble(GeoCodes=c(rep("3",length(cmhc_type_codes3)),rep("4",length(cmhc_type_codes4))),
                      Breakdown=c(names(cmhc_type_codes3),names(cmhc_type_codes4)),
                      BreakdownCode=as.character(c(cmhc_type_codes3,cmhc_type_codes4))),
-              by="GeoCodes") |>
+              by="GeoCodes", relationship="many-to-many") |>
     select(-"GeoCodes") |>
     mutate(TableCode=paste0(.data$SurveyCode,".",.data$SeriesCode,".",
                             .data$DimensionCode,".",.data$BreakdownCode))
@@ -406,6 +412,7 @@ list_cmhc_tables <- function(short=TRUE){
       select("Survey","Series","Dimension","Breakdown","GeoFilter","Filters")
   }
 
+  .cmhc_table_cache[[cache_key]] <- table_list
   table_list
 }
 
@@ -722,7 +729,7 @@ list_cmhc_periods <- function(survey, series, dimension, breakdown, geo_uid = NU
     "&DisplayAs=Table"
   )
 
-  response <- httr::GET(url)
+  response <- httr::GET(url, httr::timeout(60))
   if (httr::status_code(response) != 200) {
     stop("Failed to fetch table page. HTTP status: ", httr::status_code(response))
   }

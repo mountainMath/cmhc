@@ -27,6 +27,8 @@ parse_numeric <- function(x){
   xx<-x %>%
     gsub(",", "", ., fixed = TRUE) %>%
     gsub(" %","",.,fixed = TRUE)
+  # CMHC uses "-" to denote a nil/zero value, whereas "++", "n/a" and "**" mark values that
+  # are suppressed or unavailable and are therefore mapped to NA.
   xx[xx=="-"]="0"
   xx[xx=="++"]=NA_character_
   xx[xx=="n/a"]=NA_character_
