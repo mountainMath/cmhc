@@ -1,81 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/404.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/articles/basic_usage.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/articles/rental_universe.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_cma_translation_data.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_csd_translation_data.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_csd_translation_data_2023.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_ct_translation_data.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/cmhc_quality_labels.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/get_cmhc.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/get_cmhc_geography.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_breakdowns.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_dimensions.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_filters.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_series.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_surveys.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_tables.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/select_cmhc_table.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/set_cmhc_cache_path.html</loc>
-  </url>
-  <url>
-    <loc>https://mountainmath.github.io/cmhc/reference/show_cmhc_cache_path.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://mountainmath.github.io/cmhc/404.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/CLAUDE.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/LICENSE-text.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/LICENSE.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/articles/basic_usage.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/articles/index.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/articles/rental_universe.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/authors.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/index.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/news/index.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/cmhc_cma_translation_data.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/cmhc_csd_translation_data.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/cmhc_csd_translation_data_2023.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/cmhc_ct_translation_data.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/cmhc_quality_labels.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/get_cmhc.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/get_cmhc_geography.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/index.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_breakdowns.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_dimensions.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_filters.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_periods.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_series.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_surveys.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/list_cmhc_tables.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/select_cmhc_table.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/set_cmhc_cache_path.html</loc></url>
+<url><loc>https://mountainmath.github.io/cmhc/reference/show_cmhc_cache_path.html</loc></url>
 </urlset>
+
