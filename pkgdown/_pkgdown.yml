@@ -15,6 +15,7 @@ reference:
   - title: Data discovery
   - contents:
     - select_cmhc_table
+    - list_cmhc_periods
     - list_cmhc_tables
     - list_cmhc_surveys
     - list_cmhc_series
@@ -39,9 +40,8 @@ authors:
   Jens von Bergmann:
     href: https://mountainmath.ca
 template:
-  params:
-    #ganalytics: UA-107390160-3
-    bootswatch: simplex
+  bootstrap: 5
+  bootswatch: simplex
   opengraph:
     image:
       src: 'https://github.com/mountainMath/cmhc/raw/master/logo.png'

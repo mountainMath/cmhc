@@ -50,7 +50,8 @@ or census metropolitan area.}
 
 \item{filters}{optional list of filters, consult `list_cmhc_filters()` for possible values.}
 
-\item{refresh}{optional, refresh the temporary local cache of the CMHC tables. Defaults to `FALSE`.}
+\item{refresh}{optional, re-download the data from CMHC instead of using the copy cached in
+the R session's temporary directory. Defaults to `FALSE`.}
 }
 \value{
 A tibble with the data in long form.

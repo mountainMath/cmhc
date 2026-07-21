@@ -6,7 +6,7 @@
 [![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/cmhc)](https://cranlogs.r-pkg.org/badges/cmhc)
 <!-- badges: end -->
 
-<a href="https://mountainmath.github.io/cmhc/index.html"><img src="man/figures/logo.png" align="right" height="139" /></a>
+<a href="https://mountainmath.github.io/cmhc/index.html"><img src="man/figures/logo.png" align="right" height="139" alt="cmhc package hex sticker logo" /></a>
 
 
 API wrapper for extracting CMHC data out of the [CMHC Housing Market Information Portal](https://www.cmhc-schl.gc.ca/hmiportal).
@@ -37,10 +37,9 @@ for vacancy rate data by bedroom type for the Vancouver Census Metropolitan Area
 library(cmhc)
 vacancy_data <- get_cmhc(survey="Rms",series="Vacancy Rate",dimension="Bedroom Type",
                          breakdown="Historical Time Periods",  geo_uid="59933")
-
 ```
 
-Starting with version v.0.3.2 the package has an interactive query builder helper function `select_cmhc_table()` that interactively walks through the available data and builds parameters for `get_cmhc()` like the example above. This makes it easy to discover data and build function calls to CMHC tables.
+Starting with version v0.2.3 the package has an interactive query builder helper function `select_cmhc_table()` that interactively walks through the available data and builds parameters for `get_cmhc()` like the example above. This makes it easy to discover data and build function calls to CMHC tables.
 
 ## Contributing
 
@@ -51,7 +50,7 @@ Starting with version v.0.3.2 the package has an interactive query builder helpe
 
 If you wish to cite cmhc:
 
-  von Bergmann, J. (2025) cmhc: R package to access, retrieve, and work with CMHC data. v0.2.10. DOI: 10.32614/CRAN.package.cmhc
+  von Bergmann, J. (2026) cmhc: R package to access, retrieve, and work with CMHC data. v0.2.12. DOI: 10.32614/CRAN.package.cmhc
 
 
 A BibTeX entry for LaTeX users is
@@ -59,9 +58,9 @@ A BibTeX entry for LaTeX users is
   @Manual{cmhc,
     author = {Jens {von Bergmann}},
     title = {cmhc: R package to access, retrieve, and work with CMHC data},
-    year = {2025},
+    year = {2026},
     doi = {10.32614/CRAN.package.cmhc},
-    note = {R package version 0.2.10},
+    note = {R package version 0.2.12},
     url = {https://mountainmath.github.io/cmhc/},
   }
 ```

@@ -178,28 +178,59 @@ cmhc_to_census_geocode <- function(GeoUID,parent_region=NULL){
 #' @return NULL
 download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
   if (is.null(base_directory)||base_directory=="") stop(paste0("Not a valid base directory ",base_directory))
-  aws_bucket="cmhc"
-  #aws_path=NULL
-  if (!file.exists(base_directory)) dir.create(base_directory)
+  bucket_url <- "https://cmhc.s3.us-west-2.amazonaws.com"
+  if (!file.exists(base_directory)) dir.create(base_directory, recursive = TRUE)
   message("Downloading geographies, this may take a minute...")
   for (d in paste0("RMS2017_",seq(1,3),".gdb")) {
     if (dir.exists(file.path(base_directory,d))) unlink(file.path(base_directory,d),recursive=TRUE)
     dir.create(file.path(base_directory,d))
-    for (f in aws.s3::get_bucket(bucket=aws_bucket,
-                                 prefix = d,#file.path(aws_path,d),
-                                 region = 'us-west-2')) {
-      key=f$Key
-      #local_path=gsub(paste0("cmhc/",d,"/"),"",key)
-      #local_file <- file.path(base_directory,d,local_path)
+    for (key in list_s3_bucket_keys(bucket_url, prefix = d)) {
       local_file <- file.path(base_directory,key)
-      if (!file.exists(local_file))
-        aws.s3::save_object(object=key,
-                            bucket=aws_bucket,
-                            region='us-west-2',
-                            file=local_file)
+      if (!file.exists(local_file)) {
+        # URL-encode each path segment individually so the "/" separators are preserved.
+        object_url <- paste0(bucket_url, "/",
+                             paste0(vapply(strsplit(key,"/")[[1]],
+                                           utils::URLencode, character(1), reserved = TRUE),
+                                    collapse = "/"))
+        response <- httr::GET(object_url, httr::timeout(300),
+                              httr::write_disk(local_file, overwrite = TRUE))
+        if (httr::status_code(response) != 200) {
+          if (file.exists(local_file)) file.remove(local_file)
+          stop("Failed to download ",key," (status ",httr::status_code(response),").")
+        }
+      }
     }
   }
   NULL
+}
+
+#' List object keys in a public S3 bucket via the REST API
+#' @param bucket_url base URL of the (public) S3 bucket
+#' @param prefix key prefix to filter by
+#' @keywords internal
+#' @noRd
+#' @return a character vector of object keys
+list_s3_bucket_keys <- function(bucket_url, prefix){
+  keys <- character(0)
+  continuation_token <- NULL
+  repeat {
+    query <- list(`list-type`="2", prefix=prefix)
+    if (!is.null(continuation_token)) query[["continuation-token"]] <- continuation_token
+    response <- httr::GET(bucket_url, query = query, httr::timeout(60))
+    if (httr::status_code(response) != 200) {
+      stop("Failed to list bucket contents for prefix ",prefix,
+           " (status ",httr::status_code(response),").")
+    }
+    body <- httr::content(response, as = "text", encoding = "UTF-8")
+    keys <- c(keys, unlist(regmatches(body,
+                                      gregexpr("(?<=<Key>).*?(?=</Key>)", body, perl = TRUE))))
+    if (!grepl("<IsTruncated>true</IsTruncated>", body)) break
+    continuation_token <- regmatches(body,
+                                     regexpr("(?<=<NextContinuationToken>).*?(?=</NextContinuationToken>)",
+                                             body, perl = TRUE))
+    if (length(continuation_token)==0) break
+  }
+  keys
 }
 
 
@@ -228,9 +259,6 @@ download_geographies <- function(base_directory=Sys.getenv("CMHC_CACHE_PATH")){
 #' @export
 get_cmhc_geography <- function(level=c("CT","ZONE","NBHD","CSD","MET"),base_directory=Sys.getenv("CMHC_CACHE_PATH")){
   if (is.null(base_directory)||base_directory==""||!dir.exists(base_directory)) stop(paste0("Not a valid base directory: ",base_directory,"."))
-  paths <- dir(base_directory)
-  if (!dir.exists(base_directory)) dir.create(base_directory)
-  if (!dir.exists(base_directory)) stop ("Could not create base directory.")
   paths <- dir(base_directory)
   if (length(setdiff(c("RMS2017_1.gdb", "RMS2017_2.gdb", "RMS2017_3.gdb"),paths))>0) {
     download_geographies(base_directory = base_directory)

@@ -1,3 +1,23 @@
+## cmhc v0.2.12
+### Major changes
+* add a `testthat` test suite covering the parsing and geography helpers
+
+### Minor changes
+
+* remove aws.s3 dependence because of downstream unmaintained package
+* fix a broken error message for invalid named `geo_uid` values
+* silence a spurious many-to-many join warning when building the table list
+* memoize the (static) table registry so it is only assembled once per session
+* add timeouts to all requests to the CMHC and geography servers
+
+## cmhc v0.2.11
+### Minor changes
+
+* enable data access to SAAR tables
+* more informative error messages when data is not available
+* code cleaning to adhere to tidyselect updates
+* conveninence function to probe for available time periods for tables
+
 ## cmhc v0.2.10
 ### Minor changes
 

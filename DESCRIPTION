@@ -1,7 +1,7 @@
 Package: cmhc
 Type: Package
 Title: Access, Retrieve, and Work with CMHC Data
-Version: 0.2.10
+Version: 0.2.12
 Authors@R:
     c(person(given = "Jens",
              family = "von Bergmann",
@@ -19,20 +19,22 @@ Imports:
     dplyr (>= 1.0),
     digest (>= 0.1),
     httr,
+    jsonlite,
     readr,
     stringr,
     tibble,
-    rlang,
-    aws.s3
-Suggests: 
+    rlang
+Suggests:
     knitr,
     scales,
     cancensus,
     ggplot2,
     tidyr,
     rmarkdown,
-    sf
+    sf,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/mountainMath/cmhc, https://mountainmath.github.io/cmhc/, https://www03.cmhc-schl.gc.ca/hmip-pimh/en
 BugReports: https://github.com/mountainMath/cmhc/issues
-RoxygenNote: 7.3.1
+Config/roxygen2/version: 8.0.0
