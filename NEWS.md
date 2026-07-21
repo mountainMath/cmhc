@@ -1,5 +1,5 @@
-## cmhc v0.2.12
-### Minor changes
+# cmhc v0.2.12
+## Minor changes
 
 * remove dependency on the `aws.s3` package, geographic data is now downloaded directly over HTTPS
 * remove a stale hardcoded session cookie from data requests
@@ -47,32 +47,31 @@
 * adjust to changes with CMHC portal that require MetId to be specified (only partial fix at this point)
 * fix link to CMHC terms of use that moved
 
-## cmhc v0.2.7
+# cmhc v0.2.7
 
 * add CMHC lookup table for met codes
 
-## cmhc v0.2.8
+# cmhc v0.2.8
 
 * expand tables
 * improve handling for national level data
 * update to new CMHC internal METCODES
 
-## cmhc v0.2.9
-### Minor changes
+# cmhc v0.2.9
+## Minor changes
 
 * adapt to changes to CMHC interface
 * intelligent guessing of frequencies for data series retrieval based on temporal arguments supplied
 
-## cmhc v0.2.10
-### Minor changes
+# cmhc v0.2.10
+## Minor changes
 
 * enable data access to more tables
 
-## cmhc v0.2.11
-### Minor changes
+# cmhc v0.2.11
+## Minor changes
 
 * enable data access to SAAR tables
 * more informative error messages when data is not available
 * code cleaning to adhere to tidyselect updates
 * conveninence function to probe for available time periods for tables
-
