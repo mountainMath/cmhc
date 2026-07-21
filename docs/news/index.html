@@ -52,58 +52,13 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="cmhc-v020">cmhc v0.2.0<a class="anchor" aria-label="anchor" href="#cmhc-v020"></a></h2><p class="text-muted">CRAN release: 2022-06-15</p>
-<ul><li>Initial CRAN release, reworked workflows for a simpler way to access CMHC data tables.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.1" id="cmhc-v021">cmhc v0.2.1<a class="anchor" aria-label="anchor" href="#cmhc-v021"></a></h2><p class="text-muted">CRAN release: 2022-09-09</p>
-<ul><li>rename functions to set and show cache path to avoid conflicts with other packages</li>
-<li>add functionality for additional tables</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.2" id="cmhc-v022">cmhc v0.2.2<a class="anchor" aria-label="anchor" href="#cmhc-v022"></a></h2>
-<ul><li>fix table snafu for Scss by intended market</li>
-<li>add vignette for rental universe</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.3" id="cmhc-v023">cmhc v0.2.3<a class="anchor" aria-label="anchor" href="#cmhc-v023"></a></h2><p class="text-muted">CRAN release: 2022-10-10</p>
-<ul><li>fix more table sanfu for Scss by intended market</li>
-<li>add query builder helper function</li>
-<li>add access to census and core housing need tables</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.4" id="cmhc-v024">cmhc v0.2.4<a class="anchor" aria-label="anchor" href="#cmhc-v024"></a></h2><p class="text-muted">CRAN release: 2023-01-20</p>
-<ul><li>fixes an issue with “Rent Ranges” dimension not properly parsing (Thanks Maxime Bélanger De Blois!)</li>
-<li>add access to secondary market tables</li>
-<li>fix table codes for absorbed units</li>
-<li>improved query builder tool</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.5" id="cmhc-v025">cmhc v0.2.5<a class="anchor" aria-label="anchor" href="#cmhc-v025"></a></h2><p class="text-muted">CRAN release: 2023-04-02</p>
-<ul><li>conditional check of vignettes to account for CMHC server issues</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.6" id="cmhc-v026">cmhc v0.2.6<a class="anchor" aria-label="anchor" href="#cmhc-v026"></a></h2><p class="text-muted">CRAN release: 2023-10-06</p>
-<ul><li>add tables</li>
-<li>adjust to changes with CMHC portal that require MetId to be specified (only partial fix at this point)</li>
-<li>fix link to CMHC terms of use that moved</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.7" id="cmhc-v027">cmhc v0.2.7<a class="anchor" aria-label="anchor" href="#cmhc-v027"></a></h2><p class="text-muted">CRAN release: 2023-12-13</p>
-<ul><li>add CMHC lookup table for met codes</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.8" id="cmhc-v028">cmhc v0.2.8<a class="anchor" aria-label="anchor" href="#cmhc-v028"></a></h2><p class="text-muted">CRAN release: 2024-07-12</p>
-<ul><li>expand tables</li>
-<li>improve handling for national level data</li>
-<li>update to new CMHC internal METCODES</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.9" id="cmhc-v029">cmhc v0.2.9<a class="anchor" aria-label="anchor" href="#cmhc-v029"></a></h2><p class="text-muted">CRAN release: 2024-11-05</p>
+<h2 class="pkg-version" data-toc-text="0.2.11" id="cmhc-v0211">cmhc v0.2.11<a class="anchor" aria-label="anchor" href="#cmhc-v0211"></a></h2>
 <div class="section level3">
-<h3 id="minor-changes-0-2-9">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-2-9"></a></h3>
-<ul><li>adapt to changes to CMHC interface</li>
-<li>intelligent guessing of frequencies for data series retrieval based on temporal arguments supplied</li>
+<h3 id="minor-changes-0-2-11">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-2-11"></a></h3>
+<ul><li>enable data access to SAAR tables</li>
+<li>more informative error messages when data is not available</li>
+<li>code cleaning to adhere to tidyselect updates</li>
+<li>conveninence function to probe for available time periods for tables</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -114,15 +69,60 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.11" id="cmhc-v0211">cmhc v0.2.11<a class="anchor" aria-label="anchor" href="#cmhc-v0211"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.9" id="cmhc-v029">cmhc v0.2.9<a class="anchor" aria-label="anchor" href="#cmhc-v029"></a></h2><p class="text-muted">CRAN release: 2024-11-05</p>
 <div class="section level3">
-<h3 id="minor-changes-0-2-11">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-2-11"></a></h3>
-<ul><li>enable data access to SAAR tables</li>
-<li>more informative error messages when data is not available</li>
-<li>code cleaning to adhere to tidyselect updates</li>
-<li>conveninence function to probe for available time periods for tables</li>
+<h3 id="minor-changes-0-2-9">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-0-2-9"></a></h3>
+<ul><li>adapt to changes to CMHC interface</li>
+<li>intelligent guessing of frequencies for data series retrieval based on temporal arguments supplied</li>
 </ul></div>
 </div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.8" id="cmhc-v028">cmhc v0.2.8<a class="anchor" aria-label="anchor" href="#cmhc-v028"></a></h2><p class="text-muted">CRAN release: 2024-07-12</p>
+<ul><li>expand tables</li>
+<li>improve handling for national level data</li>
+<li>update to new CMHC internal METCODES</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.7" id="cmhc-v027">cmhc v0.2.7<a class="anchor" aria-label="anchor" href="#cmhc-v027"></a></h2><p class="text-muted">CRAN release: 2023-12-13</p>
+<ul><li>add CMHC lookup table for met codes</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.6" id="cmhc-v026">cmhc v0.2.6<a class="anchor" aria-label="anchor" href="#cmhc-v026"></a></h2><p class="text-muted">CRAN release: 2023-10-06</p>
+<ul><li>add tables</li>
+<li>adjust to changes with CMHC portal that require MetId to be specified (only partial fix at this point)</li>
+<li>fix link to CMHC terms of use that moved</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.5" id="cmhc-v025">cmhc v0.2.5<a class="anchor" aria-label="anchor" href="#cmhc-v025"></a></h2><p class="text-muted">CRAN release: 2023-04-02</p>
+<ul><li>conditional check of vignettes to account for CMHC server issues</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.4" id="cmhc-v024">cmhc v0.2.4<a class="anchor" aria-label="anchor" href="#cmhc-v024"></a></h2><p class="text-muted">CRAN release: 2023-01-20</p>
+<ul><li>fixes an issue with “Rent Ranges” dimension not properly parsing (Thanks Maxime Bélanger De Blois!)</li>
+<li>add access to secondary market tables</li>
+<li>fix table codes for absorbed units</li>
+<li>improved query builder tool</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.3" id="cmhc-v023">cmhc v0.2.3<a class="anchor" aria-label="anchor" href="#cmhc-v023"></a></h2><p class="text-muted">CRAN release: 2022-10-10</p>
+<ul><li>fix more table sanfu for Scss by intended market</li>
+<li>add query builder helper function</li>
+<li>add access to census and core housing need tables</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.2" id="cmhc-v022">cmhc v0.2.2<a class="anchor" aria-label="anchor" href="#cmhc-v022"></a></h2>
+<ul><li>fix table snafu for Scss by intended market</li>
+<li>add vignette for rental universe</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.1" id="cmhc-v021">cmhc v0.2.1<a class="anchor" aria-label="anchor" href="#cmhc-v021"></a></h2><p class="text-muted">CRAN release: 2022-09-09</p>
+<ul><li>rename functions to set and show cache path to avoid conflicts with other packages</li>
+<li>add functionality for additional tables</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="cmhc-v020">cmhc v0.2.0<a class="anchor" aria-label="anchor" href="#cmhc-v020"></a></h2><p class="text-muted">CRAN release: 2022-06-15</p>
+<ul><li>Initial CRAN release, reworked workflows for a simpler way to access CMHC data tables.</li>
+</ul></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
